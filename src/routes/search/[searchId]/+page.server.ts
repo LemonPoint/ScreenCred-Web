@@ -1,6 +1,7 @@
 import { MEDIA_TYPE_KEY, type MediaTypeKey } from '$lib/interfaces';
 import { getDetails } from '$lib/tmdb';
 import { compare } from '$lib/comparison';
+import { redirect } from '@sveltejs/kit';
 
 type ParsedComparison = {
 	type: MediaTypeKey;
@@ -29,6 +30,11 @@ export const load = async ({ params }) => {
 			getDetails(MEDIA_TYPE_KEY[comparisons.first.type], parseInt(comparisons.first.id)),
 			getDetails(MEDIA_TYPE_KEY[comparisons.second.type], parseInt(comparisons.second.id))
 		]);
-		return await compare(first, second);
+		return {
+			first,
+			second,
+			results: await compare(first, second)
+		};
 	}
+	redirect(307, '/');
 };
