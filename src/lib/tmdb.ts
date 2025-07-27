@@ -1,3 +1,4 @@
+import { TMDB_API_KEY } from '$env/static/private';
 import type {
 	Credits,
 	MediaDetails,
@@ -12,7 +13,6 @@ import type {
 } from './interfaces';
 import { camelize } from './utils';
 
-const API_KEY = Bun.env.TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3/';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
 
@@ -66,7 +66,7 @@ function formatDate(date: string, locale?: string) {
 async function makeTMDBRequest<T>(url: string) {
 	const response = await fetch(url, {
 		headers: {
-			Authorization: `Bearer ${API_KEY}`
+			Authorization: `Bearer ${TMDB_API_KEY}`
 		}
 	});
 
