@@ -1,6 +1,6 @@
 import { MEDIA_TYPE_KEY, type MediaTypeKey } from '$lib/interfaces';
-import { getDetails } from '$lib/tmdb';
-import { compare } from '$lib/comparison';
+import { getDetails } from '$lib/server/tmdb';
+import { compare } from '$lib/server/comparison';
 import { redirect } from '@sveltejs/kit';
 
 type ParsedComparison = {

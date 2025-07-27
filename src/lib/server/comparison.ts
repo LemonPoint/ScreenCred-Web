@@ -1,4 +1,4 @@
-import type { MediaDetails, MediaType, SimpleCredit } from './interfaces';
+import type { MediaDetails, MediaType, SimpleCredit } from '../interfaces';
 import { getCredits } from './tmdb';
 
 export interface UnionComparison {

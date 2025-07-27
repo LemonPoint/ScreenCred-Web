@@ -10,8 +10,8 @@ import type {
 	SearchResponse,
 	TvShowCast,
 	TvShowCrew
-} from './interfaces';
-import { camelize } from './utils';
+} from '../interfaces';
+import { camelize } from '../utils';
 
 const BASE_URL = 'https://api.themoviedb.org/3/';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
