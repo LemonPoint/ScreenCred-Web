@@ -114,7 +114,7 @@
 	{#if comparison.second}
 		<img src={mediaImage(comparison.second, 185)} alt={mediaTitle(comparison.second)} />
 	{/if}
-	<span>{comparison.second ? mediaTitle(comparison.second) : 'First'}</span>
+	<span>{comparison.second ? mediaTitle(comparison.second) : 'Second'}</span>
 </button>
 <dialog bind:this={searchDialog}>
 	<button onclick={closeSearch}>Close</button>
