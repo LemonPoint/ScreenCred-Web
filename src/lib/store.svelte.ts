@@ -5,7 +5,7 @@ interface ComparisonState {
 	second?: MediaDetails;
 }
 
-export let comparison: ComparisonState = $state({});
+export const comparison: ComparisonState = $state({});
 
 export function updateComparison({ first, second }: ComparisonState) {
 	if (first) {
