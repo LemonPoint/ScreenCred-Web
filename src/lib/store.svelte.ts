@@ -10,6 +10,8 @@ interface ComparisonState {
 export const comparison: ComparisonState = $state({});
 
 export function updateComparison({ first, second }: ComparisonState) {
+	const previous = { ...comparison };
+
 	if (first) {
 		comparison.first = first;
 	}
@@ -17,9 +19,19 @@ export function updateComparison({ first, second }: ComparisonState) {
 		comparison.second = second;
 	}
 
-	if (browser && comparison.first && comparison.second) {
+	const shouldNavigate =
+		!equals(previous.first, comparison.first) || !equals(previous.second, comparison.second);
+
+	if (browser && shouldNavigate && comparison.first && comparison.second) {
 		goto(`/search/${makeId(comparison.first)}${makeId(comparison.second)}`);
 	}
+}
+
+function equals(a?: MediaDetails, b?: MediaDetails) {
+	if (!a || !b) {
+		return false;
+	}
+	return a.id === b.id && a.mediaType === b.mediaType;
 }
 
 function makeId({ id, mediaType }: MediaDetails) {
