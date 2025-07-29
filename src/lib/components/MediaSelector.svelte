@@ -1,0 +1,153 @@
+<script lang="ts">
+	import type { MediaDetails } from '$lib/interfaces';
+	import { mediaImage, mediaSubtitle, mediaTitle } from '$lib/utils';
+	import { comparison, updateComparison } from '$lib/store.svelte';
+
+	type ForWhich = 'first' | 'second';
+
+	let searchDialog: HTMLDialogElement;
+	let debounceTimer: ReturnType<typeof setTimeout>;
+	let abortController: AbortController | null = null;
+
+	let forWhich = $state<ForWhich | null>(null);
+	let query = $state('');
+	let results: MediaDetails[] = $state([]);
+	let isLoading = $state(false);
+	let error = $state<string | null>(null);
+
+	function startSearch(which: ForWhich) {
+		searchDialog.showModal();
+		forWhich = which;
+	}
+
+	function closeSearch() {
+		searchDialog.close();
+		query = '';
+		results = [];
+		error = null;
+		clearTimeout(debounceTimer);
+		abortController?.abort();
+		abortController = null;
+		forWhich = null;
+	}
+
+	function selectMedia(media: MediaDetails) {
+		if (forWhich) {
+			updateComparison({ [forWhich]: media });
+		}
+		closeSearch();
+	}
+
+	async function search(query: string, signal?: AbortSignal) {
+		if (!query.trim()) {
+			results = [];
+			return;
+		}
+
+		isLoading = true;
+		error = null;
+
+		try {
+			const url = new URL('/search', window.location.origin);
+			url.searchParams.set('query', query);
+			const response = await fetch(url, {
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				signal
+			});
+
+			if (!response.ok) {
+				error = `Search failed: ${response.status}`;
+				return;
+			}
+
+			const data = await response.json();
+
+			if (!signal?.aborted) {
+				results = data.results || [];
+			}
+		} catch (err) {
+			if (err instanceof Error && err.name === 'AbortError') {
+				return;
+			}
+
+			if (!signal?.aborted) {
+				error = err instanceof Error ? err.message : 'Search failed';
+				results = [];
+			}
+		} finally {
+			if (!signal?.aborted) {
+				isLoading = false;
+				abortController = null;
+			}
+		}
+	}
+
+	function debouncedSearch(query: string, delay = 300) {
+		clearTimeout(debounceTimer);
+
+		abortController?.abort();
+		abortController = null;
+
+		if (!query.trim()) {
+			results = [];
+			error = null;
+			isLoading = false;
+			return;
+		}
+
+		debounceTimer = setTimeout(() => {
+			abortController = new AbortController();
+			search(query, abortController.signal);
+		}, delay);
+	}
+
+	$effect(() => {
+		debouncedSearch(query);
+	});
+
+	$effect(() => {
+		return () => {
+			clearTimeout(debounceTimer);
+			abortController?.abort();
+		};
+	});
+</script>
+
+<button onclick={() => startSearch('first')}>
+	{#if comparison.first}
+		<img src={mediaImage(comparison.first, 185)} alt={mediaTitle(comparison.first)} />
+	{/if}
+	<span>{comparison.first ? mediaTitle(comparison.first) : 'First'}</span>
+</button>
+<button onclick={() => startSearch('second')}>
+	{#if comparison.second}
+		<img src={mediaImage(comparison.second, 185)} alt={mediaTitle(comparison.second)} />
+	{/if}
+	<span>{comparison.second ? mediaTitle(comparison.second) : 'First'}</span>
+</button>
+<dialog bind:this={searchDialog}>
+	<button onclick={closeSearch}>Close</button>
+	<input type="text" bind:value={query} />
+	<ul role="list">
+		{#each results as result (result.id)}
+			{@const imagePath = mediaImage(result, 185)}
+			{@const title = mediaTitle(result)}
+			{@const subtitle = mediaSubtitle(result, navigator.language)}
+			<li>
+				<button
+					onclick={() => {
+						selectMedia(result);
+					}}
+				>
+					<img src={imagePath} alt={title} />
+					<div class="metadata">
+						<p class="title">{title}</p>
+						<p class="subtitle">{subtitle}</p>
+					</div>
+				</button>
+			</li>
+		{/each}
+	</ul>
+</dialog>
