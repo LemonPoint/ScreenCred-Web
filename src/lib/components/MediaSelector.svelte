@@ -2,11 +2,11 @@
 	import type { MediaDetails } from '$lib/interfaces';
 	import { mediaImage, mediaSubtitle, mediaTitle } from '$lib/utils';
 	import { comparison, updateComparison } from '$lib/store.svelte';
+	import DebounceInput from '$lib/components/DebounceInput.svelte';
 
 	type ForWhich = 'first' | 'second';
 
 	let searchDialog: HTMLDialogElement;
-	let debounceTimer: ReturnType<typeof setTimeout>;
 	let abortController: AbortController | null = null;
 
 	let forWhich = $state<ForWhich | null>(null);
@@ -25,7 +25,6 @@
 		query = '';
 		results = [];
 		error = null;
-		clearTimeout(debounceTimer);
 		abortController?.abort();
 		abortController = null;
 		forWhich = null;
@@ -84,11 +83,8 @@
 		}
 	}
 
-	function debouncedSearch(query: string, delay = 300) {
-		clearTimeout(debounceTimer);
-
+	async function handleSearch(query: string) {
 		abortController?.abort();
-		abortController = null;
 
 		if (!query.trim()) {
 			results = [];
@@ -97,19 +93,12 @@
 			return;
 		}
 
-		debounceTimer = setTimeout(() => {
-			abortController = new AbortController();
-			search(query, abortController.signal);
-		}, delay);
+		abortController = new AbortController();
+		await search(query, abortController.signal);
 	}
 
 	$effect(() => {
-		debouncedSearch(query);
-	});
-
-	$effect(() => {
 		return () => {
-			clearTimeout(debounceTimer);
 			abortController?.abort();
 		};
 	});
@@ -129,25 +118,36 @@
 </button>
 <dialog bind:this={searchDialog}>
 	<button onclick={closeSearch}>Close</button>
-	<input type="text" bind:value={query} />
-	<ul role="list">
-		{#each results as result (result.id)}
-			{@const imagePath = mediaImage(result, 185)}
-			{@const title = mediaTitle(result)}
-			{@const subtitle = mediaSubtitle(result, navigator.language)}
-			<li>
-				<button
-					onclick={() => {
-						selectMedia(result);
-					}}
-				>
-					<img src={imagePath} alt={title} />
-					<div class="metadata">
-						<p class="title">{title}</p>
-						<p class="subtitle">{subtitle}</p>
-					</div>
-				</button>
-			</li>
-		{/each}
-	</ul>
+	<DebounceInput
+		bind:value={query}
+		placeholder="Search movies, TV shows, people..."
+		onSearch={handleSearch}
+	/>
+
+	{#if isLoading}
+		<p>Searching...</p>
+	{:else if error}
+		<p>Error: {error}</p>
+	{:else}
+		<ul role="list">
+			{#each results as result (result.id)}
+				{@const imagePath = mediaImage(result, 185)}
+				{@const title = mediaTitle(result)}
+				{@const subtitle = mediaSubtitle(result, navigator.language)}
+				<li>
+					<button
+						onclick={() => {
+							selectMedia(result);
+						}}
+					>
+						<img src={imagePath} alt={title} />
+						<div class="metadata">
+							<p class="title">{title}</p>
+							<p class="subtitle">{subtitle}</p>
+						</div>
+					</button>
+				</li>
+			{/each}
+		</ul>
+	{/if}
 </dialog>
