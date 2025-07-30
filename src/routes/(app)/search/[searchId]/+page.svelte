@@ -1,7 +1,7 @@
 <script lang="ts">
 	import CombinedResults from './CombinedResults.svelte';
 	import SimpleResults from './SimpleResults.svelte';
-	import { updateComparison } from '$lib/store.svelte';
+	import { updateComparison } from '$lib/store.svelte.js';
 
 	let { data } = $props();
 
