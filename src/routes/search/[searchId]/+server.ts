@@ -6,11 +6,11 @@ export async function POST({ params, platform }) {
 	if (comparison.first !== null && comparison.second !== null) {
 		const searchTimestamp = Date.now();
 		const normalizedSearchId = [
-			...new Set([
-				`${comparison.first.type}${comparison.first.id}`,
-				`${comparison.second.type}${comparison.second.id}`
-			])
-		].join();
+			`${comparison.first.type}${comparison.first.id}`,
+			`${comparison.second.type}${comparison.second.id}`
+		]
+			.sort()
+			.join('');
 		platform?.env?.SCREENCRED_SEARCH?.writeDataPoint({
 			blobs: [searchId, normalizedSearchId],
 			doubles: [1, searchTimestamp],
