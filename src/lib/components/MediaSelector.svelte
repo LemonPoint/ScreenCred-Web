@@ -3,6 +3,7 @@
 	import { mediaImage, mediaSubtitle, mediaTitle } from '$lib/utils';
 	import { comparison, updateComparison } from '$lib/store.svelte';
 	import DebounceInput from '$lib/components/DebounceInput.svelte';
+	import { goto } from '$app/navigation';
 
 	type ForWhich = 'first' | 'second';
 
@@ -30,9 +31,13 @@
 		forWhich = null;
 	}
 
-	function selectMedia(media: MediaDetails) {
+	async function selectMedia(media: MediaDetails) {
 		if (forWhich) {
-			updateComparison({ [forWhich]: media });
+			const newSearchId = updateComparison({ [forWhich]: media });
+			if (newSearchId) {
+				fetch(`/search/${newSearchId}`, { method: 'POST' });
+				await goto(`/search/${newSearchId}`);
+			}
 		}
 		closeSearch();
 	}
@@ -61,7 +66,7 @@
 				return;
 			}
 
-			const data = await response.json();
+			const data = (await response.json()) as { results: MediaDetails[] };
 
 			if (!signal?.aborted) {
 				results = data.results || [];

@@ -1,6 +1,4 @@
 import type { MediaDetails } from '$lib/interfaces';
-import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
 
 interface ComparisonState {
 	first?: MediaDetails;
@@ -9,7 +7,7 @@ interface ComparisonState {
 
 export const comparison: ComparisonState = $state({});
 
-export function updateComparison({ first, second }: ComparisonState) {
+export function updateComparison({ first, second }: ComparisonState): string | undefined {
 	const previous = { ...comparison };
 
 	if (first) {
@@ -19,11 +17,11 @@ export function updateComparison({ first, second }: ComparisonState) {
 		comparison.second = second;
 	}
 
-	const shouldNavigate =
+	const hasChanged =
 		!equals(previous.first, comparison.first) || !equals(previous.second, comparison.second);
 
-	if (browser && shouldNavigate && comparison.first && comparison.second) {
-		goto(`/search/${makeId(comparison.first)}${makeId(comparison.second)}`);
+	if (hasChanged && comparison.first && comparison.second) {
+		return `${makeId(comparison.first)}${makeId(comparison.second)}`;
 	}
 }
 

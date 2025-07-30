@@ -1,4 +1,4 @@
-import type { MediaDetails } from '$lib/interfaces';
+import type { MediaDetails, MediaTypeKey } from '$lib/interfaces';
 
 export const BASE_URL = 'https://api.themoviedb.org/3/';
 export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
@@ -63,4 +63,25 @@ export function mediaSubtitle(details: MediaDetails, locale?: string) {
 		case 'person':
 			return details.knownFor.map((d) => mediaTitle(d)).join(', ');
 	}
+}
+
+type ParsedComparison = {
+	type: MediaTypeKey;
+	id: string;
+};
+
+export function parseSearchId(searchId: string) {
+	const matches = [...searchId.matchAll(/(?<type>[mtp])(?<id>\d+)/g)];
+	return {
+		first: matches[0]
+			? {
+					...(matches[0].groups as ParsedComparison)
+				}
+			: null,
+		second: matches[1]
+			? {
+					...(matches[1].groups as ParsedComparison)
+				}
+			: null
+	};
 }
