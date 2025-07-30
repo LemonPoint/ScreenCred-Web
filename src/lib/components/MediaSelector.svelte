@@ -33,11 +33,8 @@
 
 	async function selectMedia(media: MediaDetails) {
 		if (forWhich) {
-			console.log('selectMedia', forWhich);
 			const newSearchId = updateComparison({ [forWhich]: media });
-			console.log('newSearchId', newSearchId);
 			if (newSearchId) {
-				console.log('doings tuff');
 				await Promise.all([
 					fetch(`/search/${newSearchId}`, { method: 'POST' }),
 					goto(`/search/${newSearchId}`)
