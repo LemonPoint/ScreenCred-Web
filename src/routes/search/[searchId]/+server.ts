@@ -3,6 +3,7 @@ import { parseSearchId } from '$lib/utils';
 export async function POST({ params, platform }) {
 	const searchId = params.searchId;
 	const comparison = parseSearchId(searchId);
+	console.log(comparison.first !== null && comparison.second !== null);
 	if (comparison.first !== null && comparison.second !== null) {
 		const searchTimestamp = Date.now();
 		const normalizedSearchId = [
@@ -11,6 +12,7 @@ export async function POST({ params, platform }) {
 				`${comparison.second.type}${comparison.second.id}`
 			])
 		].join();
+		console.log(searchId, normalizedSearchId);
 		platform?.env?.SCREENCRED_SEARCH?.writeDataPoint({
 			blobs: [searchId, normalizedSearchId],
 			doubles: [1, searchTimestamp],
