@@ -4,6 +4,7 @@
 	import { comparison, updateComparison } from '$lib/store.svelte';
 	import DebounceInput from '$lib/components/DebounceInput.svelte';
 	import { goto } from '$app/navigation';
+	import Poster from '$lib/components/Poster.svelte';
 
 	type ForWhich = 'first' | 'second';
 
@@ -54,7 +55,7 @@
 		error = null;
 
 		try {
-			const url = new URL('/search', window.location.origin);
+			const url = new URL('/api/search', window.location.origin);
 			url.searchParams.set('query', query);
 			const response = await fetch(url, {
 				headers: {
@@ -112,24 +113,22 @@
 </script>
 
 <button onclick={() => startSearch('first')}>
-	{#if comparison.first}
-		<img src={mediaImage(comparison.first, 185)} alt={mediaTitle(comparison.first)} />
-	{/if}
+	<Poster media={comparison.first} />
 	<span>{comparison.first ? mediaTitle(comparison.first) : 'First'}</span>
 </button>
 <button onclick={() => startSearch('second')}>
-	{#if comparison.second}
-		<img src={mediaImage(comparison.second, 185)} alt={mediaTitle(comparison.second)} />
-	{/if}
+	<Poster media={comparison.second} />
 	<span>{comparison.second ? mediaTitle(comparison.second) : 'Second'}</span>
 </button>
 <dialog bind:this={searchDialog}>
-	<button onclick={closeSearch}>Close</button>
-	<DebounceInput
-		bind:value={query}
-		placeholder="Search movies, TV shows, people..."
-		onSearch={handleSearch}
-	/>
+	<header>
+		<DebounceInput
+			bind:value={query}
+			placeholder="Search movies, TV shows, people..."
+			onSearch={handleSearch}
+		/>
+		<button onclick={closeSearch} aria-label="close"><span class="icon x"></span></button>
+	</header>
 
 	{#if isLoading}
 		<p>Searching...</p>
@@ -138,7 +137,6 @@
 	{:else}
 		<ul role="list">
 			{#each results as result (result.id)}
-				{@const imagePath = mediaImage(result, 185)}
 				{@const title = mediaTitle(result)}
 				{@const subtitle = mediaSubtitle(result, navigator.language)}
 				<li>
@@ -147,9 +145,9 @@
 							selectMedia(result);
 						}}
 					>
-						<img src={imagePath} alt={title} />
+						<Poster media={result} size={120} />
 						<div class="metadata">
-							<p class="title">{title}</p>
+							<h2 class="title">{title}</h2>
 							<p class="subtitle">{subtitle}</p>
 						</div>
 					</button>
@@ -158,3 +156,86 @@
 		</ul>
 	{/if}
 </dialog>
+
+<style>
+	button {
+		border: none;
+		background: none;
+		cursor: pointer;
+		padding: 0;
+	}
+
+	ul {
+		list-style: none;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding-block: 2rem;
+		padding-inline: 2rem;
+	}
+
+	li {
+		display: flex;
+	}
+
+	li button {
+		flex-grow: 1;
+		padding: 0.5em;
+		border-radius: calc(0.5em + 18px);
+		background: white;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		transition: scale 0.2s ease-in-out;
+		box-shadow:
+			0 10px 15px -3px rgb(0 0 0 / 0.1),
+			0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+		&:hover {
+			scale: 1.05;
+		}
+
+		.metadata {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			text-align: start;
+		}
+	}
+
+	dialog::backdrop {
+		backdrop-filter: blur(10px);
+		background-color: rgb(0 0 0 / 0.1);
+	}
+
+	dialog {
+		border: none;
+		background: transparent;
+		margin-inline: auto;
+		width: 100%;
+		min-height: 100%;
+
+		header {
+			display: flex;
+			gap: 1rem;
+			font-size: 1.5rem;
+			align-items: center;
+			position: sticky;
+			top: 0;
+			z-index: 100;
+		}
+
+		button[aria-label='close'] {
+			background: white;
+			border: none;
+			padding: 0.5rem;
+			border-radius: 999px;
+			aspect-ratio: 1;
+			height: 100%;
+			box-shadow:
+				0 20px 25px -5px rgb(0 0 0 / 0.1),
+				0 8px 10px -6px rgb(0 0 0 / 0.1);
+		}
+	}
+</style>
