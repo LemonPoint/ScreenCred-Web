@@ -31,7 +31,7 @@
 	</div>
 {/snippet}
 
-<ul>
+<ul role="list" class="results">
 	{#each results.credits as credit (credit.id)}
 		<li>
 			<h2>{credit.name}</h2>
@@ -40,3 +40,26 @@
 		</li>
 	{/each}
 </ul>
+
+<style>
+	.results {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
+		padding: 0;
+		margin: 1rem;
+
+		> li {
+			border: 1px solid #ccc;
+			grid-column: span 2;
+			display: grid;
+			grid-template-columns: subgrid;
+			padding: 1rem;
+			border-radius: 1rem;
+
+			h2 {
+				grid-column: span 2;
+			}
+		}
+	}
+</style>
