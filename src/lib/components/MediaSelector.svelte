@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { MediaDetails } from '$lib/interfaces';
-	import { mediaImage, mediaSubtitle, mediaTitle } from '$lib/utils';
+	import { mediaSubtitle, mediaTitle } from '$lib/utils';
 	import { comparison, updateComparison } from '$lib/store.svelte';
 	import DebounceInput from '$lib/components/DebounceInput.svelte';
 	import { goto } from '$app/navigation';
@@ -8,8 +8,11 @@
 
 	type ForWhich = 'first' | 'second';
 
+	const dialogTransitionDuration = 350;
+
 	let searchDialog: HTMLDialogElement;
 	let abortController: AbortController | null = null;
+	let isClosing = $state(false);
 
 	let forWhich = $state<ForWhich | null>(null);
 	let query = $state('');
@@ -20,19 +23,26 @@
 	function startSearch(which: ForWhich) {
 		searchDialog.showModal();
 		forWhich = which;
+		isClosing = false;
 	}
 
 	function closeSearch() {
-		searchDialog.close();
-		query = '';
-		results = [];
-		error = null;
-		abortController?.abort();
-		abortController = null;
-		forWhich = null;
+		isClosing = true;
+
+		setTimeout(() => {
+			searchDialog.close();
+			query = '';
+			results = [];
+			error = null;
+			abortController?.abort();
+			abortController = null;
+			forWhich = null;
+			isClosing = false;
+		}, dialogTransitionDuration);
 	}
 
 	async function selectMedia(media: MediaDetails) {
+		closeSearch();
 		if (forWhich) {
 			const newSearchId = updateComparison({ [forWhich]: media });
 			if (newSearchId) {
@@ -42,7 +52,6 @@
 				]);
 			}
 		}
-		closeSearch();
 	}
 
 	async function search(query: string, signal?: AbortSignal) {
@@ -121,7 +130,11 @@
 	</button>
 </div>
 
-<dialog bind:this={searchDialog}>
+<dialog
+	bind:this={searchDialog}
+	class:closing={isClosing}
+	style="--dialog-transition-duration: {dialogTransitionDuration}ms"
+>
 	<header>
 		<DebounceInput
 			bind:value={query}
@@ -172,17 +185,55 @@
 		padding: 0;
 	}
 
-	dialog::backdrop {
-		backdrop-filter: blur(10px);
-		background-color: rgb(0 0 0 / 0.1);
-	}
-
 	dialog {
 		border: none;
 		background: transparent;
 		margin-inline: auto;
 		width: 100%;
 		min-height: 100%;
+		opacity: 0;
+		scale: 0.95;
+		translate: 0 -200px;
+		transition:
+			opacity var(--dialog-transition-duration) ease-out,
+			scale var(--dialog-transition-duration) ease-out,
+			translate var(--dialog-transition-duration) ease-out;
+
+		&::backdrop {
+			backdrop-filter: blur(10px);
+			background-color: rgb(0 0 0 / 0.1);
+			opacity: 0;
+			transition: opacity var(--dialog-transition-duration) ease-out;
+		}
+
+		&[open] {
+			opacity: 1;
+			scale: 1;
+			translate: 0 0;
+
+			@starting-style {
+				opacity: 0;
+				scale: 0.95;
+				translate: 0 -200px;
+			}
+
+			&::backdrop {
+				opacity: 1;
+
+				@starting-style {
+					opacity: 0;
+				}
+			}
+		}
+
+		&.closing {
+			opacity: 0;
+			scale: 0.95;
+
+			&::backdrop {
+				opacity: 0;
+			}
+		}
 
 		header {
 			margin-inline: auto;
@@ -221,30 +272,30 @@
 
 		li {
 			display: flex;
-		}
 
-		li button {
-			flex-grow: 1;
-			padding: 0.5em;
-			border-radius: calc(0.5em + 18px);
-			background: white;
-			display: flex;
-			align-items: center;
-			gap: 1rem;
-			transition: scale 0.2s ease-in-out;
-			box-shadow:
-				0 10px 15px -3px rgb(0 0 0 / 0.1),
-				0 4px 6px -4px rgb(0 0 0 / 0.1);
-
-			&:hover {
-				scale: 1.05;
-			}
-
-			.metadata {
+			button {
+				flex-grow: 1;
+				padding: 0.5em;
+				border-radius: calc(0.5em + 18px);
+				background: white;
 				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				text-align: start;
+				align-items: center;
+				gap: 1rem;
+				transition: scale 0.2s ease-in-out;
+				box-shadow:
+					0 10px 15px -3px rgb(0 0 0 / 0.1),
+					0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+				&:hover {
+					scale: 1.05;
+				}
+
+				.metadata {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-start;
+					text-align: start;
+				}
 			}
 		}
 	}
