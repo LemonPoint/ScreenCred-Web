@@ -112,14 +112,15 @@
 	});
 </script>
 
-<button onclick={() => startSearch('first')}>
-	<Poster media={comparison.first} />
-	<span>{comparison.first ? mediaTitle(comparison.first) : 'First'}</span>
-</button>
-<button onclick={() => startSearch('second')}>
-	<Poster media={comparison.second} />
-	<span>{comparison.second ? mediaTitle(comparison.second) : 'Second'}</span>
-</button>
+<div class="media-selector">
+	<button onclick={() => startSearch('first')}>
+		<Poster media={comparison.first} />
+	</button>
+	<button onclick={() => startSearch('second')}>
+		<Poster media={comparison.second} />
+	</button>
+</div>
+
 <dialog bind:this={searchDialog}>
 	<header>
 		<DebounceInput
@@ -158,50 +159,17 @@
 </dialog>
 
 <style>
+	.media-selector {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+	}
+
 	button {
 		border: none;
 		background: none;
 		cursor: pointer;
 		padding: 0;
-	}
-
-	ul {
-		list-style: none;
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		padding-block: 2rem;
-		padding-inline: 2rem;
-	}
-
-	li {
-		display: flex;
-	}
-
-	li button {
-		flex-grow: 1;
-		padding: 0.5em;
-		border-radius: calc(0.5em + 18px);
-		background: white;
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		transition: scale 0.2s ease-in-out;
-		box-shadow:
-			0 10px 15px -3px rgb(0 0 0 / 0.1),
-			0 4px 6px -4px rgb(0 0 0 / 0.1);
-
-		&:hover {
-			scale: 1.05;
-		}
-
-		.metadata {
-			display: flex;
-			flex-direction: column;
-			align-items: flex-start;
-			text-align: start;
-		}
 	}
 
 	dialog::backdrop {
@@ -217,6 +185,7 @@
 		min-height: 100%;
 
 		header {
+			margin-inline: auto;
 			display: flex;
 			gap: 1rem;
 			font-size: 1.5rem;
@@ -224,6 +193,7 @@
 			position: sticky;
 			top: 0;
 			z-index: 100;
+			max-width: 600px;
 		}
 
 		button[aria-label='close'] {
@@ -236,6 +206,46 @@
 			box-shadow:
 				0 20px 25px -5px rgb(0 0 0 / 0.1),
 				0 8px 10px -6px rgb(0 0 0 / 0.1);
+		}
+
+		ul {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			padding-block: 2rem;
+			padding-inline: 2rem;
+			max-width: 600px;
+			margin-inline: auto;
+		}
+
+		li {
+			display: flex;
+		}
+
+		li button {
+			flex-grow: 1;
+			padding: 0.5em;
+			border-radius: calc(0.5em + 18px);
+			background: white;
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			transition: scale 0.2s ease-in-out;
+			box-shadow:
+				0 10px 15px -3px rgb(0 0 0 / 0.1),
+				0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+			&:hover {
+				scale: 1.05;
+			}
+
+			.metadata {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				text-align: start;
+			}
 		}
 	}
 </style>

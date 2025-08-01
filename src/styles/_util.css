@@ -1,0 +1,8 @@
+.z-stack {
+    position: relative;
+
+    > * {
+        position: absolute;
+        inset: 0;
+    }
+}

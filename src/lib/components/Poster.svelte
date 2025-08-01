@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
 	import type { MediaDetails } from '$lib/interfaces';
 	import { mediaImage, mediaTitle } from '$lib/utils';
 
@@ -10,32 +11,32 @@
 	const { media, size = 185 }: Props = $props();
 </script>
 
-<div class="poster" style:width={`${size}px`} style:border-radius={`${size * 0.15}px`}>
+<div class="poster z-stack" style:width={`${size}px`} style:border-radius={`${size * 0.15}px`}>
+	<div class="placeholder">
+		{#if media?.mediaType === 'movie'}
+			<span class="icon movie"></span>
+		{:else if media?.mediaType === 'tv'}
+			<span class="icon tv"></span>
+		{:else if media?.mediaType === 'person'}
+			<span class="icon person"></span>
+		{:else}
+			<span class="icon magnifying-glass"></span>
+		{/if}
+	</div>
 	{#if media}
 		{@const image = mediaImage(media)}
 		{#if image}
-			<img src={image} alt={mediaTitle(media)} />
+			<img src={image} alt={mediaTitle(media)} transition:fade|global />
 		{/if}
 	{/if}
-	<div class="placeholder">
-		{#if media?.mediaType === 'movie'}
-			<span>Movie</span>
-		{:else if media?.mediaType === 'tv'}
-			<span>TV</span>
-		{:else if media?.mediaType === 'person'}
-			<span>Person</span>
-		{:else}
-			<span>Search</span>
-		{/if}
-	</div>
 </div>
 
 <style>
 	.poster {
 		aspect-ratio: 2/3;
 		overflow: hidden;
-		background: aliceblue;
-		position: relative;
+		border: 1px solid oklch(87.2% 0.01 258.338);
+		background: oklch(96.7% 0.003 264.542);
 		flex-shrink: 0;
 
 		img {
@@ -46,11 +47,14 @@
 		}
 
 		.placeholder {
-			position: absolute;
-			inset: 0;
 			display: flex;
 			justify-content: center;
 			align-items: center;
+		}
+
+		.icon {
+			font-size: 2em;
+			color: oklch(37.3% 0.034 259.733);
 		}
 	}
 </style>
