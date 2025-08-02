@@ -30,6 +30,11 @@
 			{@render poster(comparison.first)}
 			{@render poster(comparison.second)}
 		</div>
+		<div class="overlay">
+			<div class="circle">
+				<span class="icon plus"></span>
+			</div>
+		</div>
 	</div>
 </a>
 
@@ -80,6 +85,35 @@
 
 		> :last-child {
 			top: 5%;
+		}
+	}
+
+	.overlay {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 2em;
+		color: white;
+
+		.circle {
+			border-radius: 50%;
+			height: 20%;
+			aspect-ratio: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: relative;
+			overflow: hidden;
+			box-shadow:
+				0 20px 25px -5px rgb(0 0 0 / 0.1),
+				0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+			&::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				backdrop-filter: blur(25px) saturate(150%);
+			}
 		}
 	}
 </style>
