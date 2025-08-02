@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { ComparisonState } from '$lib/store.svelte';
-	import Poster from '$lib/components/Poster.svelte';
 	import { mediaImage } from '$lib/utils';
 	import type { MediaDetails } from '$lib/interfaces';
 
@@ -40,7 +39,7 @@
 
 <style>
 	.comparison-card {
-		width: 20vw;
+		width: clamp(150px, 40vw, 200px);
 		aspect-ratio: 1;
 		overflow: hidden;
 		border-radius: 12%;
