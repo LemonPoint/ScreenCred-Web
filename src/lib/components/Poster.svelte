@@ -26,7 +26,7 @@
 	{#if media}
 		{@const image = mediaImage(media)}
 		{#if image}
-			<img src={image} alt={mediaTitle(media)} transition:fade|global={{ duration: 200 }} />/>
+			<img src={image} alt={mediaTitle(media)} transition:fade|global={{ duration: 200 }} />
 		{/if}
 	{/if}
 </div>

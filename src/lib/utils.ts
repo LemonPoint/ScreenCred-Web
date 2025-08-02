@@ -85,3 +85,7 @@ export function parseSearchId(searchId: string) {
 			: null
 	};
 }
+
+export function normalizeSearchId(first: string, second: string) {
+	return [first, second].sort().join('');
+}

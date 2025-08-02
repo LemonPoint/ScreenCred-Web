@@ -1,13 +1,25 @@
 import type { MediaDetails } from '$lib/interfaces';
+import { localStore } from '$lib/storage.svelte';
+import { normalizeSearchId } from '$lib/utils';
 
 interface ComparisonState {
+	id?: string;
+	normalizedId?: string;
 	first?: MediaDetails;
 	second?: MediaDetails;
 }
 
 export const comparison: ComparisonState = $state({});
+export const recentComparisons = localStore('recentComparisons', [] as Required<ComparisonState>[]);
 
-export function updateComparison({ first, second }: ComparisonState): string | undefined {
+export function resetComparison() {
+	comparison.id = undefined;
+	comparison.normalizedId = undefined;
+	comparison.first = undefined;
+	comparison.second = undefined;
+}
+
+export function updateComparison({ first, second }: ComparisonState): ComparisonState | undefined {
 	const previous = { ...comparison };
 
 	if (first) {
@@ -21,7 +33,24 @@ export function updateComparison({ first, second }: ComparisonState): string | u
 		!equals(previous.first, comparison.first) || !equals(previous.second, comparison.second);
 
 	if (hasChanged && comparison.first && comparison.second) {
-		return `${makeId(comparison.first)}${makeId(comparison.second)}`;
+		comparison.id = `${makeId(comparison.first)}${makeId(comparison.second)}`;
+		comparison.normalizedId = normalizeSearchId(
+			makeId(comparison.first),
+			makeId(comparison.second)
+		);
+		return comparison;
+	}
+}
+
+export function updateRecentComparisons({ id, normalizedId, first, second }: ComparisonState) {
+	if (id && normalizedId && first && second) {
+		const recentComparison = { id, normalizedId, first, second };
+		const _recentComparisons = [...recentComparisons.value];
+		const existingIndex = _recentComparisons.findIndex((c) => c.normalizedId === normalizedId);
+		if (existingIndex > -1) {
+			_recentComparisons.splice(existingIndex, 1);
+		}
+		recentComparisons.value = [recentComparison, ..._recentComparisons];
 	}
 }
 

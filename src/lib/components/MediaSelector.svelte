@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { MediaDetails } from '$lib/interfaces';
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
-	import { comparison, updateComparison } from '$lib/store.svelte';
+	import { comparison, updateComparison, updateRecentComparisons } from '$lib/store.svelte';
 	import DebounceInput from '$lib/components/DebounceInput.svelte';
 	import { goto } from '$app/navigation';
 	import Poster from '$lib/components/Poster.svelte';
@@ -44,12 +44,14 @@
 	async function selectMedia(media: MediaDetails) {
 		closeSearch();
 		if (forWhich) {
-			const newSearchId = updateComparison({ [forWhich]: media });
-			if (newSearchId) {
+			const completedComparison = updateComparison({ [forWhich]: media });
+			if (completedComparison) {
 				await Promise.all([
-					fetch(`/search/${newSearchId}`, { method: 'POST' }),
-					goto(`/search/${newSearchId}`)
+					fetch(`/search/${completedComparison.id}`, { method: 'POST' }),
+					goto(`/search/${completedComparison.id}`)
 				]);
+				// Do after navigation so you don't see it pop up while data is loading
+				updateRecentComparisons(completedComparison);
 			}
 		}
 	}
