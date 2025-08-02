@@ -2,7 +2,7 @@ import type { MediaDetails } from '$lib/interfaces';
 import { localStore } from '$lib/storage.svelte';
 import { normalizeSearchId } from '$lib/utils';
 
-interface ComparisonState {
+export interface ComparisonState {
 	id?: string;
 	normalizedId?: string;
 	first?: MediaDetails;

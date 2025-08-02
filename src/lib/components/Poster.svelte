@@ -35,7 +35,7 @@
 	.poster {
 		aspect-ratio: 2/3;
 		overflow: hidden;
-		border: 1px solid oklch(87.2% 0.01 258.338);
+		/*border: 1px solid oklch(87.2% 0.01 258.338);*/
 		background: oklch(96.7% 0.003 264.542);
 		flex-shrink: 0;
 
