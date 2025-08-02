@@ -43,7 +43,7 @@
 		width: 20vw;
 		aspect-ratio: 1;
 		overflow: hidden;
-		border-radius: 15%;
+		border-radius: 12%;
 		scroll-snap-align: start;
 		max-width: 200px;
 	}
@@ -76,7 +76,7 @@
 				0 8px 10px -6px rgb(0 0 0 / 0.1);
 			position: relative;
 			height: 60%;
-			border-radius: 8px;
+			border-radius: 4px;
 		}
 
 		> :first-child {
