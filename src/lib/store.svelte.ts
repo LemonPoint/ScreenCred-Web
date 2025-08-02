@@ -1,6 +1,6 @@
 import type { MediaDetails } from '$lib/interfaces';
 import { localStore } from '$lib/storage.svelte';
-import { normalizeSearchId } from '$lib/utils';
+import { normalizeMediaDetails, normalizeSearchId } from '$lib/utils';
 
 export interface ComparisonState {
 	id?: string;
@@ -44,7 +44,12 @@ export function updateComparison({ first, second }: ComparisonState): Comparison
 
 export function updateRecentComparisons({ id, normalizedId, first, second }: ComparisonState) {
 	if (id && normalizedId && first && second) {
-		const recentComparison = { id, normalizedId, first, second };
+		const recentComparison = {
+			id,
+			normalizedId,
+			first: normalizeMediaDetails(first),
+			second: normalizeMediaDetails(second)
+		};
 		const _recentComparisons = [...recentComparisons.value];
 		const existingIndex = _recentComparisons.findIndex((c) => c.normalizedId === normalizedId);
 		if (existingIndex > -1) {

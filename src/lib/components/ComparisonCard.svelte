@@ -60,7 +60,7 @@
 			content: '';
 			position: absolute;
 			inset: 0;
-			backdrop-filter: blur(25px) saturate(150%);
+			backdrop-filter: blur(25px) saturate(110%);
 		}
 	}
 

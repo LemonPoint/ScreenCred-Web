@@ -1,3 +1,5 @@
+import z from 'zod';
+
 export const MEDIA_TYPE_KEY = {
 	m: 'movie',
 	t: 'tv',
@@ -7,33 +9,42 @@ export type MediaTypeKey = keyof typeof MEDIA_TYPE_KEY;
 
 export type MediaType = 'movie' | 'tv' | 'person';
 
-export interface BaseMediaDetails {
-	id: number;
-	mediaType: MediaType;
-}
+const BaseMediaDetailsSchema = z.object({
+	id: z.number(),
+	mediaType: z.string()
+});
 
-export interface MovieDetails extends BaseMediaDetails {
-	mediaType: 'movie';
-	title: string;
-	posterPath: string;
-	releaseDate: string;
-}
+export const MovieDetailsSchema = BaseMediaDetailsSchema.extend({
+	mediaType: z.literal('movie'),
+	title: z.string(),
+	posterPath: z.string(),
+	releaseDate: z.string()
+});
 
-export interface TVDetails extends BaseMediaDetails {
-	mediaType: 'tv';
-	name: string;
-	posterPath: string;
-	firstAirDate: string;
-}
+export const TVDetailsSchema = BaseMediaDetailsSchema.extend({
+	mediaType: z.literal('tv'),
+	name: z.string(),
+	posterPath: z.string(),
+	firstAirDate: z.string()
+});
 
-export interface PersonDetails extends BaseMediaDetails {
-	mediaType: 'person';
-	name: string;
-	profilePath: string;
-	knownFor: MediaDetails[];
-}
+export const PersonDetailsSchema = BaseMediaDetailsSchema.extend({
+	mediaType: z.literal('person'),
+	name: z.string(),
+	profilePath: z.string(),
+	knownFor: z.array(z.string())
+});
 
-export type MediaDetails = MovieDetails | TVDetails | PersonDetails;
+export const MediaDetailsSchema = z.discriminatedUnion('mediaType', [
+	MovieDetailsSchema,
+	TVDetailsSchema,
+	PersonDetailsSchema
+]);
+
+export type MovieDetails = z.infer<typeof MovieDetailsSchema>;
+export type TVDetails = z.infer<typeof TVDetailsSchema>;
+export type PersonDetails = z.infer<typeof PersonDetailsSchema>;
+export type MediaDetails = z.infer<typeof MediaDetailsSchema>;
 
 export interface SimpleCredit {
 	id: number;

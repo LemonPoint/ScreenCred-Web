@@ -1,4 +1,4 @@
-import type { MediaDetails, MediaTypeKey } from '$lib/interfaces';
+import { type MediaDetails, MediaDetailsSchema, type MediaTypeKey } from '$lib/interfaces';
 
 export const BASE_URL = 'https://api.themoviedb.org/3/';
 export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
@@ -88,4 +88,8 @@ export function parseSearchId(searchId: string) {
 
 export function normalizeSearchId(first: string, second: string) {
 	return [first, second].sort().join('');
+}
+
+export function normalizeMediaDetails(details: MediaDetails): MediaDetails {
+	return MediaDetailsSchema.parse(details);
 }
