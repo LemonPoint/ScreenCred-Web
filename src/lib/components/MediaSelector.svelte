@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { MediaDetails } from '$lib/interfaces';
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
-	import { comparison, updateComparison, updateRecentComparisons } from '$lib/store.svelte';
+	import { comparison, updateComparison } from '$lib/store.svelte';
 	import DebounceInput from '$lib/components/DebounceInput.svelte';
 	import { goto } from '$app/navigation';
 	import Poster from '$lib/components/Poster.svelte';
@@ -50,8 +50,6 @@
 					fetch(`/search/${completedComparison.id}`, { method: 'POST' }),
 					goto(`/search/${completedComparison.id}`)
 				]);
-				// Do after navigation so you don't see it pop up while data is loading
-				updateRecentComparisons(completedComparison);
 			}
 		}
 	}

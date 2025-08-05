@@ -38,11 +38,12 @@ export function updateComparison({ first, second }: ComparisonState): Comparison
 			makeId(comparison.first),
 			makeId(comparison.second)
 		);
+		updateRecentComparisons(comparison);
 		return comparison;
 	}
 }
 
-export function updateRecentComparisons({ id, normalizedId, first, second }: ComparisonState) {
+function updateRecentComparisons({ id, normalizedId, first, second }: ComparisonState) {
 	if (id && normalizedId && first && second) {
 		const recentComparison = {
 			id,
