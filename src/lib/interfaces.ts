@@ -115,7 +115,7 @@ export interface PersonCast {
 	releaseDate?: Date;
 	creditId: string;
 	character: string;
-	profilePath?: string;
+	posterPath?: string;
 	mediaType: 'movie' | 'tv';
 }
 
@@ -127,7 +127,7 @@ export interface PersonCrew {
 	creditId: string;
 	department: string;
 	job: string;
-	profilePath?: string;
+	posterPath?: string;
 	mediaType: 'movie' | 'tv';
 }
 

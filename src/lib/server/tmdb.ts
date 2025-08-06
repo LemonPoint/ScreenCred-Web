@@ -133,19 +133,20 @@ async function getCreditsForPerson(id: number): Promise<Credits> {
 				id: c.id,
 				name: c.title ?? c.name ?? 'Unknown',
 				role: normalizeCharacter(c.character),
-				profilePath: c.profilePath,
+				profilePath: c.posterPath,
 				type: c.mediaType
 			}))
 			.filter((c) => {
 				if (c.type === 'tv') {
 					return c.role !== 'Self';
 				}
+				return true;
 			}),
 		crew: crew.map((c) => ({
 			id: c.id,
 			name: c.title ?? c.name ?? 'Unknown',
 			role: c.job,
-			profilePath: c.profilePath,
+			profilePath: c.posterPath,
 			type: c.mediaType
 		}))
 	};
