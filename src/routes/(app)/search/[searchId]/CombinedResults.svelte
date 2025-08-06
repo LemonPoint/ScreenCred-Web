@@ -2,8 +2,7 @@
 	import type { UnionComparison } from '$lib/server/comparison';
 	import { mediaTitleWithYear, tmdbImageUrl, tmdbImageUrlSquare } from '$lib/utils';
 	import type { MediaDetails } from '$lib/interfaces';
-
-	type Roles = string[];
+	import Credits from '$lib/components/Credits.svelte';
 
 	interface Props {
 		first: MediaDetails;
@@ -28,27 +27,6 @@
 	</div>
 {/snippet}
 
-{#snippet Credits(castRoles: Roles, crewRoles: Roles)}
-	<div>
-		{#if castRoles.length}
-			<h3>Cast</h3>
-			<ul>
-				{#each castRoles as cast, index (index)}
-					<li>{cast}</li>
-				{/each}
-			</ul>
-		{/if}
-		{#if crewRoles.length}
-			<h3>Crew</h3>
-			<ul>
-				{#each crewRoles as crew, index (index)}
-					<li>{crew}</li>
-				{/each}
-			</ul>
-		{/if}
-	</div>
-{/snippet}
-
 {#if results.credits.length === 0}
 	<p>
 		Looks like no one worked on both <strong>{mediaTitleWithYear(first)}</strong> and
@@ -62,8 +40,8 @@
 					{@render CreditImage(credit)}
 					<h2>{credit.name}</h2>
 				</header>
-				{@render Credits(credit.roles.firstCast, credit.roles.firstCrew)}
-				{@render Credits(credit.roles.secondCast, credit.roles.secondCrew)}
+				<Credits castRoles={credit.roles.firstCast} crewRoles={credit.roles.firstCrew} />
+				<Credits castRoles={credit.roles.secondCast} crewRoles={credit.roles.secondCrew} />
 			</li>
 		{/each}
 	</ul>
@@ -103,23 +81,14 @@
 						0 8px 10px -6px rgb(0 0 0 / 0.1);
 					font-size: 2rem;
 
+					img {
+						height: 100%;
+					}
+
 					&.person {
 						aspect-ratio: 1;
 					}
 				}
-			}
-
-			h3 {
-				color: oklch(55% 0.003 264.542);
-				text-transform: uppercase;
-				font-weight: 500;
-				font-size: 1em;
-				margin-top: 1em;
-			}
-
-			ul {
-				list-style-position: inside;
-				padding: 0;
 			}
 		}
 	}

@@ -1,0 +1,42 @@
+<script lang="ts">
+	interface Props {
+		castRoles: string[];
+		crewRoles: string[];
+	}
+
+	const { castRoles, crewRoles }: Props = $props();
+</script>
+
+<div>
+	{#if castRoles.length}
+		<h3>Cast</h3>
+		<ul>
+			{#each castRoles as cast, index (index)}
+				<li>{cast}</li>
+			{/each}
+		</ul>
+	{/if}
+	{#if crewRoles.length}
+		<h3>Crew</h3>
+		<ul>
+			{#each crewRoles as crew, index (index)}
+				<li>{crew}</li>
+			{/each}
+		</ul>
+	{/if}
+</div>
+
+<style>
+	h3 {
+		color: oklch(55% 0.003 264.542);
+		text-transform: uppercase;
+		font-weight: 500;
+		font-size: 1em;
+		margin-top: 1em;
+	}
+
+	ul {
+		list-style-position: inside;
+		padding: 0;
+	}
+</style>

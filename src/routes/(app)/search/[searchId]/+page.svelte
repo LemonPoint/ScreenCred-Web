@@ -12,5 +12,5 @@
 {#if results.type === 'union'}
 	<CombinedResults {...data} {results} />
 {:else}
-	<SimpleResults />
+	<SimpleResults {...data} {results} />
 {/if}
