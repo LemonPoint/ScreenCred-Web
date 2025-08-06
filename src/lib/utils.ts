@@ -18,8 +18,12 @@ export function camelize(obj: any): any {
 	return result;
 }
 
-function tmdbImageUrl(path: string | undefined, width = 500) {
+export function tmdbImageUrl(path: string | undefined, width = 500) {
 	return path ? `${IMAGE_BASE_URL}w${width}${path}` : undefined;
+}
+
+export function tmdbImageUrlSquare(path: string | undefined) {
+	return path ? `${IMAGE_BASE_URL}w300_and_h300_bestv2${path}` : undefined;
 }
 
 function formatDate(date: string, locale?: string) {

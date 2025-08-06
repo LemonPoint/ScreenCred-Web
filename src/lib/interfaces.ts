@@ -32,7 +32,9 @@ export const PersonDetailsSchema = BaseMediaDetailsSchema.extend({
 	mediaType: z.literal('person'),
 	name: z.string(),
 	profilePath: z.string(),
-	knownFor: z.array(z.string())
+	knownFor: z.optional(
+		z.array(z.discriminatedUnion('mediaType', [MovieDetailsSchema, TVDetailsSchema]))
+	)
 });
 
 export const MediaDetailsSchema = z.discriminatedUnion('mediaType', [
