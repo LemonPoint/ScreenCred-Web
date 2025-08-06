@@ -4,12 +4,13 @@
 	import { updateComparison } from '$lib/store.svelte.js';
 
 	let { data } = $props();
+	const { first, second, results } = data;
 
-	updateComparison({ first: data.first, second: data.second });
+	updateComparison({ first, second });
 </script>
 
-{#if data.results.type === 'union'}
-	<CombinedResults results={data.results} />
+{#if results.type === 'union'}
+	<CombinedResults {...data} {results} />
 {:else}
 	<SimpleResults />
 {/if}

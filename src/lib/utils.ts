@@ -58,6 +58,17 @@ export function mediaTitle(details: MediaDetails) {
 	}
 }
 
+export function mediaTitleWithYear(details: MediaDetails) {
+	switch (details.mediaType) {
+		case 'movie':
+			return `${details.title} (${details.releaseDate.slice(0, 4)})`;
+		case 'tv':
+			return `${details.name} (${details.firstAirDate.slice(0, 4)})`;
+		case 'person':
+			return details.name;
+	}
+}
+
 export function mediaSubtitle(details: MediaDetails, locale?: string) {
 	switch (details.mediaType) {
 		case 'movie':

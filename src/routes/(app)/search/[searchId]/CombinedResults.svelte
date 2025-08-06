@@ -1,14 +1,17 @@
 <script lang="ts">
 	import type { UnionComparison } from '$lib/server/comparison';
-	import { tmdbImageUrl, tmdbImageUrlSquare } from '$lib/utils';
+	import { mediaTitleWithYear, tmdbImageUrl, tmdbImageUrlSquare } from '$lib/utils';
+	import type { MediaDetails } from '$lib/interfaces';
 
 	type Roles = string[];
 
 	interface Props {
+		first: MediaDetails;
+		second: MediaDetails;
 		results: UnionComparison;
 	}
 
-	const { results }: Props = $props();
+	const { first, second, results }: Props = $props();
 </script>
 
 {#snippet CreditImage(credit: CombinedCredit)}
@@ -46,18 +49,25 @@
 	</div>
 {/snippet}
 
-<ul role="list" class="results">
-	{#each results.credits as credit (credit.id)}
-		<li>
-			<header>
-				{@render CreditImage(credit)}
-				<h2>{credit.name}</h2>
-			</header>
-			{@render Credits(credit.roles.firstCast, credit.roles.firstCrew)}
-			{@render Credits(credit.roles.secondCast, credit.roles.secondCrew)}
-		</li>
-	{/each}
-</ul>
+{#if results.credits.length === 0}
+	<p>
+		Looks like no one worked on both <strong>{mediaTitleWithYear(first)}</strong> and
+		<strong>{mediaTitleWithYear(second)}</strong>.
+	</p>
+{:else}
+	<ul role="list" class="results">
+		{#each results.credits as credit (credit.id)}
+			<li>
+				<header>
+					{@render CreditImage(credit)}
+					<h2>{credit.name}</h2>
+				</header>
+				{@render Credits(credit.roles.firstCast, credit.roles.firstCrew)}
+				{@render Credits(credit.roles.secondCast, credit.roles.secondCrew)}
+			</li>
+		{/each}
+	</ul>
+{/if}
 
 <style>
 	.results {
