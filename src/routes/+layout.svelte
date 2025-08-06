@@ -3,6 +3,8 @@
 	let { children } = $props();
 </script>
 
-<h1>ScreenCred</h1>
+<a href="/">
+	<h1>ScreenCred</h1>
+</a>
 
 {@render children()}
