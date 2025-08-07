@@ -5,9 +5,13 @@ import type {
 	MediaType,
 	MovieCast,
 	MovieCrew,
+	MovieDetails,
+	PagedResponse,
 	PersonCast,
 	PersonCrew,
+	PersonDetails,
 	SearchResponse,
+	TVDetails,
 	TvShowCast,
 	TvShowCrew
 } from '../interfaces';
@@ -148,6 +152,42 @@ async function getCreditsForPerson(id: number): Promise<Credits> {
 			role: c.job,
 			profilePath: c.posterPath,
 			type: c.mediaType
+		}))
+	};
+}
+
+export async function getPopularMovies() {
+	const url = `${BASE_URL}/movie/popular?language=en-US&page=1`;
+	const data = await makeTMDBRequest<PagedResponse<MovieDetails>>(url);
+	return {
+		...data,
+		results: data.results.map((r) => ({
+			...r,
+			mediaType: 'movie'
+		}))
+	};
+}
+
+export async function getPopularTvShows() {
+	const url = `${BASE_URL}/tv/popular?language=en-US&page=1`;
+	const data = await makeTMDBRequest<PagedResponse<TVDetails>>(url);
+	return {
+		...data,
+		results: data.results.map((r) => ({
+			...r,
+			mediaType: 'tv'
+		}))
+	};
+}
+
+export async function getPopularPeople() {
+	const url = `${BASE_URL}/person/popular?language=en-US&page=1`;
+	const data = await makeTMDBRequest<PagedResponse<PersonDetails>>(url);
+	return {
+		...data,
+		results: data.results.map((r) => ({
+			...r,
+			mediaType: 'person'
 		}))
 	};
 }
