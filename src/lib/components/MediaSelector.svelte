@@ -7,7 +7,12 @@
 		TVDetails
 	} from '$lib/interfaces';
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
-	import { comparison, updateComparison } from '$lib/store.svelte';
+	import {
+		comparison,
+		recentSearches,
+		updateComparison,
+		updateRecentSearches
+	} from '$lib/store.svelte';
 	import DebounceInput from '$lib/components/DebounceInput.svelte';
 	import { goto } from '$app/navigation';
 	import Poster from '$lib/components/Poster.svelte';
@@ -46,7 +51,6 @@
 			tvShows: tvShows as TVDetails[],
 			people: people as PersonDetails[]
 		};
-		console.log(popular);
 	});
 
 	function startSearch(which: ForWhich) {
@@ -75,6 +79,9 @@
 		if (forWhich) {
 			const completedComparison = updateComparison({ [forWhich]: media });
 			if (completedComparison) {
+				if (completedComparison.first && completedComparison.second) {
+					updateRecentSearches([completedComparison.first, completedComparison.second]);
+				}
 				await Promise.all([
 					fetch(`/search/${completedComparison.id}`, { method: 'POST' }),
 					goto(`/search/${completedComparison.id}`)
@@ -200,7 +207,9 @@
 		</section>
 	{/snippet}
 
-	<!--{@render Section({ title: 'Recent', type: 'history', media: [] })}-->
+	{#if recentSearches.value.length > 0}
+		{@render Section({ title: 'Recent', type: 'history', media: recentSearches.value })}
+	{/if}
 	{@render Section({ title: 'Popular Movies', type: 'movie', media: popular.movies })}
 	{@render Section({ title: 'Popular Shows', type: 'tv', media: popular.tvShows })}
 	{@render Section({ title: 'Popular People', type: 'person', media: popular.people })}

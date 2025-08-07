@@ -11,6 +11,7 @@ export interface ComparisonState {
 
 export const comparison: ComparisonState = $state({});
 export const recentComparisons = localStore('recentComparisons', [] as Required<ComparisonState>[]);
+export const recentSearches = localStore('recentSearches', [] as MediaDetails[]);
 
 export function resetComparison() {
 	comparison.id = undefined;
@@ -58,6 +59,18 @@ function updateRecentComparisons({ id, normalizedId, first, second }: Comparison
 		}
 		recentComparisons.value = [recentComparison, ..._recentComparisons];
 	}
+}
+
+export function updateRecentSearches(searches: MediaDetails[]) {
+	const normalizedMedia = searches.map(normalizeMediaDetails);
+	const _recentSearches = [...recentSearches.value];
+	for (const media of normalizedMedia) {
+		const existingIndex = _recentSearches.findIndex((m) => m.id === media.id);
+		if (existingIndex > -1) {
+			_recentSearches.splice(existingIndex, 1);
+		}
+	}
+	recentSearches.value = [...normalizedMedia, ..._recentSearches];
 }
 
 function equals(a?: MediaDetails, b?: MediaDetails) {
