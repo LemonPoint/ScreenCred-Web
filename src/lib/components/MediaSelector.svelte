@@ -210,9 +210,9 @@
 	{#if recentSearches.value.length > 0}
 		{@render Section({ title: 'Recent', type: 'history', media: recentSearches.value })}
 	{/if}
-	{@render Section({ title: 'Popular Movies', type: 'movie', media: popular.movies })}
-	{@render Section({ title: 'Popular Shows', type: 'tv', media: popular.tvShows })}
-	{@render Section({ title: 'Popular People', type: 'person', media: popular.people })}
+	{@render Section({ title: 'Trending Movies', type: 'movie', media: popular.movies })}
+	{@render Section({ title: 'Trending Shows', type: 'tv', media: popular.tvShows })}
+	{@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
 
 	{#if isLoading}
 		<p>Searching...</p>
