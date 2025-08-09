@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ComparisonState } from '$lib/store.svelte';
-	import { mediaImage } from '$lib/utils';
+	import { mediaImage, mediaTitle } from '$lib/utils';
 	import type { MediaDetails } from '$lib/interfaces';
 
 	interface Props {
@@ -38,13 +38,17 @@
 </a>
 
 <style>
-	.comparison-card {
+	a {
 		width: clamp(150px, 40vw, 200px);
+		display: block;
+	}
+
+	.comparison-card {
 		aspect-ratio: 1;
 		overflow: hidden;
 		border-radius: 12%;
 		scroll-snap-align: start;
-		max-width: 200px;
+		max-width: 100%;
 	}
 
 	.background {

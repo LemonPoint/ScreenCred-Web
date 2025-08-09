@@ -1,0 +1,5 @@
+@import "_colors.css";
+
+:root {
+    --font-geometric-humanist: Avenir, Montserrat, Corbel, URW Gothic, source-sans-pro, sans-serif;
+}

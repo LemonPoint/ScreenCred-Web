@@ -1,8 +1,10 @@
 @import "./_reset.css";
+@import "./_variables.css";
 @import "./_icons.css";
 @import "./_util.css";
 
 html {
-    font-family: sans-serif;
+    font-family: var(--font-geometric-humanist), sans-serif;
+    background: linear-gradient(to right bottom, var(--uchu-yin-8), var(--uchu-yin-9));
 }
 

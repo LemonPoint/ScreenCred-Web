@@ -123,12 +123,21 @@
 </section>
 
 <style>
+	h2 {
+		color: white;
+		font-weight: 500;
+		margin-block: 1rem;
+	}
 	ul {
-		padding: 1rem;
+		padding: 0;
 		display: flex;
 		gap: 1rem;
 		overflow-x: scroll;
 		scroll-snap-type: x mandatory;
-		scroll-padding-inline: 2rem;
+		scroll-padding-inline: 1rem;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
 	}
 </style>
