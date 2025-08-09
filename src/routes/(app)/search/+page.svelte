@@ -11,8 +11,7 @@
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
 	import Poster from '$lib/components/Poster.svelte';
 	import { page } from '$app/state';
-
-	type ForWhich = 'first' | 'second';
+	import z from 'zod';
 
 	let query = $state('');
 	let abortController: AbortController | null = null;
@@ -102,7 +101,8 @@
 	}
 
 	async function selectMedia(media: MediaDetails) {
-		const forWhich = (page.url.searchParams.get('for') as ForWhich | null) || 'first';
+		const schema = z.enum(['first', 'second']).catch('first');
+		const forWhich = schema.parse(page.url.searchParams.get('for'));
 		const completedComparison = updateComparison({ [forWhich]: media });
 		if (completedComparison) {
 			if (completedComparison.first && completedComparison.second) {
