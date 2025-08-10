@@ -41,14 +41,16 @@
 	a {
 		width: clamp(150px, 40vw, 200px);
 		display: block;
+		container-type: inline-size;
 	}
 
 	.comparison-card {
 		aspect-ratio: 1;
 		overflow: hidden;
-		border-radius: 12%;
+		border-radius: 10cqmin;
 		scroll-snap-align: start;
 		max-width: 100%;
+		box-shadow: var(--shadow-2);
 	}
 
 	.background {
@@ -74,9 +76,7 @@
 		gap: 5%;
 
 		> * {
-			box-shadow:
-				0 20px 25px -5px rgb(0 0 0 / 0.1),
-				0 8px 10px -6px rgb(0 0 0 / 0.1);
+			box-shadow: var(--shadow-2);
 			position: relative;
 			height: 60%;
 			border-radius: 4px;
@@ -96,7 +96,7 @@
 		justify-content: center;
 		align-items: center;
 		font-size: 2em;
-		color: white;
+		color: hsl(0 0% 100% / 90%);
 
 		.circle {
 			border-radius: 50%;
@@ -107,9 +107,7 @@
 			align-items: center;
 			position: relative;
 			overflow: hidden;
-			box-shadow:
-				0 20px 25px -5px rgb(0 0 0 / 0.1),
-				0 8px 10px -6px rgb(0 0 0 / 0.1);
+			box-shadow: var(--shadow-2);
 
 			&::before {
 				content: '';

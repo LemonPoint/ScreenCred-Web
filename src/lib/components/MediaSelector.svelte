@@ -17,4 +17,8 @@
 		display: flex;
 		gap: 1rem;
 	}
+
+	a {
+		width: 200px;
+	}
 </style>

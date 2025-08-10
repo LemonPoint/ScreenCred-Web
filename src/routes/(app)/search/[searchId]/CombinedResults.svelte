@@ -53,13 +53,14 @@
 		grid-template-columns: max-content max-content;
 		gap: 2rem;
 		padding: 0;
-		margin: 1rem;
+		margin-block: 1rem;
 
 		> li {
 			grid-column: span 2;
 			display: grid;
 			grid-template-columns: subgrid;
 			gap: 1rem;
+			position: relative;
 
 			header {
 				grid-column: span 2;
@@ -70,15 +71,13 @@
 				.image {
 					width: 100px;
 					aspect-ratio: 2/3;
-					border-radius: 1em;
+					border-radius: 10px;
 					overflow: hidden;
 					display: flex;
 					justify-content: center;
 					align-items: center;
-					background: oklch(96.7% 0.003 264.542);
-					box-shadow:
-						0 20px 25px -5px rgb(0 0 0 / 0.1),
-						0 8px 10px -6px rgb(0 0 0 / 0.1);
+					background: var(--uchu-yin-9);
+					box-shadow: var(--shadow-3);
 					font-size: 2rem;
 
 					img {

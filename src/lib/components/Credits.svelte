@@ -28,7 +28,7 @@
 
 <style>
 	h3 {
-		color: oklch(55% 0.003 264.542);
+		color: var(--uchu-gray-6);
 		text-transform: uppercase;
 		font-weight: 500;
 		font-size: 1em;

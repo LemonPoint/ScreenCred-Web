@@ -35,7 +35,7 @@
 
 <style>
 	input {
-		flex-grow: 1;
+		width: 100%;
 		border: none;
 		padding: 0.5rem 1rem;
 		border-radius: 999px;

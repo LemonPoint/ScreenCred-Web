@@ -15,7 +15,7 @@
 
 	let query = $state('');
 	let abortController: AbortController | null = null;
-	let results: MediaDetails[] = $state([]);
+	let searchResults: MediaDetails[] = $state([]);
 	let isLoading = $state(false);
 	let error = $state<string | null>(null);
 
@@ -44,7 +44,7 @@
 		abortController?.abort();
 
 		if (!query.trim()) {
-			results = [];
+			searchResults = [];
 			error = null;
 			isLoading = false;
 			return;
@@ -56,7 +56,7 @@
 
 	async function search(query: string, signal?: AbortSignal) {
 		if (!query.trim()) {
-			results = [];
+			searchResults = [];
 			return;
 		}
 
@@ -81,7 +81,7 @@
 			const data = (await response.json()) as { results: MediaDetails[] };
 
 			if (!signal?.aborted) {
-				results = data.results || [];
+				searchResults = data.results || [];
 			}
 		} catch (err) {
 			if (err instanceof Error && err.name === 'AbortError') {
@@ -90,7 +90,7 @@
 
 			if (!signal?.aborted) {
 				error = err instanceof Error ? err.message : 'Search failed';
-				results = [];
+				searchResults = [];
 			}
 		} finally {
 			if (!signal?.aborted) {
@@ -124,11 +124,14 @@
 	});
 </script>
 
-<DebounceInput
-	bind:value={query}
-	placeholder="Search movies, TV shows, people..."
-	onSearch={handleSearch}
-/>
+<div class="search">
+	<DebounceInput
+		bind:value={query}
+		placeholder="Search movies, TV shows, people..."
+		onSearch={handleSearch}
+	/>
+	<span class="icon magnifying-glass"></span>
+</div>
 
 {#snippet Section({ title, type, media })}
 	<section class="popular">
@@ -145,7 +148,9 @@
 							selectMedia(media);
 						}}
 					>
-						<Poster {media} size={120} />
+						<div class="poster">
+							<Poster {media} />
+						</div>
 						<div class="metadata">
 							<h4 class="title">{title}</h4>
 							<p class="subtitle">{subtitle}</p>
@@ -161,26 +166,10 @@
 	<p>Searching...</p>
 {:else if error}
 	<p>Error: {error}</p>
-{:else}
-	<ul role="list">
-		{#each results as result (result.id)}
-			{@const title = mediaTitle(result)}
-			{@const subtitle = mediaSubtitle(result, navigator.language)}
-			<li>
-				<button
-					onclick={() => {
-						selectMedia(result);
-					}}
-				>
-					<Poster media={result} size={120} />
-					<div class="metadata">
-						<h2 class="title">{title}</h2>
-						<p class="subtitle">{subtitle}</p>
-					</div>
-				</button>
-			</li>
-		{/each}
-	</ul>
+{:else if searchResults.length > 0}
+	{@render Section({ title: 'Search', type: 'magnifying-glass', media: searchResults })}
+{:else if query.trim() && recentSearches.value.length === 0}
+	<p>No results found</p>
 {/if}
 
 {#if recentSearches.value.length > 0}
@@ -191,67 +180,94 @@
 {@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
 
 <style>
-	ul {
+	.search {
 		width: 100%;
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
 		padding-block: 2rem;
-		padding-inline: 2rem;
-		margin-inline: auto;
+		position: relative;
+		font-size: 1.5rem;
+
+		.icon {
+			position: absolute;
+			right: 1rem;
+			top: 50%;
+			transform: translateY(-50%);
+			color: var(--uchu-gray-8);
+		}
+	}
+
+	ul {
+		padding: 0;
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+		overflow-x: scroll;
+		scroll-snap-type: x mandatory;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
 	}
 
 	li {
 		display: flex;
 
 		button {
-			flex-grow: 1;
-			padding: 0.5em;
-			border-radius: calc(0.5em + 18px);
-			background: white;
+			background: transparent;
 			display: flex;
+			flex-direction: column;
 			align-items: center;
 			gap: 1rem;
-			transition: scale 0.2s ease-in-out;
-			box-shadow:
-				0 10px 15px -3px rgb(0 0 0 / 0.1),
-				0 4px 6px -4px rgb(0 0 0 / 0.1);
 			cursor: pointer;
 			border: none;
+			width: min-content;
+			padding: 0;
 
-			&:hover {
-				scale: 1.05;
+			.poster {
+				width: 140px;
 			}
 
 			.metadata {
+				width: 100%;
 				display: flex;
 				flex-direction: column;
 				align-items: flex-start;
 				text-align: start;
+				color: white;
+				gap: 0.25rem;
+
+				h4 {
+					display: -webkit-box;
+					line-clamp: 2;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+					overflow: hidden;
+				}
+
+				p {
+					color: var(--uchu-gray-5);
+					display: -webkit-box;
+					line-clamp: 2;
+					-webkit-line-clamp: 2;
+					-webkit-box-orient: vertical;
+					overflow: hidden;
+				}
 			}
 		}
 	}
 
-	.popular {
-		header {
-			h3 {
-				display: flex;
-				align-items: center;
-			}
-		}
+	header {
+		margin-bottom: 1rem;
 
-		ul {
-			padding: 1rem;
+		h3 {
+			color: white;
 			display: flex;
-			flex-direction: row;
-			gap: 1rem;
-			overflow-x: scroll;
-			scroll-snap-type: x mandatory;
-			scroll-padding-inline: 2rem;
+			align-items: center;
+			gap: 0.25em;
+			font-weight: 500;
 		}
+	}
 
-		button {
-			flex-direction: column;
-		}
+	.popular {
+		margin-top: 2rem;
 	}
 </style>

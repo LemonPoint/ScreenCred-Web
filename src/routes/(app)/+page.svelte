@@ -126,10 +126,11 @@
 	h2 {
 		color: white;
 		font-weight: 500;
-		margin-block: 1rem;
+		margin-top: 1rem;
 	}
 	ul {
 		padding: 0;
+		padding-block: 1rem;
 		display: flex;
 		gap: 1rem;
 		overflow-x: scroll;
