@@ -4,11 +4,11 @@
 @import "./_util.css";
 
 html {
-    font-family: var(--font-geometric-humanist), sans-serif;
-    color: white;
-    background: linear-gradient(to right bottom, var(--uchu-yin-8), var(--uchu-yin-9));
+  font-family: var(--font-geometric-humanist), sans-serif;
+  color: white;
+  background: linear-gradient(to right bottom, var(--uchu-yin-8), var(--uchu-yin-9));
 }
 
 body {
-    padding: 2rem;
+  padding: 2rem;
 }

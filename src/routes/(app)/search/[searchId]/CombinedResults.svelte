@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { UnionComparison } from '$lib/server/comparison';
+	import type { CombinedCredit, UnionComparison } from '$lib/server/comparison';
 	import { mediaTitleWithYear, tmdbImageUrl, tmdbImageUrlSquare } from '$lib/utils';
 	import type { MediaDetails } from '$lib/interfaces';
 	import Credits from '$lib/components/Credits.svelte';

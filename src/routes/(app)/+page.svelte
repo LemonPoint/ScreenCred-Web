@@ -124,7 +124,6 @@
 
 <style>
 	h2 {
-		color: white;
 		font-weight: 500;
 		margin-top: 1rem;
 	}

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { ComparisonState } from '$lib/store.svelte';
-	import { mediaImage, mediaTitle } from '$lib/utils';
 	import type { MediaDetails } from '$lib/interfaces';
+	import type { ComparisonState } from '$lib/store.svelte';
+	import { mediaImage } from '$lib/utils';
 
 	interface Props {
 		comparison: ComparisonState;

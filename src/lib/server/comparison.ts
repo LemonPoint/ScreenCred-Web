@@ -1,13 +1,12 @@
 import type { MediaDetails, MediaType, SimpleCredit } from '../interfaces';
 import { getCredits } from './tmdb';
-import { mediaTitle } from '$lib/utils';
 
 export interface UnionComparison {
 	type: 'union';
 	credits: CombinedCredit[];
 }
 
-interface CombinedCredit {
+export interface CombinedCredit {
 	id: number;
 	name: string;
 	profilePath?: string;
