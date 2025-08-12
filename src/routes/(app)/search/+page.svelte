@@ -1,7 +1,7 @@
 <script lang="ts">
 	import DebounceInput from '$lib/components/DebounceInput.svelte';
 	import { onMount } from 'svelte';
-	import type { PagedResponse } from '$lib/interfaces.js';
+	import type { MediaType, PagedResponse } from '$lib/interfaces.js';
 	import type { MediaDetails } from '$lib/interfaces.js';
 	import type { MovieDetails } from '$lib/interfaces.js';
 	import type { TVDetails } from '$lib/interfaces.js';
@@ -124,19 +124,21 @@
 	});
 </script>
 
-<div class="search">
-	<DebounceInput
-		bind:value={query}
-		placeholder="Search movies, TV shows, people..."
-		onSearch={handleSearch}
-	/>
-	<span class="icon magnifying-glass"></span>
+<div class="search-wrapper">
+	<div class="search">
+		<DebounceInput
+			bind:value={query}
+			placeholder="Search movies, TV shows, people..."
+			onSearch={handleSearch}
+		/>
+		<span class="icon magnifying-glass"></span>
+	</div>
 </div>
 
-{#snippet Section({ title, type, media })}
+{#snippet Section({ title, type, media }: { title: string; type: string; media: MediaDetails[] })}
 	<section class="popular">
 		<header>
-			<h3><span class={['icon', type]}></span>{title}</h3>
+			<h2><span class={['icon', type]}></span>{title}</h2>
 		</header>
 		<ul role="list">
 			{#each media as media (media.id)}
@@ -173,16 +175,20 @@
 {/if}
 
 {#if recentSearches.value.length > 0}
-	{@render Section({ title: 'Recent', type: 'history', media: recentSearches.value })}
+	{@render Section({ title: 'Recent Searches', type: 'history', media: recentSearches.value })}
 {/if}
 {@render Section({ title: 'Trending Movies', type: 'movie', media: popular.movies })}
 {@render Section({ title: 'Trending Shows', type: 'tv', media: popular.tvShows })}
 {@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
 
 <style>
-	.search {
+	.search-wrapper {
 		width: 100%;
 		padding-block: 2rem;
+		padding-inline: var(--body-padding-inline);
+	}
+	.search {
+		width: 100%;
 		position: relative;
 		font-size: 1.5rem;
 
@@ -196,12 +202,13 @@
 	}
 
 	ul {
-		padding: 0;
+		padding-inline: var(--body-padding-inline);
 		display: flex;
 		flex-direction: row;
 		gap: 1rem;
 		overflow-x: scroll;
 		scroll-snap-type: x mandatory;
+		scroll-padding-inline: var(--body-padding-inline);
 
 		&::-webkit-scrollbar {
 			display: none;
@@ -258,12 +265,13 @@
 	header {
 		margin-bottom: 1rem;
 
-		h3 {
+		h2 {
 			color: white;
 			display: flex;
 			align-items: center;
 			gap: 0.25em;
 			font-weight: 500;
+			padding-inline-start: var(--body-padding-inline);
 		}
 	}
 

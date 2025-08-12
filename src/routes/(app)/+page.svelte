@@ -126,15 +126,16 @@
 	h2 {
 		font-weight: 500;
 		margin-top: 1rem;
+		margin-inline-start: var(--body-padding-inline);
 	}
 	ul {
-		padding: 0;
+		padding: 2em var(--body-padding-inline);
 		padding-block: 1rem;
 		display: flex;
 		gap: 1rem;
 		overflow-x: scroll;
 		scroll-snap-type: x mandatory;
-		scroll-padding-inline: 1rem;
+		scroll-padding-inline: var(--body-padding-inline);
 
 		&::-webkit-scrollbar {
 			display: none;

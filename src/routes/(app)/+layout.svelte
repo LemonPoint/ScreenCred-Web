@@ -4,6 +4,14 @@
 	let { children } = $props();
 </script>
 
-<MediaSelector />
+<div class="media-selector">
+	<MediaSelector />
+</div>
 
 {@render children()}
+
+<style>
+	.media-selector {
+		margin: var(--body-padding-inline);
+	}
+</style>
