@@ -27,30 +27,36 @@
 	</div>
 {/snippet}
 
-{#if results.credits.length === 0}
-	<p>
-		Looks like no one worked on both <strong>{mediaTitleWithYear(first)}</strong> and
-		<strong>{mediaTitleWithYear(second)}</strong>.
-	</p>
-{:else}
-	<ul role="list" class="results">
-		{#each results.credits as credit (credit.id)}
-			<li>
-				<header>
-					{@render CreditImage(credit)}
-					<h2>{credit.name}</h2>
-				</header>
-				<Credits castRoles={credit.roles.firstCast} crewRoles={credit.roles.firstCrew} />
-				<Credits castRoles={credit.roles.secondCast} crewRoles={credit.roles.secondCrew} />
-			</li>
-		{/each}
-	</ul>
-{/if}
+<div class="results-wrapper">
+	{#if results.credits.length === 0}
+		<p>
+			Looks like no one worked on both <strong>{mediaTitleWithYear(first)}</strong> and
+			<strong>{mediaTitleWithYear(second)}</strong>.
+		</p>
+	{:else}
+		<ul role="list" class="results">
+			{#each results.credits as credit (credit.id)}
+				<li>
+					<header>
+						{@render CreditImage(credit)}
+						<h2>{credit.name}</h2>
+					</header>
+					<Credits castRoles={credit.roles.firstCast} crewRoles={credit.roles.firstCrew} />
+					<Credits castRoles={credit.roles.secondCast} crewRoles={credit.roles.secondCrew} />
+				</li>
+			{/each}
+		</ul>
+	{/if}
+</div>
 
 <style>
+	.results-wrapper {
+		max-width: 600px;
+		container-type: inline-size;
+	}
 	.results {
 		display: grid;
-		grid-template-columns: max-content max-content;
+		grid-template-columns: 1fr 1fr;
 		gap: 2rem;
 		padding: 0;
 		margin-block: 1rem;
