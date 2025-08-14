@@ -57,7 +57,7 @@ function updateRecentComparisons({ id, normalizedId, first, second }: Comparison
 		if (existingIndex > -1) {
 			_recentComparisons.splice(existingIndex, 1);
 		}
-		recentComparisons.value = [recentComparison, ..._recentComparisons];
+		recentComparisons.value = [recentComparison, ..._recentComparisons].slice(0, 10);
 	}
 }
 
@@ -70,7 +70,7 @@ export function updateRecentSearches(searches: MediaDetails[]) {
 			_recentSearches.splice(existingIndex, 1);
 		}
 	}
-	recentSearches.value = [...normalizedMedia, ..._recentSearches];
+	recentSearches.value = [...normalizedMedia, ..._recentSearches].slice(0, 10);
 }
 
 function equals(a?: MediaDetails, b?: MediaDetails) {
