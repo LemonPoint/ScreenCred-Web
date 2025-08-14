@@ -1,7 +1,9 @@
 <script lang="ts">
+	import type { ParsedCredit } from '$lib/interfaces';
+
 	interface Props {
-		castRoles: string[];
-		crewRoles: string[];
+		castRoles: ParsedCredit[];
+		crewRoles: ParsedCredit[];
 	}
 
 	const { castRoles, crewRoles }: Props = $props();
@@ -12,7 +14,12 @@
 		<h3>Cast</h3>
 		<ul>
 			{#each castRoles as cast, index (index)}
-				<li>{cast}</li>
+				<li>
+					{cast.role}
+					{#if cast.modifiers && cast.modifiers.length > 0}
+						<span class="modifiers">({cast.modifiers!.join(', ')})</span>
+					{/if}
+				</li>
 			{/each}
 		</ul>
 	{/if}
@@ -20,7 +27,12 @@
 		<h3>Crew</h3>
 		<ul>
 			{#each crewRoles as crew, index (index)}
-				<li>{crew}</li>
+				<li>
+					{crew.role}
+					{#if crew.modifiers && crew.modifiers.length > 0}
+						<span class="modifiers">({crew.modifiers.join(', ')})</span>
+					{/if}
+				</li>
 			{/each}
 		</ul>
 	{/if}
@@ -38,5 +50,10 @@
 	ul {
 		list-style-position: inside;
 		padding: 0;
+	}
+
+	.modifiers {
+		font-size: 0.8em;
+		color: var(--uchu-gray-6);
 	}
 </style>

@@ -139,3 +139,8 @@ export interface PagedResponse<T> {
 }
 
 export type SearchResponse = PagedResponse<MediaDetails>;
+
+export interface ParsedCredit {
+	role: string;
+	modifiers?: string[];
+}

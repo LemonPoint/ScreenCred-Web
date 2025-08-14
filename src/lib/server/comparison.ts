@@ -1,4 +1,4 @@
-import type { MediaDetails, MediaType, SimpleCredit } from '../interfaces';
+import type { MediaDetails, MediaType, ParsedCredit, SimpleCredit } from '../interfaces';
 import { getCredits } from './tmdb';
 
 export interface UnionComparison {
@@ -11,10 +11,10 @@ export interface CombinedCredit {
 	name: string;
 	profilePath?: string;
 	roles: {
-		firstCast: string[];
-		secondCast: string[];
-		firstCrew: string[];
-		secondCrew: string[];
+		firstCast: ParsedCredit[];
+		secondCast: ParsedCredit[];
+		firstCrew: ParsedCredit[];
+		secondCrew: ParsedCredit[];
 	};
 	type: MediaType;
 }
@@ -113,7 +113,7 @@ function addCredits(
 	credits.forEach((credit) => {
 		const existing = combinedCredits.find((c) => c.id === credit.id);
 		if (existing) {
-			existing.roles[key].push(credit.role);
+			existing.roles[key].push(parseRole(credit.role));
 		} else {
 			const combinedCredit: CombinedCredit = {
 				id: credit.id,
@@ -122,10 +122,24 @@ function addCredits(
 				roles: { firstCast: [], secondCast: [], firstCrew: [], secondCrew: [] },
 				type: credit.type
 			};
-			combinedCredit.roles[key].push(credit.role);
+			combinedCredit.roles[key].push(parseRole(credit.role));
 			combinedCredits.push(combinedCredit);
 		}
 	});
+}
+
+function parseRole(role: string): ParsedCredit {
+	let modifiers: string[] = [];
+	if (role.includes('(voice)')) {
+		modifiers.push('voice');
+	}
+	if (role.includes('(uncredited)')) {
+		modifiers.push('uncredited');
+	}
+	return {
+		role: role.replace('(voice)', '').replace('(uncredited)', '').trim(),
+		modifiers
+	};
 }
 
 async function compareDifferentTypes(
