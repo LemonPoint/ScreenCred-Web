@@ -3,21 +3,30 @@
 	let { children } = $props();
 </script>
 
-<header>
-	<a href="/">
-		<h1>ScreenCred</h1>
-	</a>
-</header>
+<div class="wrapper">
+	<header>
+		<a href="/">
+			<h1>ScreenCred</h1>
+		</a>
+	</header>
 
-{@render children()}
+	<main>
+		{@render children()}
+	</main>
 
-<footer>
-	<ul>
-		<li><a href="/privacy">Privacy</a></li>
-	</ul>
-</footer>
+	<footer>
+		<ul>
+			<li><a href="/privacy">Privacy</a></li>
+		</ul>
+	</footer>
+</div>
 
 <style>
+	.wrapper {
+		min-height: 100vh;
+		display: grid;
+		grid-template-rows: min-content 1fr min-content;
+	}
 	header,
 	footer {
 		background-color: var(--uchu-yin-9);
