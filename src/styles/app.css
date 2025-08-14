@@ -6,9 +6,10 @@
 html {
 	font-family: var(--font-geometric-humanist), sans-serif;
 	color: white;
-	background: linear-gradient(to right bottom, var(--uchu-yin-8), var(--uchu-yin-9));
+	background-color: var(--uchu-yin-9);
 }
 
 body {
+	background: linear-gradient(to right bottom, var(--uchu-yin-8), var(--uchu-yin-9));
 	/* padding: 2rem; */
 }

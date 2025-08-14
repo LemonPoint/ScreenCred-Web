@@ -9,8 +9,16 @@
 	updateComparison({ first, second });
 </script>
 
-{#if results.type === 'union'}
-	<CombinedResults {...data} {results} />
-{:else}
-	<SimpleResults {...data} {results} />
-{/if}
+<div class="results-wrapper">
+	{#if results.type === 'union'}
+		<CombinedResults {...data} {results} />
+	{:else}
+		<SimpleResults {...data} {results} />
+	{/if}
+</div>
+
+<style>
+	.results-wrapper {
+		padding: var(--body-padding-inline);
+	}
+</style>
