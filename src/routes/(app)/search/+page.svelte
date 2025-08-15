@@ -138,6 +138,8 @@
 				goto(`/search/${completedComparison.id}`)
 			]);
 		} else if (forWhich === 'first') {
+			searchResults = [];
+			query = '';
 			await goto(`/search?for=second`);
 		}
 	}
@@ -195,7 +197,7 @@
 	<p>Error: {error}</p>
 {:else if searchResults.length > 0}
 	{@render Section({ title: 'Search', type: 'magnifying-glass', media: searchResults })}
-{:else if query.trim() && recentSearches.value.length === 0}
+{:else if query.trim() && searchResults.length === 0}
 	<p>No results found</p>
 {/if}
 
