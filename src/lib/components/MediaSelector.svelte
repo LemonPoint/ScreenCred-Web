@@ -4,21 +4,18 @@
 	import z from 'zod';
 	import { page } from '$app/state';
 
-	const schema = z.enum(['first', 'second']).catch('first');
+	const schema = z.enum(['first', 'second']).nullable();
 	const searchParams = $derived(page.url.searchParams);
-	const forWhich = $derived.by(() => schema.parse(searchParams.get('for') ?? 'first'));
+	const forWhich = $derived.by(() => schema.parse(searchParams.get('for')));
 </script>
 
 <div class="media-selector">
-	<a
-		href="/search?for=first"
-		class:focused={!comparison.first && !comparison.second && forWhich === 'first'}
-	>
+	<a href="/search?for=first" class:focused={forWhich === 'first'}>
 		<Poster media={comparison.first} />
 	</a>
 	<a
 		href={!comparison.first ? '/search?for=first' : '/search?for=second'}
-		class:focused={!comparison.first && !comparison.second && forWhich === 'second'}
+		class:focused={forWhich === 'second'}
 	>
 		<Poster media={comparison.second} />
 	</a>
