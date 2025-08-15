@@ -31,7 +31,7 @@
 	});
 </script>
 
-<input type="text" {value} {placeholder} oninput={handleInput} {...restProps} />
+<input type="text" {value} {placeholder} oninput={handleInput} {...restProps} autofocus />
 
 <style>
 	input {
