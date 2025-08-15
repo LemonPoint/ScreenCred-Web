@@ -11,7 +11,8 @@ export type MediaType = 'movie' | 'tv' | 'person';
 
 const BaseMediaDetailsSchema = z.object({
 	id: z.number(),
-	mediaType: z.string()
+	mediaType: z.string(),
+	popularity: z.number()
 });
 
 export const MovieDetailsSchema = BaseMediaDetailsSchema.extend({

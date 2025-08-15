@@ -12,6 +12,7 @@
 	import Poster from '$lib/components/Poster.svelte';
 	import { page } from '$app/state';
 	import z from 'zod';
+	import { mediaImage } from '$lib/utils.js';
 
 	let query = $state('');
 	let abortController: AbortController | null = null;
@@ -81,7 +82,31 @@
 			const data = (await response.json()) as { results: MediaDetails[] };
 
 			if (!signal?.aborted) {
-				searchResults = data.results || [];
+				const lowercasedQuery = query.toLowerCase();
+				const results = data.results || [];
+				const sortedResults = results.sort((a, b) => {
+					const lhsName = mediaTitle(a).toLowerCase();
+					const rhsName = mediaTitle(b).toLowerCase();
+
+					if (a.mediaType === 'person' && mediaImage(a) === null) {
+						return 1; // a comes after b
+					} else if (b.mediaType === 'person' && mediaImage(b) === null) {
+						return -1; // a comes before b
+					} else if (lhsName === rhsName) {
+						return b.popularity - a.popularity; // higher popularity first
+					} else if (lhsName === lowercasedQuery) {
+						return -1; // a comes before b (exact match priority)
+					} else if (rhsName === lowercasedQuery) {
+						return 1; // a comes after b (exact match priority)
+					} else if (!lhsName.includes(lowercasedQuery)) {
+						return 1; // a comes after b (doesn't contain query)
+					} else if (!rhsName.includes(lowercasedQuery)) {
+						return -1; // a comes before b (contains query)
+					} else {
+						return b.popularity - a.popularity; // higher popularity first
+					}
+				});
+				searchResults = sortedResults;
 			}
 		} catch (err) {
 			if (err instanceof Error && err.name === 'AbortError') {
