@@ -48,6 +48,16 @@ export function mediaImage(details: MediaDetails, width = 500) {
 	}
 }
 
+export function mediaImageId(details: MediaDetails) {
+	switch (details.mediaType) {
+		case 'movie':
+		case 'tv':
+			return details.posterPath?.replace('.jpg', '').replace('/', '');
+		case 'person':
+			return details.profilePath?.replace('.jpg', '').replace('/', '');
+	}
+}
+
 export function mediaTitle(details: MediaDetails) {
 	switch (details.mediaType) {
 		case 'movie':
