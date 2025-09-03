@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import satori from 'satori';
 import { html } from 'satori-html';
-import { Resvg } from '@resvg/resvg-js';
+import { Resvg } from '@resvg/resvg-wasm';
 
 export async function GET({ params }) {
 	const id = params.id;
@@ -14,7 +14,8 @@ export async function GET({ params }) {
 				'Content-Type': 'image/png'
 			}
 		});
-	} catch {
+	} catch (error) {
+		console.log(error);
 		// TODO: Make sure image exists for this
 		return redirect(307, '/images/screencred_social.png');
 	}
