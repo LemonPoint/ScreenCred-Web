@@ -2,10 +2,12 @@ import { redirect } from '@sveltejs/kit';
 import satori from 'satori';
 import { html } from 'satori-html';
 import { Resvg } from '@resvg/resvg-wasm';
+import { ensureWasmInitialized } from '$lib/server/resvg';
 
-export async function GET({ params }) {
+export async function GET({ params, fetch }) {
 	const id = params.id;
 	try {
+		await ensureWasmInitialized(fetch);
 		const buffer = await makeImage(id);
 
 		return new Response(buffer, {
