@@ -1,14 +1,10 @@
 import { redirect } from '@sveltejs/kit';
-import satori from 'satori';
-import { html } from 'satori-html';
-import { Resvg } from '@resvg/resvg-wasm';
-import { ensureWasmInitialized } from '$lib/server/resvg';
 
-export async function GET({ params, fetch }) {
+export async function GET({ params, platform }) {
 	const id = params.id;
 	try {
-		await ensureWasmInitialized(fetch);
-		const buffer = await makeImage(id);
+		// TODO: Move into a separate endpoint and cron job to keep it warm
+		const buffer = await makeImage(id, platform.env.SVG_2_PNG);
 
 		return new Response(buffer, {
 			status: 200,
@@ -23,38 +19,82 @@ export async function GET({ params, fetch }) {
 	}
 }
 
-async function makeImage(id: string) {
-	const [first, second] = id
-		.replace(/\.png$/, '')
-		.split('__')
-		.map((id) => {
-			// TODO: Update sam URL
-			return id === 'sam' ? 'sam' : `https://image.tmdb.org/t/p/w500/${id}.jpg`;
-		});
-
-	const markup = html`<div
-		style="display: flex; position: relative; height: 100%; width: 100%; background-image: linear-gradient(to right bottom, #202225, black);"
-	>
-		<div style="display: flex; width: 630px; height: 630px; margin-left: 285px;">
-			<div
-				style="display: flex; width: 50%; margin: auto 10px; border-radius: 10px; box-shadow: 0 3px 5px -2px hsl(220 3% 0% / 18%), 0 7px 14px -5px hsl(220 3% 0% / 20%)"
-			>
-				<img src="${first}" alt="" style="border-radius: 10px" />
-			</div>
-
-			<div
-				style="display: flex; width: 50%; margin: auto 10px; border-radius: 10px; box-shadow: 0 3px 5px -2px hsl(220 3% 0% / 18%), 0 7px 14px -5px hsl(220 3% 0% / 20%)"
-			>
-				<img src="${second}" alt="" style="border-radius: 10px" />
-			</div>
-		</div>
-	</div>`;
-	const svg = await satori(markup, {
-		width: 1200,
-		height: 630,
-		fonts: []
+async function makeImage(id: string, svg2Png: Service) {
+	const imagePaths = id.split('__').map((id) => {
+		// TODO: Update sam URL
+		return id === 'sam' ? 'sam' : `https://image.tmdb.org/t/p/w500/${id}.jpg`;
 	});
-	const resvg = new Resvg(svg);
-	const pngData = resvg.render();
-	return pngData.asPng();
+	const [first, second] = await Promise.all(imagePaths.map(fetchPosterImage));
+
+	const svg = `
+<svg width="1230" height="600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient x1="0%" y1="45%" x2="100%" y2="55%" id="b">
+      <stop stop-color="#202225" offset="0%"/>
+      <stop stop-color="#000000" offset="100%"/>
+    </linearGradient>
+    <path id="a" d="M0 0h1230v600H0z"/>
+    <filter id="blur" width="160%" height="160%" x="-30%" y="-30%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="50" result="blurred" />
+      <feColorMatrix type="saturate" values="1.15"/>
+    </filter>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur1"/>
+      <feOffset in="blur1" dx="0" dy="3" result="offset1"/>
+      <feFlood flood-color="rgba(0,0,0,0.18)" result="color1"/>
+      <feComposite in="color1" in2="offset1" operator="in" result="shadow1"/>
+      
+      <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur2"/>
+      <feOffset in="blur2" dx="0" dy="7" result="offset2"/>
+      <feFlood flood-color="rgba(0,0,0,0.2)" result="color2"/>
+      <feComposite in="color2" in2="offset2" operator="in" result="shadow2"/>
+      
+      <feMerge>
+        <feMergeNode in="shadow2"/>
+        <feMergeNode in="shadow1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="rounded">
+      <rect width="270" height="405" rx="15" ry="15"/>
+    </clipPath>
+  </defs>
+  <g fill="none" fill-rule="evenodd" >
+    <use fill="url(#b)" xlink:href="#a"/>
+  </g>
+  <g fill="none" fill-rule="evenodd" style="filter: url(#blur)">
+    <image href="${first}" width="50%" y="-25%"/>
+    <image href="${second}" width="50%" x="50%" y="-25%"/>
+  </g>
+  <g fill="none" fill-rule="evenodd" style="filter: url(#shadow)">
+    <g transform="translate(330, 97)" clip-path="url(#rounded)">
+      <image href="${first}" height="405" width="270" />
+    </g>
+    <g transform="translate(630, 97)" clip-path="url(#rounded)">
+      <image href="${second}" height="405" width="270" />
+    </g>
+  </g>
+</svg>`;
+	return svg2Png
+		.fetch(
+			new Request('http://worker/', {
+				method: 'POST',
+				body: svg,
+				headers: { 'Content-Type': 'text/svg+xml' }
+			})
+		)
+		.then((res) => res.arrayBuffer());
+}
+
+async function fetchPosterImage(path: string): Promise<string> {
+	// if (path === 'sam') {
+	// 	return Bun.file('./src/assets/img/sam.png').arrayBuffer();
+	// }
+	const res = await fetch(path);
+	const arrayBuffer = await res.arrayBuffer();
+
+	const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+	const contentType = res.headers.get('content-type') || 'image/jpeg';
+
+	return `data:${contentType};base64,${base64}`;
 }

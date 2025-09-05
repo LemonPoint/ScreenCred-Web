@@ -9,6 +9,7 @@ declare global {
 		interface Platform {
 			env: {
 				SCREENCRED_SEARCH: AnalyticsEngineDataset;
+				SVG_2_PNG: Service;
 			};
 		}
 	}

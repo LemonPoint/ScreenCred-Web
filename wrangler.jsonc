@@ -31,7 +31,7 @@
 			"binding": "SCREENCRED_SEARCH",
 			"dataset": "screencred_search"
 		}
-	]
+	],
 
 	/**
 	 * Environment Variables
@@ -53,5 +53,5 @@
 	 * Service Bindings (communicate between multiple Workers)
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
 	 */
-	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
+	"services": [{ "binding": "SVG_2_PNG", "service": "svg-2-png" }]
 }

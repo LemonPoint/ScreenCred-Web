@@ -41,9 +41,6 @@
 	},
 	"dependencies": {
 		"@cloudflare/workers-types": "^4.20250726.0",
-		"@resvg/resvg-wasm": "^2.6.2",
-		"satori": "^0.18.1",
-		"satori-html": "^0.3.2",
 		"zod": "^4.0.14"
 	}
 }
