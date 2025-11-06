@@ -13,9 +13,7 @@
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run",
-		"deploy": "npm run build && wrangler deploy",
-		"cf-typegen": "wrangler types ./src/worker-configuration.d.ts"
+		"test": "npm run test:unit -- --run"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -41,6 +39,7 @@
 	},
 	"dependencies": {
 		"@cloudflare/workers-types": "^4.20250726.0",
+		"@resvg/resvg-js": "^2.6.2",
 		"zod": "^4.0.14"
 	}
 }
