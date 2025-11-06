@@ -62,9 +62,9 @@ async function makeImage(id: string) {
   <g fill="none" fill-rule="evenodd" >
     <use fill="url(#b)" xlink:href="#a"/>
   </g>
-  <g fill="none" fill-rule="evenodd" style="filter: url(#blur)">
-    <image href="${first}" width="50%" y="-25%"/>
-    <image href="${second}" width="50%" x="50%" y="-25%"/>
+  <g fill="none" fill-rule="evenodd" filter="url(#blur)" transform="rotate(2) scale(1.02)" transform-origin="center">
+    <image href="${first}" width="50%" y="-25%" preserveAspectRatio="xMidYMid slice"/>
+    <image href="${second}" width="50%" x="50%" y="-25%" preserveAspectRatio="xMidYMid slice"/>
   </g>
   <g fill="none" fill-rule="evenodd" style="filter: url(#shadow)">
     <g transform="translate(330, 97)" clip-path="url(#rounded)">
@@ -75,7 +75,7 @@ async function makeImage(id: string) {
     </g>
   </g>
 </svg>`;
-	const resvg = new Resvg(svg);
+	const resvg = new Resvg(svg, {});
 	const pngData = resvg.render();
 	return pngData.asPng();
 }
