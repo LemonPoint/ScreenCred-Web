@@ -1,10 +1,10 @@
 import { redirect } from '@sveltejs/kit';
+import { Resvg } from '@resvg/resvg-js';
 
-export async function GET({ params, platform }) {
+export async function GET({ params }) {
 	const id = params.id;
 	try {
-		// TODO: Move into a separate endpoint and cron job to keep it warm
-		const buffer = await makeImage(id, platform.env.SVG_2_PNG);
+		const buffer = await makeImage(id);
 
 		return new Response(buffer, {
 			status: 200,
@@ -19,7 +19,7 @@ export async function GET({ params, platform }) {
 	}
 }
 
-async function makeImage(id: string, svg2Png: Service) {
+async function makeImage(id: string) {
 	const imagePaths = id.split('__').map((id) => {
 		// TODO: Update sam URL
 		return id === 'sam' ? 'sam' : `https://image.tmdb.org/t/p/w500/${id}.jpg`;
@@ -75,15 +75,9 @@ async function makeImage(id: string, svg2Png: Service) {
     </g>
   </g>
 </svg>`;
-	return svg2Png
-		.fetch(
-			new Request('http://worker/', {
-				method: 'POST',
-				body: svg,
-				headers: { 'Content-Type': 'text/svg+xml' }
-			})
-		)
-		.then((res) => res.arrayBuffer());
+	const resvg = new Resvg(svg);
+	const pngData = resvg.render();
+	return pngData.asPng();
 }
 
 async function fetchPosterImage(path: string): Promise<string> {
