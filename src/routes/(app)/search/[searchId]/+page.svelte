@@ -2,7 +2,8 @@
 	import CombinedResults from './CombinedResults.svelte';
 	import SimpleResults from './SimpleResults.svelte';
 	import { updateComparison } from '$lib/store.svelte.js';
-	import { mediaImageId } from '$lib/utils';
+	import { mediaImageId, mediaTitle } from '$lib/utils';
+	import { page } from '$app/state';
 
 	let { data } = $props();
 	const { first, second, results } = data;
@@ -12,7 +13,17 @@
 </script>
 
 <svelte:head>
-	<meta name="og:image" content={ogImageUrl} />
+	<meta property="og:title" content={`${mediaTitle(first)} & ${mediaTitle(second)}`} />
+	<meta property="og:description" content="" />
+	<meta property="og:image" content={ogImageUrl} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:url" content={page.url.href} />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content={ogImageUrl} />
+	<meta name="twitter:title" content={`${mediaTitle(first)} & ${mediaTitle(second)}`} />
+	<meta name="twitter:description" content="" />
 </svelte:head>
 
 <div class="results-wrapper">
