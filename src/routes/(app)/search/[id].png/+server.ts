@@ -67,10 +67,10 @@ async function makeImage(id: string) {
     <image href="${second}" width="50%" x="50%" y="-25%" preserveAspectRatio="xMidYMid slice"/>
   </g>
   <g fill="none" fill-rule="evenodd" style="filter: url(#shadow)">
-    <g transform="translate(330, 97)" clip-path="url(#rounded)">
+    <g transform="translate(330, 92) rotate(-1)" clip-path="url(#rounded)">
       <image href="${first}" height="405" width="270" />
     </g>
-    <g transform="translate(630, 97)" clip-path="url(#rounded)">
+    <g transform="translate(630, 102) rotate(1)" clip-path="url(#rounded)">
       <image href="${second}" height="405" width="270" />
     </g>
   </g>
