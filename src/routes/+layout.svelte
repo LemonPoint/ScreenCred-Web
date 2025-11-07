@@ -42,7 +42,6 @@
 
 	main {
 		max-width: 100vw;
-		overflow: hidden;
 	}
 
 	footer {

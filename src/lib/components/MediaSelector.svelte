@@ -22,12 +22,23 @@
 </div>
 
 <style>
+	@keyframes scaleDown {
+		to {
+			max-width: 200px;
+		}
+	}
+
 	.media-selector {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		justify-items: center;
 		gap: 1rem;
 		max-width: 400px;
+		transform-origin: top left;
+
+		animation: scaleDown linear forwards;
+		animation-timeline: scroll();
+		animation-range: 100px 300px;
 	}
 
 	a {

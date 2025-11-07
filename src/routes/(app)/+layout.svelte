@@ -12,6 +12,12 @@
 
 <style>
 	.media-selector {
-		margin: var(--body-padding-inline);
+		position: sticky;
+		top: 0;
+		z-index: 1;
+		backdrop-filter: blur(10px);
+		box-shadow: var(--shadow-2);
+		padding-inline: var(--body-padding-inline);
+		padding-block: 1rem;
 	}
 </style>
