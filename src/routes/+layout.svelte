@@ -1,5 +1,6 @@
 <script>
 	import '../styles/app.css';
+	import { resolve } from '$app/paths';
 	let { children } = $props();
 </script>
 
@@ -16,7 +17,7 @@
 
 	<footer>
 		<ul>
-			<li><a href="/privacy">Privacy</a></li>
+			<li><a href={resolve('/(standalone)/privacy')}>Privacy</a></li>
 		</ul>
 	</footer>
 </div>

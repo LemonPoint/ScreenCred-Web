@@ -13,6 +13,7 @@
 	import { page } from '$app/state';
 	import z from 'zod';
 	import { mediaImage } from '$lib/utils.js';
+	import { resolve } from '$app/paths';
 
 	let query = $state('');
 	let abortController: AbortController | null = null;
@@ -133,14 +134,17 @@
 			if (completedComparison.first && completedComparison.second) {
 				updateRecentSearches([completedComparison.first, completedComparison.second]);
 			}
+			const searchId = completedComparison.id!;
 			await Promise.all([
 				fetch(`/search/${completedComparison.id}`, { method: 'POST' }),
-				goto(`/search/${completedComparison.id}`)
+				goto(resolve('/(app)/search/[searchId]', { searchId }), {})
 			]);
 		} else if (forWhich === 'first') {
 			searchResults = [];
 			query = '';
-			await goto(`/search?for=second`);
+			const path = resolve('/(app)/search');
+			// eslint-disable-next-line svelte/no-navigation-without-resolve
+			await goto(`${path}?for=second`, {});
 		}
 	}
 

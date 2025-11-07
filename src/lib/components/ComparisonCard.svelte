@@ -2,6 +2,7 @@
 	import type { MediaDetails } from '$lib/interfaces';
 	import type { ComparisonState } from '$lib/store.svelte';
 	import { mediaImage } from '$lib/utils';
+	import { resolve } from '$app/paths';
 
 	interface Props {
 		comparison: ComparisonState;
@@ -19,7 +20,7 @@
 	{/if}
 {/snippet}
 
-<a href={`/search/${comparison.id}`}>
+<a href={resolve('/(app)/search/[searchId]', { searchId: comparison.id ?? '' })}>
 	<div class="z-stack comparison-card">
 		<div class="background">
 			{@render poster(comparison.first)}
