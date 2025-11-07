@@ -1,22 +1,28 @@
 <script>
 	import MediaSelector from '$lib/components/MediaSelector.svelte';
+	import Header from '$lib/components/Header.svelte';
 
 	let { children } = $props();
 </script>
 
-<div class="media-selector">
-	<MediaSelector />
+<div class="header-wrapper">
+	<Header />
+	<div class="media-selector">
+		<MediaSelector />
+	</div>
 </div>
 
 {@render children()}
 
 <style>
-	.media-selector {
+	.header-wrapper {
 		position: sticky;
 		top: 0;
 		z-index: 1;
+	}
+
+	.media-selector {
 		backdrop-filter: blur(10px);
-		box-shadow: var(--shadow-2);
 		padding-inline: var(--body-padding-inline);
 		padding-block: 1rem;
 	}
