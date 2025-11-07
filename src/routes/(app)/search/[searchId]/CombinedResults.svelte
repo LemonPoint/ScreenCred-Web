@@ -56,7 +56,7 @@
 		margin-inline: auto;
 	}
 	.results {
-		--_image-radius: 10px;
+		--_image-radius: 4px;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 2rem;
