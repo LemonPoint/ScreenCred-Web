@@ -35,10 +35,11 @@
 		gap: 1rem;
 		max-width: 400px;
 		transform-origin: top left;
+		margin-inline: auto;
 
 		animation: scaleDown linear forwards;
 		animation-timeline: scroll();
-		animation-range: 100px 300px;
+		animation-range: 100px 350px;
 	}
 
 	a {

@@ -23,7 +23,6 @@
 		grid-template-rows: 1fr min-content;
 	}
 	footer {
-		background-color: var(--uchu-yin-9);
 		padding-inline: var(--body-padding-inline);
 		padding-block: 1rem;
 

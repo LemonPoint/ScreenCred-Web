@@ -53,8 +53,10 @@
 	.results-wrapper {
 		max-width: 600px;
 		container-type: inline-size;
+		margin-inline: auto;
 	}
 	.results {
+		--_image-radius: 10px;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 2rem;
@@ -62,11 +64,16 @@
 		margin-block: 1rem;
 
 		> li {
+			--_padding: 0.5rem;
+			background: var(--uchu-yin-9);
+			padding: var(--_padding);
+			border-radius: calc(var(--_padding) + var(--_image-radius));
 			grid-column: span 2;
 			display: grid;
 			grid-template-columns: subgrid;
 			gap: 1rem;
 			position: relative;
+			box-shadow: var(--shadow-2);
 
 			header {
 				grid-column: span 2;
@@ -77,13 +84,13 @@
 				.image {
 					width: 100px;
 					aspect-ratio: 2/3;
-					border-radius: 10px;
+					border-radius: var(--_image-radius);
 					overflow: hidden;
 					display: flex;
 					justify-content: center;
 					align-items: center;
-					background: var(--uchu-yin-9);
-					box-shadow: var(--shadow-3);
+					background: var(--uchu-yin-8);
+					box-shadow: var(--shadow-1);
 					font-size: 2rem;
 
 					img {

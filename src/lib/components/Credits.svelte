@@ -4,12 +4,13 @@
 	interface Props {
 		castRoles: ParsedCredit[];
 		crewRoles: ParsedCredit[];
+		alignment?: 'start' | 'end';
 	}
 
-	const { castRoles, crewRoles }: Props = $props();
+	const { castRoles, crewRoles, alignment }: Props = $props();
 </script>
 
-<div>
+<div style:text-align={alignment}>
 	{#if castRoles.length}
 		<h3>Cast</h3>
 		<ul>
@@ -45,10 +46,11 @@
 		font-weight: 500;
 		font-size: 1em;
 		margin-top: 1em;
+		margin-bottom: 0.2em;
 	}
 
 	ul {
-		list-style-position: inside;
+		list-style: none;
 		padding: 0;
 	}
 
