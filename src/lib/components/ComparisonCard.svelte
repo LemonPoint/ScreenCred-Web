@@ -101,7 +101,7 @@
 
 		.circle {
 			border-radius: 50%;
-			height: 20%;
+			height: 20cqw;
 			aspect-ratio: 1;
 			display: flex;
 			justify-content: center;
@@ -115,6 +115,8 @@
 				position: absolute;
 				inset: 0;
 				backdrop-filter: blur(25px) saturate(150%);
+				border-radius: 50%;
+				overflow: hidden;
 			}
 		}
 	}
