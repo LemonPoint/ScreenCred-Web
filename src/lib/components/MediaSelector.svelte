@@ -30,11 +30,10 @@
 
 	.media-selector {
 		display: grid;
-		grid-template-columns: min-content min-content;
+		grid-template-columns: 1fr 1fr;
 		grid-template-rows: 300px;
 		justify-items: center;
 		gap: 1rem;
-		margin-inline: auto;
 
 		animation: scaleDown linear forwards;
 		animation-timeline: scroll();
@@ -42,9 +41,12 @@
 	}
 
 	a {
-		/* width: min(200px, calc(50vw - 1rem - (var(--body-padding-inline) * 2))); */
-		height: 100%;
-		width: 100%;
+		&:first-child {
+			justify-self: end;
+		}
+		&:last-child {
+			justify-self: start;
+		}
 	}
 
 	a.focused :global(.poster) {
