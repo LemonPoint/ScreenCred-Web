@@ -205,12 +205,14 @@
 	<p>No results found</p>
 {/if}
 
-{#if recentSearches.value.length > 0}
-	{@render Section({ title: 'Recent Searches', type: 'history', media: recentSearches.value })}
+{#if searchResults.length === 0}
+	{#if recentSearches.value.length > 0}
+		{@render Section({ title: 'Recent Searches', type: 'history', media: recentSearches.value })}
+	{/if}
+	{@render Section({ title: 'Trending Movies', type: 'movie', media: popular.movies })}
+	{@render Section({ title: 'Trending Shows', type: 'tv', media: popular.tvShows })}
+	{@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
 {/if}
-{@render Section({ title: 'Trending Movies', type: 'movie', media: popular.movies })}
-{@render Section({ title: 'Trending Shows', type: 'tv', media: popular.tvShows })}
-{@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
 
 <style>
 	.search-wrapper {
@@ -223,6 +225,7 @@
 		padding-block: 2rem;
 		padding-inline: var(--body-padding-inline);
 		z-index: 100;
+		pointer-events: none;
 	}
 	.search {
 		width: 100%;
@@ -230,6 +233,7 @@
 		margin-inline: auto;
 		font-size: clamp(1rem, 2vw, 1.5rem);
 		position: relative;
+		pointer-events: all;
 
 		.icon {
 			position: absolute;
