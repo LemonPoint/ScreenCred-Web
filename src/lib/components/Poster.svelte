@@ -35,7 +35,7 @@
 <style>
 	.poster-wrapper {
 		container-type: inline-size;
-		width: 100%;
+		height: 100%;
 		aspect-ratio: 2/3;
 	}
 

@@ -24,17 +24,16 @@
 <style>
 	@keyframes scaleDown {
 		to {
-			max-width: 200px;
+			grid-template-rows: 150px;
 		}
 	}
 
 	.media-selector {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: min-content min-content;
+		grid-template-rows: 300px;
 		justify-items: center;
 		gap: 1rem;
-		max-width: 400px;
-		transform-origin: top left;
 		margin-inline: auto;
 
 		animation: scaleDown linear forwards;
@@ -44,6 +43,7 @@
 
 	a {
 		/* width: min(200px, calc(50vw - 1rem - (var(--body-padding-inline) * 2))); */
+		height: 100%;
 		width: 100%;
 	}
 

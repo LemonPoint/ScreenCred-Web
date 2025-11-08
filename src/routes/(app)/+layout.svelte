@@ -25,5 +25,8 @@
 		backdrop-filter: blur(10px);
 		padding-inline: var(--body-padding-inline);
 		padding-block: 1rem;
+
+		display: flex;
+		justify-content: center;
 	}
 </style>
