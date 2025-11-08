@@ -214,14 +214,22 @@
 
 <style>
 	.search-wrapper {
-		width: 100%;
+		position: fixed;
+		display: flex;
+		align-items: end;
+		width: 100vw;
+		height: 100dvh;
+		top: 0;
 		padding-block: 2rem;
 		padding-inline: var(--body-padding-inline);
+		z-index: 100;
 	}
 	.search {
 		width: 100%;
+		max-width: 900px;
+		margin-inline: auto;
+		font-size: clamp(1rem, 2vw, 1.5rem);
 		position: relative;
-		font-size: 1.5rem;
 
 		.icon {
 			position: absolute;

@@ -7,7 +7,7 @@
 
 <div class="header-wrapper">
 	<Header />
-	<div class="media-selector">
+	<div class="header-content">
 		<MediaSelector />
 	</div>
 </div>
@@ -21,7 +21,7 @@
 		z-index: 1;
 	}
 
-	.media-selector {
+	.header-content {
 		backdrop-filter: blur(10px);
 		padding-inline: var(--body-padding-inline);
 		padding-block: 1rem;
