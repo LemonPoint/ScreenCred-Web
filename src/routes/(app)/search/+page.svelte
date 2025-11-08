@@ -1,25 +1,20 @@
 <script lang="ts">
-	import DebounceInput from '$lib/components/DebounceInput.svelte';
 	import { onMount } from 'svelte';
-	import type { MediaType, PagedResponse } from '$lib/interfaces.js';
-	import type { MediaDetails } from '$lib/interfaces.js';
-	import type { MovieDetails } from '$lib/interfaces.js';
-	import type { TVDetails } from '$lib/interfaces.js';
-	import type { PersonDetails } from '$lib/interfaces.js';
+	import type {
+		MediaDetails,
+		MovieDetails,
+		PagedResponse,
+		PersonDetails,
+		TVDetails
+	} from '$lib/interfaces.js';
 	import { recentSearches, updateComparison, updateRecentSearches } from '$lib/store.svelte';
 	import { goto } from '$app/navigation';
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
 	import Poster from '$lib/components/Poster.svelte';
 	import { page } from '$app/state';
 	import z from 'zod';
-	import { mediaImage } from '$lib/utils.js';
 	import { resolve } from '$app/paths';
-
-	let query = $state('');
-	let abortController: AbortController | null = null;
-	let searchResults: MediaDetails[] = $state([]);
-	let isLoading = $state(false);
-	let error = $state<string | null>(null);
+	import { error, isLoading, query, resetSearch, searchResults } from '$lib/search.svelte';
 
 	let popular = $state<{ movies: MovieDetails[]; tvShows: TVDetails[]; people: PersonDetails[] }>({
 		movies: [],
@@ -42,90 +37,6 @@
 		};
 	});
 
-	async function handleSearch(query: string) {
-		abortController?.abort();
-
-		if (!query.trim()) {
-			searchResults = [];
-			error = null;
-			isLoading = false;
-			return;
-		}
-
-		abortController = new AbortController();
-		await search(query, abortController.signal);
-	}
-
-	async function search(query: string, signal?: AbortSignal) {
-		if (!query.trim()) {
-			searchResults = [];
-			return;
-		}
-
-		isLoading = true;
-		error = null;
-
-		try {
-			const url = new URL('/api/search', window.location.origin);
-			url.searchParams.set('query', query);
-			const response = await fetch(url, {
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				signal
-			});
-
-			if (!response.ok) {
-				error = `Search failed: ${response.status}`;
-				return;
-			}
-
-			const data = (await response.json()) as { results: MediaDetails[] };
-
-			if (!signal?.aborted) {
-				const lowercasedQuery = query.toLowerCase();
-				const results = data.results || [];
-				const sortedResults = results.sort((a, b) => {
-					const lhsName = mediaTitle(a).toLowerCase();
-					const rhsName = mediaTitle(b).toLowerCase();
-
-					if (a.mediaType === 'person' && mediaImage(a) === null) {
-						return 1; // a comes after b
-					} else if (b.mediaType === 'person' && mediaImage(b) === null) {
-						return -1; // a comes before b
-					} else if (lhsName === rhsName) {
-						return b.popularity - a.popularity; // higher popularity first
-					} else if (lhsName === lowercasedQuery) {
-						return -1; // a comes before b (exact match priority)
-					} else if (rhsName === lowercasedQuery) {
-						return 1; // a comes after b (exact match priority)
-					} else if (!lhsName.includes(lowercasedQuery)) {
-						return 1; // a comes after b (doesn't contain query)
-					} else if (!rhsName.includes(lowercasedQuery)) {
-						return -1; // a comes before b (contains query)
-					} else {
-						return b.popularity - a.popularity; // higher popularity first
-					}
-				});
-				searchResults = sortedResults;
-			}
-		} catch (err) {
-			if (err instanceof Error && err.name === 'AbortError') {
-				return;
-			}
-
-			if (!signal?.aborted) {
-				error = err instanceof Error ? err.message : 'Search failed';
-				searchResults = [];
-			}
-		} finally {
-			if (!signal?.aborted) {
-				isLoading = false;
-				abortController = null;
-			}
-		}
-	}
-
 	async function selectMedia(media: MediaDetails) {
 		const schema = z.enum(['first', 'second']).catch('first');
 		const forWhich = schema.parse(page.url.searchParams.get('for'));
@@ -140,31 +51,19 @@
 				goto(resolve('/(app)/search/[searchId]', { searchId }), {})
 			]);
 		} else if (forWhich === 'first') {
-			searchResults = [];
-			query = '';
+			resetSearch();
 			const path = resolve('/(app)/search');
 			// eslint-disable-next-line svelte/no-navigation-without-resolve
 			await goto(`${path}?for=second`, {});
 		}
 	}
 
-	$effect(() => {
-		return () => {
-			abortController?.abort();
-		};
-	});
+	// $effect(() => {
+	// 	return () => {
+	// 		abortController?.abort();
+	// 	};
+	// });
 </script>
-
-<div class="search-wrapper">
-	<div class="search">
-		<DebounceInput
-			bind:value={query}
-			placeholder="Search movies, TV shows, people..."
-			onSearch={handleSearch}
-		/>
-		<span class="icon magnifying-glass"></span>
-	</div>
-</div>
 
 {#snippet Section({ title, type, media }: { title: string; type: string; media: MediaDetails[] })}
 	<section class="popular">
@@ -195,55 +94,24 @@
 	</section>
 {/snippet}
 
-{#if isLoading}
+{#if isLoading()}
 	<p>Searching...</p>
-{:else if error}
-	<p>Error: {error}</p>
-{:else if searchResults.length > 0}
-	{@render Section({ title: 'Search', type: 'magnifying-glass', media: searchResults })}
-{:else if query.trim() && searchResults.length === 0}
+{:else if error()}
+	<p>Error: {error()}</p>
+{:else if searchResults().length > 0}
+	{@render Section({ title: 'Search', type: 'magnifying-glass', media: searchResults() })}
+{:else if query.current.trim() && searchResults().length === 0}
 	<p>No results found</p>
 {/if}
 
-{#if searchResults.length === 0}
-	{#if recentSearches.value.length > 0}
-		{@render Section({ title: 'Recent Searches', type: 'history', media: recentSearches.value })}
-	{/if}
-	{@render Section({ title: 'Trending Movies', type: 'movie', media: popular.movies })}
-	{@render Section({ title: 'Trending Shows', type: 'tv', media: popular.tvShows })}
-	{@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
+{#if recentSearches.value.length > 0}
+	{@render Section({ title: 'Recent Searches', type: 'history', media: recentSearches.value })}
 {/if}
+{@render Section({ title: 'Trending Movies', type: 'movie', media: popular.movies })}
+{@render Section({ title: 'Trending Shows', type: 'tv', media: popular.tvShows })}
+{@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
 
 <style>
-	.search-wrapper {
-		position: fixed;
-		display: flex;
-		align-items: end;
-		width: 100vw;
-		height: 100dvh;
-		top: 0;
-		padding-block: 2rem;
-		padding-inline: var(--body-padding-inline);
-		z-index: 100;
-		pointer-events: none;
-	}
-	.search {
-		width: 100%;
-		max-width: 900px;
-		margin-inline: auto;
-		font-size: clamp(1rem, 2vw, 1.5rem);
-		position: relative;
-		pointer-events: all;
-
-		.icon {
-			position: absolute;
-			right: 1rem;
-			top: 50%;
-			transform: translateY(-50%);
-			color: var(--uchu-gray-8);
-		}
-	}
-
 	ul {
 		padding-inline: var(--body-padding-inline);
 		display: flex;

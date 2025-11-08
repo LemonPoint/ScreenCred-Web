@@ -4,12 +4,14 @@
 	import z from 'zod';
 	import { page } from '$app/state';
 
+	const { small = false } = $props();
+
 	const schema = z.enum(['first', 'second']).nullable();
 	const searchParams = $derived(page.url.searchParams);
 	const forWhich = $derived.by(() => schema.parse(searchParams.get('for')));
 </script>
 
-<div class="media-selector">
+<div class="media-selector" class:small>
 	<a href="/search?for=first" class:focused={forWhich === 'first'}>
 		<Poster media={comparison.first} />
 	</a>
@@ -24,23 +26,29 @@
 <style>
 	@keyframes scaleDown {
 		to {
-			grid-template-rows: 150px;
+			max-width: 200px;
 		}
 	}
 
 	.media-selector {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: 300px;
-		justify-items: center;
+		max-width: 400px;
+		margin-inline: auto;
 		gap: 1rem;
 
 		animation: scaleDown linear forwards;
 		animation-timeline: scroll();
 		animation-range: 100px 350px;
+		transition: max-width 0.2s ease-out;
+
+		&.small {
+			max-width: 200px;
+		}
 	}
 
 	a {
+		width: 100%;
 		&:first-child {
 			justify-self: end;
 		}
