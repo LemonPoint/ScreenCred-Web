@@ -3,14 +3,12 @@
 	import Poster from '$lib/components/Poster.svelte';
 	import SearchInput from '$lib/components/SearchInput.svelte';
 
-	const { small = false } = $props();
-
 	function startSearch(forWhich: 'first' | 'second') {
 		console.log('start search', forWhich);
 	}
 </script>
 
-<div class="media-selector" class:small>
+<div class="media-selector">
 	<button onclick={() => startSearch('first')}>
 		<Poster media={comparison.first} />
 	</button>
