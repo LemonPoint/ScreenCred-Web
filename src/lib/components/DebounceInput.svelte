@@ -40,5 +40,10 @@
 		padding: 0.5rem 1rem;
 		border-radius: 10px;
 		box-shadow: var(--shadow-2);
+		padding-inline-start: 2em;
+
+		&::placeholder {
+			color: var(--uchu-gray-8);
+		}
 	}
 </style>

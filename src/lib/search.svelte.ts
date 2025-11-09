@@ -1,7 +1,10 @@
 import type { MediaDetails } from '$lib/interfaces';
 import { mediaImage, mediaTitle } from '$lib/utils';
 
-export const query = $state({ current: '' });
+export const query: { current: string; forWhich: 'first' | 'second' } = $state({
+	current: '',
+	forWhich: 'first'
+});
 let abortController: AbortController | null = null;
 let _searchResults: MediaDetails[] = $state([]);
 let _isLoading = $state(false);

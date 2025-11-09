@@ -1,10 +1,14 @@
 <script lang="ts">
-	import { comparison } from '$lib/store.svelte';
 	import Poster from '$lib/components/Poster.svelte';
-	import SearchInput from '$lib/components/SearchInput.svelte';
+	import { query } from '$lib/search.svelte';
+	import { comparison } from '$lib/store.svelte';
+	import Search from './Search.svelte';
+
+	let dialogRef: HTMLDialogElement | null = null;
 
 	function startSearch(forWhich: 'first' | 'second') {
-		console.log('start search', forWhich);
+		query.forWhich = forWhich;
+		dialogRef?.showModal();
 	}
 </script>
 
@@ -17,8 +21,8 @@
 	</button>
 </div>
 
-<dialog>
-	<SearchInput />
+<dialog bind:this={dialogRef}>
+	<Search />
 </dialog>
 
 <style>
@@ -46,5 +50,20 @@
 		background: none;
 		padding: 0;
 		cursor: pointer;
+	}
+
+	dialog {
+		padding: 0;
+		margin: var(--body-padding-inline);
+		border: none;
+		background: none;
+		backdrop-filter: blur(30px) brightness(0.4);
+		width: calc(100vw - var(--body-padding-inline));
+		max-height: 900px;
+		max-width: 900px;
+		margin: auto;
+		border-radius: 10px;
+		overflow: auto;
+		box-shadow: var(--shadow-5);
 	}
 </style>

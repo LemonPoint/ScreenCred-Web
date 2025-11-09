@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
 	import DebounceInput from '$lib/components/DebounceInput.svelte';
-	import { handleSearch, query } from '$lib/search.svelte';
+	import { handleSearch, query, resetSearch } from '$lib/search.svelte';
 </script>
 
 <div class="search-wrapper">
@@ -11,6 +11,11 @@
 			onSearch={handleSearch}
 		/>
 		<span class="icon magnifying-glass"></span>
+		{#if query.current.trim()}
+			<button aria-label="Clear Search" onclick={resetSearch}>
+				<span class="icon x"></span>
+			</button>
+		{/if}
 	</div>
 </div>
 
@@ -18,10 +23,9 @@
 	.search-wrapper {
 		display: flex;
 		align-items: end;
-		padding-top: 2rem;
-		padding-inline: var(--body-padding-inline);
 		width: 100%;
 	}
+
 	.search {
 		width: 100%;
 		max-width: 900px;
@@ -30,12 +34,29 @@
 		position: relative;
 		pointer-events: all;
 
-		.icon {
+		.icon.magnifying-glass {
+			position: absolute;
+			left: 1rem;
+			top: 50%;
+			transform: translateY(-50%);
+			color: var(--uchu-gray-8);
+		}
+
+		button {
 			position: absolute;
 			right: 1rem;
 			top: 50%;
 			transform: translateY(-50%);
-			color: var(--uchu-gray-8);
+			background: var(--uchu-gray-2);
+			color: var(--uchu-gray-9);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			aspect-ratio: 1;
+			border-radius: 999px;
+			font-size: 0.75em;
+			border: none;
+			box-shadow: var(--shadow-1);
 		}
 	}
 </style>
