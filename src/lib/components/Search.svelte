@@ -136,6 +136,14 @@
 		border-radius: 10px;
 		overflow: auto;
 		box-shadow: var(--shadow-5);
+
+		@media (width <= 40rem) {
+			max-height: none;
+			height: calc(100dvh - 100px);
+			width: 100vw;
+			margin: 0;
+			margin-top: 100px;
+		}
 	}
 
 	header.search-header {
