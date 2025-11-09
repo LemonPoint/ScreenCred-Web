@@ -10,12 +10,18 @@
 	import SearchInput from './SearchInput.svelte';
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
 	import Poster from './Poster.svelte';
+	import { error, isLoading, query, resetSearch, searchResults } from '$lib/search.svelte';
+	import { recentSearches, updateComparison, updateRecentSearches } from '$lib/store.svelte';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	let popular = $state<{ movies: MovieDetails[]; tvShows: TVDetails[]; people: PersonDetails[] }>({
 		movies: [],
 		tvShows: [],
 		people: []
 	});
+
+	let dialogRef: HTMLDialogElement | null = null;
 
 	onMount(async () => {
 		const response = await fetch('/api/popular', {
@@ -32,50 +38,106 @@
 		};
 	});
 
-	async function selectMedia(media: MediaDetails) {}
+	export function start() {
+		resetSearch();
+		dialogRef?.showModal();
+	}
+
+	async function selectMedia(media: MediaDetails) {
+		const completedComparison = updateComparison({ [query.forWhich]: media });
+		if (completedComparison) {
+			if (completedComparison.first && completedComparison.second) {
+				updateRecentSearches([completedComparison.first, completedComparison.second]);
+			}
+			const searchId = completedComparison.id!;
+			await Promise.all([
+				fetch(`/search/${completedComparison.id}`, { method: 'POST' }),
+				goto(resolve('/(app)/search/[searchId]', { searchId }), {})
+			]);
+		}
+		resetSearch();
+		dialogRef?.close();
+	}
+
+	// $effect(() => {
+	// 	return () => {
+	// 		abortController?.abort();
+	// 	};
+	// });
 </script>
 
-<header class="search-header">
-	<form method="dialog">
-		<button aria-label="Close Search"> Close </button>
-	</form>
-	<SearchInput />
-</header>
+<dialog bind:this={dialogRef}>
+	<header class="search-header">
+		<form method="dialog">
+			<button aria-label="Close Search"> Close </button>
+		</form>
+		<SearchInput />
+	</header>
 
-{#snippet Section({ title, type, media }: { title: string; type: string; media: MediaDetails[] })}
-	<section class="popular">
-		<header>
-			<h2><span class={['icon', type]}></span>{title}</h2>
-		</header>
-		<ul role="list">
-			{#each media as media (media.id)}
-				{@const title = mediaTitle(media)}
-				{@const subtitle = mediaSubtitle(media, navigator.language)}
-				<li>
-					<button
-						onclick={() => {
-							selectMedia(media);
-						}}
-					>
-						<div class="poster">
-							<Poster {media} />
-						</div>
-						<div class="metadata">
-							<h4 class="title">{title}</h4>
-							<p class="subtitle">{subtitle}</p>
-						</div>
-					</button>
-				</li>
-			{/each}
-		</ul>
-	</section>
-{/snippet}
+	{#snippet Section({ title, type, media }: { title: string; type: string; media: MediaDetails[] })}
+		<section class="popular">
+			<header>
+				<h2><span class={['icon', type]}></span>{title}</h2>
+			</header>
+			<ul role="list">
+				{#each media as media (media.id)}
+					{@const title = mediaTitle(media)}
+					{@const subtitle = mediaSubtitle(media, navigator.language)}
+					<li>
+						<button
+							onclick={() => {
+								selectMedia(media);
+							}}
+						>
+							<div class="poster">
+								<Poster {media} />
+							</div>
+							<div class="metadata">
+								<h4 class="title">{title}</h4>
+								<p class="subtitle">{subtitle}</p>
+							</div>
+						</button>
+					</li>
+				{/each}
+			</ul>
+		</section>
+	{/snippet}
 
-{@render Section({ title: 'Trending Movies', type: 'movie', media: popular.movies })}
-{@render Section({ title: 'Trending Shows', type: 'tv', media: popular.tvShows })}
-{@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
+	{#if isLoading()}
+		<p>Searching...</p>
+	{:else if error()}
+		<p>Error: {error()}</p>
+	{:else if searchResults().length > 0}
+		{@render Section({ title: 'Search', type: 'magnifying-glass', media: searchResults() })}
+	{:else if query.current.trim() && searchResults().length === 0}
+		<p>No results found</p>
+	{/if}
+
+	{#if recentSearches.value.length > 0}
+		{@render Section({ title: 'Recent Searches', type: 'history', media: recentSearches.value })}
+	{/if}
+
+	{@render Section({ title: 'Trending Movies', type: 'movie', media: popular.movies })}
+	{@render Section({ title: 'Trending Shows', type: 'tv', media: popular.tvShows })}
+	{@render Section({ title: 'Trending People', type: 'person', media: popular.people })}
+</dialog>
 
 <style>
+	dialog {
+		padding: 0;
+		margin: var(--body-padding-inline);
+		border: none;
+		background: none;
+		backdrop-filter: blur(30px) brightness(0.4);
+		width: calc(100vw - var(--body-padding-inline));
+		max-height: 900px;
+		max-width: 900px;
+		margin: auto;
+		border-radius: 10px;
+		overflow: auto;
+		box-shadow: var(--shadow-5);
+	}
+
 	header.search-header {
 		padding-top: 1rem;
 		padding-bottom: 2rem;

@@ -4,11 +4,11 @@
 	import { comparison } from '$lib/store.svelte';
 	import Search from './Search.svelte';
 
-	let dialogRef: HTMLDialogElement | null = null;
+	let searchRef: Search | null = null;
 
 	function startSearch(forWhich: 'first' | 'second') {
 		query.forWhich = forWhich;
-		dialogRef?.showModal();
+		searchRef?.start();
 	}
 </script>
 
@@ -21,9 +21,7 @@
 	</button>
 </div>
 
-<dialog bind:this={dialogRef}>
-	<Search />
-</dialog>
+<Search bind:this={searchRef} />
 
 <style>
 	@keyframes scaleDown {
@@ -50,20 +48,5 @@
 		background: none;
 		padding: 0;
 		cursor: pointer;
-	}
-
-	dialog {
-		padding: 0;
-		margin: var(--body-padding-inline);
-		border: none;
-		background: none;
-		backdrop-filter: blur(30px) brightness(0.4);
-		width: calc(100vw - var(--body-padding-inline));
-		max-height: 900px;
-		max-width: 900px;
-		margin: auto;
-		border-radius: 10px;
-		overflow: auto;
-		box-shadow: var(--shadow-5);
 	}
 </style>
