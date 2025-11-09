@@ -74,7 +74,7 @@ async function search(query: string, signal?: AbortSignal) {
 				} else if (b.mediaType === 'person' && mediaImage(b) === null) {
 					return -1; // a comes before b
 				} else if (lhsName === rhsName) {
-					return b.popularity - a.popularity; // higher popularity first
+					return (b.popularity ?? 0) - (a.popularity ?? 0); // higher popularity first
 				} else if (lhsName === lowercasedQuery) {
 					return -1; // a comes before b (exact match priority)
 				} else if (rhsName === lowercasedQuery) {
@@ -84,7 +84,7 @@ async function search(query: string, signal?: AbortSignal) {
 				} else if (!rhsName.includes(lowercasedQuery)) {
 					return -1; // a comes before b (contains query)
 				} else {
-					return b.popularity - a.popularity; // higher popularity first
+					return (b.popularity ?? 0) - (a.popularity ?? 0); // higher popularity first
 				}
 			});
 			_searchResults = sortedResults;
