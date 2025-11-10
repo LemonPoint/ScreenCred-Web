@@ -9,6 +9,10 @@ html {
 	background-color: var(--uchu-yin-9);
 }
 
+html:has(dialog[open]) {
+	overflow: hidden;
+}
+
 body {
-    background: var(--uchu-yin-8);
+	background: var(--uchu-yin-8);
 }

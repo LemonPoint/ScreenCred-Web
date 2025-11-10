@@ -130,19 +130,37 @@
 		background: none;
 		backdrop-filter: blur(30px) brightness(0.4);
 		width: calc(100vw - var(--body-padding-inline));
+		height: calc(100vh - var(--body-padding-inline));
 		max-height: 900px;
 		max-width: 900px;
 		margin: auto;
 		border-radius: 10px;
 		overflow: auto;
 		box-shadow: var(--shadow-5);
+		transform-origin: bottom;
+		transition:
+			opacity 150ms linear,
+			transform 100ms linear,
+			overlay 150ms allow-discrete,
+			display 150ms allow-discrete;
+		opacity: 0;
+		transform: scale(0.8);
+
+		&[open] {
+			opacity: 1;
+			transform: scale(1);
+
+			@starting-style {
+				opacity: 0;
+				transform: scale(0.8);
+			}
+		}
 
 		@media (width <= 40rem) {
 			max-height: none;
-			height: calc(100dvh - 100px);
+			height: 100vh;
 			width: 100vw;
 			margin: 0;
-			margin-top: 100px;
 		}
 	}
 
@@ -171,6 +189,13 @@
 		border-radius: 999px;
 		font-size: 1.25em;
 		border: none;
+		outline: none;
+		border-radius: 2px;
+		cursor: pointer;
+
+		&:focus-visible {
+			outline: 1px solid white;
+		}
 	}
 
 	ul {
