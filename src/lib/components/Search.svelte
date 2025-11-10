@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import type {
 		MediaDetails,
 		MovieDetails,
@@ -6,14 +8,13 @@
 		PersonDetails,
 		TVDetails
 	} from '$lib/interfaces';
-	import { onMount } from 'svelte';
-	import SearchInput from './SearchInput.svelte';
-	import { mediaSubtitle, mediaTitle } from '$lib/utils';
-	import Poster from './Poster.svelte';
 	import { error, isLoading, query, resetSearch, searchResults } from '$lib/search.svelte';
 	import { recentSearches, updateComparison, updateRecentSearches } from '$lib/store.svelte';
-	import { goto } from '$app/navigation';
-	import { resolve } from '$app/paths';
+	import { mediaSubtitle, mediaTitle } from '$lib/utils';
+	import slugify from '@sindresorhus/slugify';
+	import { onMount } from 'svelte';
+	import Poster from './Poster.svelte';
+	import SearchInput from './SearchInput.svelte';
 
 	let popular = $state<{ movies: MovieDetails[]; tvShows: TVDetails[]; people: PersonDetails[] }>({
 		movies: [],
@@ -22,6 +23,12 @@
 	});
 
 	let dialogRef: HTMLDialogElement | null = null;
+
+	$effect(() => {
+		searchResults();
+		const search = document.getElementById('search');
+		search?.scrollIntoView({ behavior: 'smooth' });
+	});
 
 	onMount(async () => {
 		const response = await fetch('/api/popular', {
@@ -36,11 +43,16 @@
 			tvShows: tvShows as TVDetails[],
 			people: people as PersonDetails[]
 		};
+
+		dialogRef?.addEventListener('close', resetSearch);
 	});
 
 	export function start() {
 		resetSearch();
-		dialogRef?.showModal();
+		if (dialogRef) {
+			dialogRef.showModal();
+			dialogRef.scrollTop = 0;
+		}
 	}
 
 	async function selectMedia(media: MediaDetails) {
@@ -59,11 +71,9 @@
 		dialogRef?.close();
 	}
 
-	// $effect(() => {
-	// 	return () => {
-	// 		abortController?.abort();
-	// 	};
-	// });
+	$effect(() => {
+		return dialogRef?.removeEventListener('close', resetSearch);
+	});
 </script>
 
 <dialog bind:this={dialogRef}>
@@ -77,7 +87,7 @@
 	{#snippet Section({ title, type, media }: { title: string; type: string; media: MediaDetails[] })}
 		<section class="popular">
 			<header>
-				<h2><span class={['icon', type]}></span>{title}</h2>
+				<h2 id={slugify(title)}><span class={['icon', type]}></span>{title}</h2>
 			</header>
 			<ul role="list">
 				{#each media as media (media.id)}
@@ -104,13 +114,13 @@
 	{/snippet}
 
 	{#if isLoading()}
-		<p>Searching...</p>
+		<p class="search-state">Searching...</p>
 	{:else if error()}
-		<p>Error: {error()}</p>
-	{:else if searchResults().length > 0}
-		{@render Section({ title: 'Search', type: 'magnifying-glass', media: searchResults() })}
-	{:else if query.current.trim() && searchResults().length === 0}
-		<p>No results found</p>
+		<p class="search-state">Error: {error()}</p>
+	{:else if (searchResults()?.length ?? 0) > 0}
+		{@render Section({ title: 'Search', type: 'magnifying-glass', media: searchResults()! })}
+	{:else if query.current.trim() && searchResults()?.length === 0}
+		<p class="search-state">No results found</p>
 	{/if}
 
 	{#if recentSearches.value.length > 0}
@@ -269,10 +279,16 @@
 			gap: 0.25em;
 			font-weight: 500;
 			padding-inline-start: var(--body-padding-inline);
+			scroll-margin-block-start: 150px;
 		}
 	}
 
 	.popular {
 		margin-top: 2rem;
+	}
+
+	.search-state {
+		color: white;
+		padding: var(--body-padding-inline);
 	}
 </style>

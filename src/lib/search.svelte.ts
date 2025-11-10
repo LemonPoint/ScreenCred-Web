@@ -6,7 +6,7 @@ export const query: { current: string; forWhich: 'first' | 'second' } = $state({
 	forWhich: 'first'
 });
 let abortController: AbortController | null = null;
-let _searchResults: MediaDetails[] = $state([]);
+let _searchResults: MediaDetails[] | null = $state(null);
 let _isLoading = $state(false);
 let _error = $state<string | null>(null);
 
@@ -107,8 +107,10 @@ async function search(query: string, signal?: AbortSignal) {
 }
 
 export function resetSearch() {
-	_searchResults = [];
+	_searchResults = null;
 	_error = null;
 	_isLoading = false;
 	query.current = '';
+	abortController?.abort();
+	abortController = null;
 }
