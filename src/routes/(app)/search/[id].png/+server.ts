@@ -9,7 +9,8 @@ export async function GET({ params }) {
 		return new Response(buffer, {
 			status: 200,
 			headers: {
-				'Content-Type': 'image/png'
+				'Content-Type': 'image/png',
+				'Cache-Control': 'public, max-age=2592000, stale-while-revalidate=604800'
 			}
 		});
 	} catch (error) {
@@ -43,12 +44,12 @@ async function makeImage(id: string) {
       <feOffset in="blur1" dx="0" dy="3" result="offset1"/>
       <feFlood flood-color="rgba(0,0,0,0.18)" result="color1"/>
       <feComposite in="color1" in2="offset1" operator="in" result="shadow1"/>
-      
+
       <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="blur2"/>
       <feOffset in="blur2" dx="0" dy="7" result="offset2"/>
       <feFlood flood-color="rgba(0,0,0,0.2)" result="color2"/>
       <feComposite in="color2" in2="offset2" operator="in" result="shadow2"/>
-      
+
       <feMerge>
         <feMergeNode in="shadow2"/>
         <feMergeNode in="shadow1"/>

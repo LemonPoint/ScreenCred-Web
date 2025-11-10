@@ -4,12 +4,17 @@
 	import { updateComparison } from '$lib/store.svelte.js';
 	import { mediaImageId, mediaTitle } from '$lib/utils';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	const { first, second, results } = data;
 	const ogImageUrl = `/search/${mediaImageId(first)}__${mediaImageId(second)}.png`;
 
 	updateComparison({ first, second });
+
+	onMount(() => {
+		fetch(ogImageUrl);
+	});
 </script>
 
 <svelte:head>
