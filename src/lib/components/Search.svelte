@@ -68,6 +68,10 @@
 			},
 			{ once: true }
 		);
+
+		dialogRef?.addEventListener('click', () => {
+			console.log('click');
+		});
 	}
 
 	export function start() {
@@ -91,7 +95,9 @@
 			]);
 		}
 		resetSearch();
-		dialogRef?.close();
+		requestAnimationFrame(() => {
+			startClosingAnimation();
+		});
 	}
 
 	$effect(() => {
