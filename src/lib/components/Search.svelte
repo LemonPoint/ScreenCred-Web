@@ -68,10 +68,6 @@
 			},
 			{ once: true }
 		);
-
-		dialogRef?.addEventListener('click', () => {
-			console.log('click');
-		});
 	}
 
 	export function start() {
@@ -79,6 +75,11 @@
 		if (dialogRef) {
 			dialogRef.showModal();
 			dialogRef.scrollTop = 0;
+			dialogRef.addEventListener('click', (e) => {
+				if (e.target === dialogRef) {
+					startClosingAnimation();
+				}
+			});
 		}
 	}
 
