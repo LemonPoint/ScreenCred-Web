@@ -23,6 +23,7 @@
 	});
 
 	let dialogRef: HTMLDialogElement | null = null;
+	let closing = $state(false);
 
 	$effect(() => {
 		searchResults();
@@ -45,7 +46,29 @@
 		};
 
 		dialogRef?.addEventListener('close', resetSearch);
+
+		dialogRef?.addEventListener('cancel', (e) => {
+			e.preventDefault();
+			startClosingAnimation();
+		});
 	});
+
+	function startClosingAnimation() {
+		if (closing) {
+			return;
+		}
+
+		closing = true;
+
+		dialogRef?.addEventListener(
+			'animationend',
+			() => {
+				closing = false;
+				dialogRef?.close();
+			},
+			{ once: true }
+		);
+	}
 
 	export function start() {
 		resetSearch();
@@ -76,11 +99,9 @@
 	});
 </script>
 
-<dialog bind:this={dialogRef}>
+<dialog bind:this={dialogRef} class:closing>
 	<header class="search-header">
-		<form method="dialog">
-			<button aria-label="Close Search"> Close </button>
-		</form>
+		<button aria-label="Close Search" onclick={startClosingAnimation}> Close </button>
 		<SearchInput />
 	</header>
 
@@ -133,6 +154,13 @@
 </dialog>
 
 <style>
+	@keyframes dialogClose {
+		to {
+			opacity: 0;
+			transform: scale(0.8);
+		}
+	}
+
 	dialog {
 		padding: 0;
 		margin: var(--body-padding-inline);
@@ -147,14 +175,18 @@
 		border-radius: 10px;
 		overflow: auto;
 		box-shadow: var(--shadow-5);
-		transform-origin: bottom;
+		transform-origin: top;
+		--_transition-speed: 500ms;
 		transition:
-			opacity 150ms linear,
-			transform 100ms linear,
-			overlay 150ms allow-discrete,
-			display 150ms allow-discrete;
+			opacity var(--_transition-speed) var(--spring-1),
+			transform var(--_transition-speed) var(--spring-1),
+			display var(--_transition-speed) var(--spring-1) allow-discrete;
 		opacity: 0;
 		transform: scale(0.8);
+
+		&::backdrop {
+			background: none;
+		}
 
 		&[open] {
 			opacity: 1;
@@ -164,6 +196,10 @@
 				opacity: 0;
 				transform: scale(0.8);
 			}
+		}
+
+		&.closing {
+			animation: dialogClose var(--_transition-speed) var(--spring-1) forwards;
 		}
 
 		@media (width <= 40rem) {
@@ -190,7 +226,7 @@
 		align-items: end;
 	}
 
-	form[method='dialog'] button {
+	button {
 		background: none;
 		color: var(--uchu-gray-1);
 		display: flex;
