@@ -12,7 +12,7 @@
 	import { recentSearches, updateComparison, updateRecentSearches } from '$lib/store.svelte';
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
 	import slugify from '@sindresorhus/slugify';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Poster from './Poster.svelte';
 	import SearchInput from './SearchInput.svelte';
 
@@ -24,6 +24,7 @@
 
 	let dialogRef: HTMLDialogElement | null = null;
 	let closing = $state(false);
+	let clickHandler: ((e: MouseEvent) => void) | null = null;
 
 	$effect(() => {
 		searchResults();
@@ -75,11 +76,17 @@
 		if (dialogRef) {
 			dialogRef.showModal();
 			dialogRef.scrollTop = 0;
-			dialogRef.addEventListener('click', (e) => {
+
+			if (clickHandler) {
+				dialogRef.removeEventListener('click', clickHandler);
+			}
+
+			clickHandler = (e) => {
 				if (e.target === dialogRef) {
 					startClosingAnimation();
 				}
-			});
+			};
+			dialogRef.addEventListener('click', clickHandler);
 		}
 	}
 
@@ -101,8 +108,13 @@
 		});
 	}
 
-	$effect(() => {
-		return dialogRef?.removeEventListener('close', resetSearch);
+	onDestroy(() => {
+		if (dialogRef) {
+			dialogRef.removeEventListener('close', resetSearch);
+			if (clickHandler) {
+				dialogRef.removeEventListener('click', clickHandler);
+			}
+		}
 	});
 </script>
 
