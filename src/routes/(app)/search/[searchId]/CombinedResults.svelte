@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CombinedCredit, UnionComparison } from '$lib/server/comparison';
-	import { mediaTitleWithYear, tmdbImageUrl, tmdbImageUrlSquare } from '$lib/utils';
+	import { mediaTitleWithYear, tmdbDetailsUrl, tmdbImageUrl, tmdbImageUrlSquare } from '$lib/utils';
 	import type { MediaDetails } from '$lib/interfaces';
 	import Credits from '$lib/components/Credits.svelte';
 
@@ -39,7 +39,7 @@
 				<li>
 					<header>
 						{@render CreditImage(credit)}
-						<h2>{credit.name}</h2>
+						<a href={tmdbDetailsUrl(credit.id, credit.type)}><h2>{credit.name}</h2></a>
 					</header>
 					<Credits castRoles={credit.roles.firstCast} crewRoles={credit.roles.firstCrew} />
 					<Credits castRoles={credit.roles.secondCast} crewRoles={credit.roles.secondCrew} />
@@ -80,6 +80,11 @@
 				display: flex;
 				gap: 1rem;
 				align-items: center;
+
+				a {
+					color: white;
+					text-decoration: none;
+				}
 
 				.image {
 					width: 100px;

@@ -251,7 +251,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border-radius: 999px;
 		font-size: 1.25em;
 		border: none;
 		outline: none;

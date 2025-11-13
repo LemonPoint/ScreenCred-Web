@@ -26,6 +26,22 @@ export function tmdbImageUrlSquare(path: string | undefined) {
 	return path ? `${IMAGE_BASE_URL}w300_and_h300_bestv2${path}` : undefined;
 }
 
+export function tmdbDetailsUrl(id: number, type: MediaTypeKey) {
+	let path = '';
+	switch (type) {
+		case 'm':
+			path = 'movie';
+			break;
+		case 't':
+			path = 'tv';
+			break;
+		case 'p':
+			path = 'person';
+			break;
+	}
+	return `https://themoviedb.org/${type}/${id}`;
+}
+
 function formatDate(date: string, locale?: string) {
 	if (!date) {
 		return null;
