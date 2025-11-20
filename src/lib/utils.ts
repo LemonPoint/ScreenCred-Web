@@ -1,4 +1,9 @@
-import { type MediaDetails, MediaDetailsSchema, type MediaTypeKey } from '$lib/interfaces';
+import {
+	type MediaDetails,
+	MediaDetailsSchema,
+	type MediaType,
+	type MediaTypeKey
+} from '$lib/interfaces';
 
 export const BASE_URL = 'https://api.themoviedb.org/3/';
 export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
@@ -26,19 +31,7 @@ export function tmdbImageUrlSquare(path: string | undefined) {
 	return path ? `${IMAGE_BASE_URL}w300_and_h300_bestv2${path}` : undefined;
 }
 
-export function tmdbDetailsUrl(id: number, type: MediaTypeKey) {
-	let path = '';
-	switch (type) {
-		case 'm':
-			path = 'movie';
-			break;
-		case 't':
-			path = 'tv';
-			break;
-		case 'p':
-			path = 'person';
-			break;
-	}
+export function tmdbDetailsUrl(id: number, type: MediaType) {
 	return `https://themoviedb.org/${type}/${id}`;
 }
 
@@ -102,7 +95,7 @@ export function mediaSubtitle(details: MediaDetails, locale?: string) {
 		case 'tv':
 			return formatDate(details.firstAirDate, locale);
 		case 'person':
-			return details.knownFor.map((d) => mediaTitle(d)).join(', ');
+			return details.knownFor?.map((d) => mediaTitle(d)).join(', ');
 	}
 }
 

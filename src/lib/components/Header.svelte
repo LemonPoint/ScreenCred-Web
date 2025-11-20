@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import logo from '$lib/assets/screencred.svg';
 </script>
 
 <header>
 	<a href={resolve('/')}>
-		<h1><span class="icon logo" style="--icon-size: 2em"></span>ScreenCred</h1>
+		<h1><img alt="ScreenCred TV logo" src={logo} />ScreenCred</h1>
 	</a>
 </header>
 
@@ -20,6 +21,11 @@
 			line-height: 1;
 			font-weight: 500;
 			font-size: 1.5rem;
+
+			img {
+				height: 2rem;
+				margin-block: 0.5rem;
+			}
 		}
 
 		a {
