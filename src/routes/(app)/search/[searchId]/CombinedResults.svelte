@@ -27,34 +27,27 @@
 	</div>
 {/snippet}
 
-<div class="results-wrapper">
-	{#if results.credits.length === 0}
-		<p>
-			Looks like no one worked on both <strong>{mediaTitleWithYear(first)}</strong> and
-			<strong>{mediaTitleWithYear(second)}</strong>.
-		</p>
-	{:else}
-		<ul role="list" class="results">
-			{#each results.credits as credit (credit.id)}
-				<li>
-					<header>
-						{@render CreditImage(credit)}
-						<a href={tmdbDetailsUrl(credit.id, credit.type)}><h2>{credit.name}</h2></a>
-					</header>
-					<Credits castRoles={credit.roles.firstCast} crewRoles={credit.roles.firstCrew} />
-					<Credits castRoles={credit.roles.secondCast} crewRoles={credit.roles.secondCrew} />
-				</li>
-			{/each}
-		</ul>
-	{/if}
-</div>
+{#if results.credits.length === 0}
+	<p>
+		Looks like no one worked on both <strong>{mediaTitleWithYear(first)}</strong> and
+		<strong>{mediaTitleWithYear(second)}</strong>.
+	</p>
+{:else}
+	<ul role="list" class="results">
+		{#each results.credits as credit (credit.id)}
+			<li>
+				<header>
+					{@render CreditImage(credit)}
+					<a href={tmdbDetailsUrl(credit.id, credit.type)}><h2>{credit.name}</h2></a>
+				</header>
+				<Credits castRoles={credit.roles.firstCast} crewRoles={credit.roles.firstCrew} />
+				<Credits castRoles={credit.roles.secondCast} crewRoles={credit.roles.secondCrew} />
+			</li>
+		{/each}
+	</ul>
+{/if}
 
 <style>
-	.results-wrapper {
-		max-width: 600px;
-		container-type: inline-size;
-		margin-inline: auto;
-	}
 	.results {
 		--_image-radius: 4px;
 		display: grid;

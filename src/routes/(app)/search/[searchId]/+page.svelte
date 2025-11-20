@@ -42,5 +42,8 @@
 <style>
 	.results-wrapper {
 		padding: var(--body-padding-inline);
+		max-width: 600px;
+		container-type: inline-size;
+		margin-inline: auto;
 	}
 </style>
