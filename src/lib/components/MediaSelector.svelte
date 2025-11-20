@@ -41,6 +41,10 @@
 		animation-timeline: scroll();
 		animation-range: 100px 350px;
 		transition: max-width 0.2s ease-out;
+
+		@media (max-width: 400px) {
+			max-width: 250px;
+		}
 	}
 
 	button {
