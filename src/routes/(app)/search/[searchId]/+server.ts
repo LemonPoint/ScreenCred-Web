@@ -4,16 +4,16 @@ export async function POST({ params, platform }) {
 	const searchId = params.searchId;
 	const comparison = parseSearchId(searchId);
 	if (comparison.first !== null && comparison.second !== null) {
-		const searchTimestamp = Date.now();
-		const normalizedSearchId = normalizeSearchId(
-			`${comparison.first.type}${comparison.first.id}`,
-			`${comparison.second.type}${comparison.second.id}`
-		);
-		platform?.env?.SCREENCRED_SEARCH?.writeDataPoint({
-			blobs: [searchId, normalizedSearchId],
-			doubles: [1, searchTimestamp],
-			indexes: [searchId]
-		});
+		// const searchTimestamp = Date.now();
+		// const normalizedSearchId = normalizeSearchId(
+		// 	`${comparison.first.type}${comparison.first.id}`,
+		// 	`${comparison.second.type}${comparison.second.id}`
+		// );
+		// platform?.env?.SCREENCRED_SEARCH?.writeDataPoint({
+		// 	blobs: [searchId, normalizedSearchId],
+		// 	doubles: [1, searchTimestamp],
+		// 	indexes: [searchId]
+		// });
 		return new Response(null, { status: 201 });
 	}
 	return new Response(null, { status: 400 });

@@ -1,4 +1,4 @@
-import { MEDIA_TYPE_KEY, type MediaTypeKey } from '$lib/interfaces';
+import { MEDIA_TYPE_KEY } from '$lib/interfaces';
 import { getDetails } from '$lib/server/tmdb';
 import { compare } from '$lib/server/comparison';
 import { redirect } from '@sveltejs/kit';
