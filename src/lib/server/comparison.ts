@@ -113,8 +113,6 @@ async function compareLikeTypes(
 			return a.name.localeCompare(b.name);
 		});
 
-	console.log(combinedCredits);
-
 	return {
 		type: 'union',
 		credits: combinedCredits
