@@ -55,6 +55,7 @@ export interface SimpleCredit {
 	role: string;
 	profilePath?: string;
 	type: MediaType;
+	popularity?: number;
 }
 
 export interface Credits<Cast = SimpleCredit, Crew = SimpleCredit> {
@@ -69,6 +70,7 @@ export interface MovieCast {
 	character: string;
 	knownForDepartment: string;
 	profilePath?: string;
+	popularity?: number;
 }
 
 export interface MovieCrew {
@@ -79,6 +81,7 @@ export interface MovieCrew {
 	department: string;
 	job: string;
 	profilePath?: string;
+	popularity?: number;
 }
 
 export interface TvShowRole {
@@ -93,6 +96,7 @@ export interface TvShowCast {
 	roles: TvShowRole[];
 	knownForDepartment: string;
 	profilePath?: string;
+	popularity?: number;
 }
 
 export interface TvShowJob {
@@ -107,6 +111,7 @@ export interface TvShowCrew {
 	department: string;
 	jobs: TvShowJob[];
 	profilePath?: string;
+	popularity?: number;
 }
 
 export interface PersonCast {
@@ -118,6 +123,7 @@ export interface PersonCast {
 	character: string;
 	posterPath?: string;
 	mediaType: 'movie' | 'tv';
+	popularity?: number;
 }
 
 export interface PersonCrew {
@@ -130,6 +136,7 @@ export interface PersonCrew {
 	job: string;
 	posterPath?: string;
 	mediaType: 'movie' | 'tv';
+	popularity?: number;
 }
 
 export interface PagedResponse<T> {

@@ -80,14 +80,16 @@ async function getCreditsForMovie(id: number): Promise<Credits> {
 			name: c.name,
 			role: normalizeCharacter(c.character),
 			profilePath: c.profilePath,
-			type: 'person'
+			type: 'person',
+			popularity: c.popularity
 		})),
 		crew: crew.map((c) => ({
 			id: c.id,
 			name: c.name,
 			role: c.job,
 			profilePath: c.profilePath,
-			type: 'person'
+			type: 'person',
+			popularity: c.popularity
 		}))
 	};
 }
@@ -104,7 +106,8 @@ async function getCreditsForTvShow(id: number): Promise<Credits> {
 				name: c.name,
 				role: normalizeCharacter(character),
 				profilePath: c.profilePath,
-				type: 'person'
+				type: 'person',
+				popularity: c.popularity
 			}))
 		),
 		crew: crew.flatMap((c) =>
@@ -113,7 +116,8 @@ async function getCreditsForTvShow(id: number): Promise<Credits> {
 				name: c.name,
 				role: job,
 				profilePath: c.profilePath,
-				type: 'person'
+				type: 'person',
+				popularity: c.popularity
 			}))
 		)
 	};
@@ -138,7 +142,8 @@ async function getCreditsForPerson(id: number): Promise<Credits> {
 				name: c.title ?? c.name ?? 'Unknown',
 				role: normalizeCharacter(c.character),
 				profilePath: c.posterPath,
-				type: c.mediaType
+				type: c.mediaType,
+				popularity: c.popularity
 			}))
 			.filter((c) => {
 				if (c.type === 'tv') {
@@ -151,7 +156,8 @@ async function getCreditsForPerson(id: number): Promise<Credits> {
 			name: c.title ?? c.name ?? 'Unknown',
 			role: c.job,
 			profilePath: c.posterPath,
-			type: c.mediaType
+			type: c.mediaType,
+			popularity: c.popularity
 		}))
 	};
 }

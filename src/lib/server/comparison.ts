@@ -17,6 +17,7 @@ export interface CombinedCredit {
 		secondCrew: ParsedCredit[];
 	};
 	type: MediaType;
+	popularity?: number;
 }
 
 export interface SimpleComparison {
@@ -83,6 +84,18 @@ async function compareLikeTypes(
 		})
 		// TODO: Make this configurable and stuff
 		.toSorted((a, b) => {
+			const aPopularity = a.popularity ?? 0;
+			const bPopularity = b.popularity ?? 0;
+			if (aPopularity !== bPopularity) {
+				return bPopularity - aPopularity;
+			}
+
+			const aHasImage = !!a.profilePath;
+			const bHasImage = !!b.profilePath;
+			if (aHasImage !== bHasImage) {
+				return aHasImage ? -1 : 1;
+			}
+
 			const aCount =
 				a.roles.firstCast.length +
 				a.roles.firstCrew.length +
@@ -93,11 +106,14 @@ async function compareLikeTypes(
 				b.roles.firstCrew.length +
 				b.roles.secondCast.length +
 				b.roles.secondCrew.length;
-			if (aCount == bCount) {
-				return a.name.localeCompare(b.name);
+			if (aCount !== bCount) {
+				return bCount - aCount;
 			}
-			return bCount - aCount;
+
+			return a.name.localeCompare(b.name);
 		});
+
+	console.log(combinedCredits);
 
 	return {
 		type: 'union',
@@ -120,7 +136,8 @@ function addCredits(
 				name: credit.name,
 				profilePath: credit.profilePath,
 				roles: { firstCast: [], secondCast: [], firstCrew: [], secondCrew: [] },
-				type: credit.type
+				type: credit.type,
+				popularity: credit.popularity
 			};
 			combinedCredit.roles[key].push(parseRole(credit.role));
 			combinedCredits.push(combinedCredit);
