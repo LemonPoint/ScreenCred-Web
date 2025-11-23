@@ -16,13 +16,30 @@
 	const didWorkOn = results.crewCredits.length > 0 || results.castCredits.length > 0;
 </script>
 
-{#if didWorkOn}
-	<p>
-		<strong>{mediaTitle(person)}</strong> worked on <strong>{mediaTitleWithYear(media)}</strong>
-	</p>
-	<Credits castRoles={results.castCredits} crewRoles={results.crewCredits}></Credits>
-{:else}
-	<p>
-		<strong>{mediaTitle(person)}</strong> did not on <strong>{mediaTitleWithYear(media)}</strong>
-	</p>
-{/if}
+<div class="result">
+	{#if didWorkOn}
+		<p>
+			<strong>{mediaTitle(person)}</strong> worked on <strong>{mediaTitleWithYear(media)}</strong>
+		</p>
+		<Credits castRoles={results.castCredits} crewRoles={results.crewCredits}></Credits>
+	{:else}
+		<p>
+			<strong>{mediaTitle(person)}</strong> did not on <strong>{mediaTitleWithYear(media)}</strong>
+		</p>
+	{/if}
+</div>
+
+<style>
+	.result {
+		--_padding: 0.5rem;
+		background: var(--uchu-yin-9);
+		padding: var(--_padding);
+		border-radius: var(--_padding);
+		grid-column: span 2;
+		display: grid;
+		grid-template-columns: subgrid;
+		gap: 1rem;
+		position: relative;
+		box-shadow: var(--shadow-2);
+	}
+</style>
