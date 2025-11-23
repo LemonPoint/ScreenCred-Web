@@ -10,9 +10,12 @@
 	</main>
 
 	<footer>
-		<ul>
-			<li><a href={resolve('/(standalone)/privacy')}>Privacy</a></li>
-		</ul>
+		<nav aria-label="footer">
+			<ul>
+				<li><a href={resolve('/(standalone)/privacy')}>Privacy</a></li>
+				<li><a href={resolve('/(standalone)/about')}>About</a></li>
+			</ul>
+		</nav>
 	</footer>
 </div>
 
@@ -25,6 +28,13 @@
 	footer {
 		padding-inline: var(--body-padding-inline);
 		padding-block: 1rem;
+
+		ul {
+			display: flex;
+			justify-content: flex-end;
+			list-style: none;
+			gap: 1rem;
+		}
 
 		a {
 			color: white;

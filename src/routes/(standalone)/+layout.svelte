@@ -6,4 +6,14 @@
 
 <Header />
 
-{@render children()}
+<article class="standalone">
+	{@render children()}
+</article>
+
+<style>
+	article {
+		padding-inline: var(--body-padding-inline);
+		max-width: 600px;
+		margin-inline: auto;
+	}
+</style>
