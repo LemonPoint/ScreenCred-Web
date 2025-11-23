@@ -42,3 +42,7 @@ hr {
     margin-inline: var(--body-padding-inline);
     margin-block: 2em;
 }
+
+button {
+    cursor: pointer;
+}
