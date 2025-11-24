@@ -17,7 +17,8 @@
 			href="https://mastodon.social/@samwarnick"
 			target="_blank"
 			rel="noopener noreferrer">Mastodon</a
-		> if you have any questions or comments.
+		>
+		or <a href="mailto:sam@screencred.app">email me</a> if you have any questions or comments.
 	</p>
 </section>
 <hr />
