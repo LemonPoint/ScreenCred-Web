@@ -266,6 +266,7 @@
 		padding-inline: var(--body-padding-inline);
 		display: flex;
 		flex-direction: row;
+		align-items: start;
 		gap: 1rem;
 		overflow-x: scroll;
 		scroll-snap-type: x mandatory;
