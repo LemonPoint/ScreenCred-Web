@@ -6,6 +6,41 @@
 
 	const suggestions: ComparisonState[] = [
 		{
+			id: 'm324857m803796',
+			normalizedId: 'm324857m803796',
+			first: {
+				id: 324857,
+				posterPath: '/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg',
+				releaseDate: '2018-12-14',
+				title: 'Spider-Man: Into the Spider-Verse',
+				mediaType: 'movie'
+			},
+			second: {
+				id: 803796,
+				posterPath: '/zT7Lhw3BhJbMkRqm9Zlx2YGMsY0.jpg',
+				releaseDate: '2025-06-20',
+				title: 'KPop Demon Hunters',
+				mediaType: 'movie'
+			}
+		},
+		{
+			first: {
+				id: 13242,
+				name: 'Paul Giamatti',
+				mediaType: 'person',
+				profilePath: '/kn7LAbFYP5RPC2r61tDx2CRUeuw.jpg'
+			},
+			second: {
+				id: 11870,
+				title: 'Big Fat Liar',
+				posterPath: '/3EjpQeyOpH8VIaWqIq6SpCQrCks.jpg',
+				releaseDate: '2002-02-08',
+				mediaType: 'movie'
+			},
+			id: 'p13242m11870',
+			normalizedId: 'm11870p13242'
+		},
+		{
 			id: 't97546t136311',
 			normalizedId: 't136311t97546',
 			first: {
@@ -109,6 +144,11 @@
 			{/each}
 		</ul>
 	</section>
+{:else}
+	<section class="no-recents">
+		<p>Find the connections between movies, shows, and the people who make them.</p>
+		<p>Search above to get started or try one of the suggestions below!</p>
+	</section>
 {/if}
 
 <section>
@@ -139,6 +179,25 @@
 
 		&::-webkit-scrollbar {
 			display: none;
+		}
+	}
+	.no-recents {
+		margin-block: 2em;
+		/*margin-inline: var(--body-padding-inline);*/
+		padding: var(--body-padding-inline);
+		padding-block: 1rem;
+		font-size: 1.25rem;
+		background: var(--uchu-yin-9);
+		/*border-radius: 0.5em;*/
+		grid-column: span 2;
+		display: grid;
+		grid-template-columns: subgrid;
+		gap: 1rem;
+		position: relative;
+		box-shadow: var(--shadow-2);
+
+		p:first-child {
+			font-weight: 600;
 		}
 	}
 </style>
