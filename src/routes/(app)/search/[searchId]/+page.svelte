@@ -37,8 +37,8 @@
 </script>
 
 <svelte:head>
+	<title>ScreenCred | {title}</title>
 	<meta property="og:title" content={title} />
-	<meta property="og:description" content="" />
 	<meta property="og:image" content={ogImageUrl} />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
@@ -47,7 +47,6 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" content={ogImageUrl} />
 	<meta name="twitter:title" content={title} />
-	<meta name="twitter:description" content="" />
 </svelte:head>
 
 <div class="results-wrapper">

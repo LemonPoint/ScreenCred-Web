@@ -133,6 +133,10 @@
 	];
 </script>
 
+<svelte:head>
+	<title>ScreenCred</title>
+</svelte:head>
+
 {#if recentComparisons.value.length > 0}
 	<section>
 		<h2>Recents</h2>

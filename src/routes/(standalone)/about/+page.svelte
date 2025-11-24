@@ -3,6 +3,10 @@
 	import tmdb from '$lib/assets/tmdb.svg';
 </script>
 
+<svelte:head>
+	<title>ScreenCred | About</title>
+</svelte:head>
+
 <h2>About</h2>
 <section>
 	<img src={sam} alt="Sam Warnick" class="sam-profile" />

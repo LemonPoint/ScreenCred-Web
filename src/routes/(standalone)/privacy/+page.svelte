@@ -1,6 +1,10 @@
 <script>
 </script>
 
+<svelte:head>
+	<title>ScreenCred | Privacy</title>
+</svelte:head>
+
 <h2>Privacy Policy</h2>
 <p>
 	Your privacy is incredibly important. I minimzie what data and how much is collected as much as

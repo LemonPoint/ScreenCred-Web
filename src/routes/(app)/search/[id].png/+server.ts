@@ -16,7 +16,6 @@ export async function GET({ params }) {
 		});
 	} catch (error) {
 		console.log(error);
-		// TODO: Make sure image exists for this
 		return redirect(307, '/img/screencred_social.png');
 	}
 }
