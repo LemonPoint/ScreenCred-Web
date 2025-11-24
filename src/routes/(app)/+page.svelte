@@ -182,7 +182,7 @@
 		}
 	}
 	.no-recents {
-		margin-block: 2em;
+		margin-bottom: 2em;
 		/*margin-inline: var(--body-padding-inline);*/
 		padding: var(--body-padding-inline);
 		padding-block: 1rem;
