@@ -9,7 +9,12 @@
 		TVDetails
 	} from '$lib/interfaces';
 	import { error, isLoading, query, resetSearch, searchResults } from '$lib/search.svelte';
-	import { recentSearches, updateComparison, updateRecentSearches } from '$lib/store.svelte';
+	import {
+		comparison,
+		recentSearches,
+		updateComparison,
+		updateRecentSearches
+	} from '$lib/store.svelte';
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
 	import slugify from '@sindresorhus/slugify';
 	import { onDestroy, onMount } from 'svelte';
@@ -108,6 +113,11 @@
 		});
 	}
 
+	function alreadySelected(media: MediaDetails) {
+		const otherMedia = query.forWhich === 'first' ? comparison.second : comparison.first;
+		return otherMedia?.mediaType === media.mediaType && otherMedia?.id === media.id;
+	}
+
 	onDestroy(() => {
 		if (dialogRef) {
 			dialogRef.removeEventListener('close', resetSearch);
@@ -135,12 +145,18 @@
 					{@const subtitle = mediaSubtitle(media, navigator.language)}
 					<li>
 						<button
+							disabled={alreadySelected(media)}
 							onclick={() => {
 								selectMedia(media);
 							}}
 						>
 							<div class="poster">
-								<Poster {media} />
+								<Poster {media} disabled={alreadySelected(media)} />
+								{#if alreadySelected(media)}
+									<div class="check-container">
+										<span class="icon check"></span>
+									</div>
+								{/if}
 							</div>
 							<div class="metadata">
 								<h4 class="title">{title}</h4>
@@ -292,6 +308,19 @@
 
 			.poster {
 				width: 140px;
+				position: relative;
+
+				.check-container {
+					position: absolute;
+					inset: 0;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+				}
+
+				.icon.check {
+					font-size: 3em;
+				}
 			}
 
 			.metadata {

@@ -5,12 +5,13 @@
 
 	interface Props {
 		media?: MediaDetails;
+		disabled?: boolean;
 	}
 
-	const { media }: Props = $props();
+	const { media, disabled }: Props = $props();
 </script>
 
-<div class="poster-wrapper">
+<div class="poster-wrapper" class:disabled>
 	<div class="poster z-stack">
 		<div class="placeholder">
 			{#if media?.mediaType === 'movie'}
@@ -39,6 +40,10 @@
 		aspect-ratio: 2/3;
 	}
 
+	.disabled {
+		filter: grayscale(1);
+	}
+
 	.poster {
 		width: 100%;
 		height: 100%;
@@ -47,6 +52,14 @@
 		color: var(--uchu-gray-4);
 		border-radius: 5cqmin;
 		box-shadow: var(--shadow-2);
+	}
+
+	.disabled .poster::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background-image: linear-gradient(to top, black 60%, transparent);
+		opacity: 0.85;
 	}
 
 	img {
