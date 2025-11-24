@@ -7,6 +7,7 @@ html {
 	font-family: var(--font-geometric-humanist), sans-serif;
 	color: white;
 	background-color: var(--uchu-yin-9);
+    overflow: auto;
 }
 
 html:has(dialog[open]) {
