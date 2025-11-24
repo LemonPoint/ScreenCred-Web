@@ -28,10 +28,19 @@
 {/snippet}
 
 {#if results.credits.length === 0}
-	<p>
-		Looks like no one worked on both <strong>{mediaTitleWithYear(first)}</strong> and
-		<strong>{mediaTitleWithYear(second)}</strong>.
-	</p>
+	<div class="no-results">
+		{#if first.mediaType === 'person'}
+			<p>
+				Looks like <strong>{mediaTitleWithYear(first)}</strong> and
+				<strong>{mediaTitleWithYear(second)}</strong> have not worked on anything together.
+			</p>
+		{:else}
+			<p>
+				Looks like no one worked on both <strong>{mediaTitleWithYear(first)}</strong> and
+				<strong>{mediaTitleWithYear(second)}</strong>.
+			</p>
+		{/if}
+	</div>
 {:else}
 	<ul role="list" class="results">
 		{#each results.credits as credit (credit.id)}
@@ -48,6 +57,18 @@
 {/if}
 
 <style>
+	.no-results {
+		--_padding: 0.5rem;
+		background: var(--uchu-yin-9);
+		padding: var(--_padding);
+		border-radius: var(--_padding);
+		grid-column: span 2;
+		display: grid;
+		grid-template-columns: subgrid;
+		gap: 1rem;
+		position: relative;
+		box-shadow: var(--shadow-2);
+	}
 	.results {
 		--_image-radius: 4px;
 		display: grid;
