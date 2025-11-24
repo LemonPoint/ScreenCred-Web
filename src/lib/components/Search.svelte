@@ -222,8 +222,8 @@
 
 		@media (width <= 40rem) {
 			max-height: none;
-			height: 100vh;
-			width: 100vw;
+			width: 100%;
+			height: 100%;
 			margin: 0;
 		}
 	}

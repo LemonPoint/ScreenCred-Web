@@ -4,7 +4,11 @@
 	import { comparison } from '$lib/store.svelte';
 	import Search from './Search.svelte';
 
-	let searchRef: Search | null = null;
+	interface Props {
+		searchRef: Search | null;
+	}
+
+	let { searchRef }: Props = $props();
 
 	function startSearch(forWhich: 'first' | 'second') {
 		query.forWhich = forWhich;
@@ -20,8 +24,6 @@
 		<Poster media={comparison.second} />
 	</button>
 </div>
-
-<Search bind:this={searchRef} />
 
 <style>
 	@keyframes scaleDown {
