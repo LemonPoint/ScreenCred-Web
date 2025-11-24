@@ -41,6 +41,7 @@
 	"dependencies": {
 		"@resvg/resvg-js": "^2.6.2",
 		"@sindresorhus/slugify": "^3.0.0",
+		"postgres": "^3.4.7",
 		"zod": "^4.0.14"
 	}
 }
