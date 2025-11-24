@@ -26,10 +26,10 @@
 		<p>
 			<strong>{mediaTitle(person)}</strong> did not work on
 			<strong>{mediaTitleWithYear(media)}</strong>
-			{#if person.mediaType === 'person' && person.id === -1}
-				<p>But he did make this app.</p>
-			{/if}
 		</p>
+		{#if person.mediaType === 'person' && person.id === -1}
+			<p>But he did make this app.</p>
+		{/if}
 	{/if}
 </div>
 
