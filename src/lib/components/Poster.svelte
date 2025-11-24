@@ -41,7 +41,7 @@
 	}
 
 	.disabled {
-		filter: grayscale(1);
+		/*filter: grayscale(1);*/
 	}
 
 	.poster {
@@ -54,12 +54,16 @@
 		box-shadow: var(--shadow-2);
 	}
 
+	.disabled .poster img {
+		filter: blur(1px);
+	}
+
 	.disabled .poster::after {
 		content: '';
 		position: absolute;
 		inset: 0;
-		background-image: linear-gradient(to top, black 60%, transparent);
-		opacity: 0.85;
+		background-image: linear-gradient(to top, var(--uchu-blue-9), var(--uchu-blue-4));
+		opacity: 0.8;
 	}
 
 	img {
