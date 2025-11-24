@@ -182,7 +182,6 @@
 
 	dialog {
 		padding: 0;
-		margin: var(--body-padding-inline);
 		border: none;
 		background: none;
 		backdrop-filter: blur(30px) brightness(0.4);

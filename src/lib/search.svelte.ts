@@ -1,5 +1,6 @@
 import type { MediaDetails } from '$lib/interfaces';
 import { mediaImage, mediaTitle } from '$lib/utils';
+import { SAM } from '$lib/sam';
 
 export const query: { current: string; forWhich: 'first' | 'second' } = $state({
 	current: '',
@@ -39,6 +40,11 @@ export async function handleSearch(query: string) {
 async function search(query: string, signal?: AbortSignal) {
 	if (!query.trim()) {
 		_searchResults = [];
+		return;
+	}
+
+	if (query.toLowerCase() === 'sam warnick') {
+		_searchResults = [SAM];
 		return;
 	}
 

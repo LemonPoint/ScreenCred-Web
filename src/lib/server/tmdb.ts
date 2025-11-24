@@ -16,6 +16,7 @@ import type {
 	TvShowCrew
 } from '../interfaces';
 import { BASE_URL, camelize } from '../utils';
+import { SAM } from '$lib/sam';
 
 async function makeTMDBRequest<T>(url: string) {
 	const response = await fetch(url, {
@@ -40,7 +41,7 @@ export async function search(query: string): Promise<SearchResponse> {
 
 export async function getDetails(type: MediaType, id: number): Promise<MediaDetails> {
 	if (type === 'person' && id === -1) {
-		// TODO: return Sam
+		return SAM;
 	}
 	const url = `${BASE_URL}/${type}/${id}`;
 

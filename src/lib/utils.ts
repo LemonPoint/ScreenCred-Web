@@ -48,6 +48,9 @@ function formatDate(date: string, locale?: string) {
 }
 
 export function mediaImage(details: MediaDetails, width = 500) {
+	if (details.id === -1 && details.mediaType === 'person') {
+		return details.profilePath;
+	}
 	switch (details.mediaType) {
 		case 'movie':
 		case 'tv':
@@ -63,6 +66,9 @@ export function mediaImageId(details: MediaDetails) {
 		case 'tv':
 			return details.posterPath?.replace('.jpg', '').replace('/', '');
 		case 'person':
+			if (details.id === -1) {
+				return 'sam';
+			}
 			return details.profilePath?.replace('.jpg', '').replace('/', '');
 	}
 }
@@ -105,7 +111,7 @@ type ParsedComparison = {
 };
 
 export function parseSearchId(searchId: string) {
-	const matches = [...searchId.matchAll(/(?<type>[mtp])(?<id>\d+)/g)];
+	const matches = [...searchId.matchAll(/(?<type>[mtp])(?<id>-?\d+)/g)];
 	return {
 		first: matches[0]
 			? {

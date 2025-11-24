@@ -24,7 +24,11 @@
 		<Credits castRoles={results.castCredits} crewRoles={results.crewCredits}></Credits>
 	{:else}
 		<p>
-			<strong>{mediaTitle(person)}</strong> did not on <strong>{mediaTitleWithYear(media)}</strong>
+			<strong>{mediaTitle(person)}</strong> did not work on
+			<strong>{mediaTitleWithYear(media)}</strong>
+			{#if person.mediaType === 'person' && person.id === -1}
+				<p>But he did make this app.</p>
+			{/if}
 		</p>
 	{/if}
 </div>

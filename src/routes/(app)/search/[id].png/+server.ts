@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import { Resvg } from '@resvg/resvg-js';
+import { readFile } from 'fs/promises';
 
 export async function GET({ params }) {
 	const id = params.id;
@@ -16,13 +17,12 @@ export async function GET({ params }) {
 	} catch (error) {
 		console.log(error);
 		// TODO: Make sure image exists for this
-		return redirect(307, '/images/screencred_social.png');
+		return redirect(307, '/img/screencred_social.png');
 	}
 }
 
 async function makeImage(id: string) {
 	const imagePaths = id.split('__').map((id) => {
-		// TODO: Update sam URL
 		return id === 'sam' ? 'sam' : `https://image.tmdb.org/t/p/w500/${id}.jpg`;
 	});
 	const [first, second] = await Promise.all(imagePaths.map(fetchPosterImage));
@@ -82,14 +82,19 @@ async function makeImage(id: string) {
 }
 
 async function fetchPosterImage(path: string): Promise<string> {
-	// if (path === 'sam') {
-	// 	return Bun.file('./src/assets/img/sam.png').arrayBuffer();
-	// }
+	if (path === 'sam') {
+		const arrayBuffer = await readFile('./static/img/sam.jpg');
+		return bufferToBase64(arrayBuffer, 'image/jpeg');
+	}
 	const res = await fetch(path);
-	const arrayBuffer = await res.arrayBuffer();
-
-	const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
 	const contentType = res.headers.get('content-type') || 'image/jpeg';
+	const arrayBuffer = await res.arrayBuffer();
+	const buffer = Buffer.from(arrayBuffer);
 
+	return bufferToBase64(buffer, contentType);
+}
+
+function bufferToBase64(buffer: Buffer, contentType?: string) {
+	const base64 = buffer.toString('base64');
 	return `data:${contentType};base64,${base64}`;
 }

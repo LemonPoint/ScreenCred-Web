@@ -144,7 +144,7 @@ function addCredits(
 }
 
 function parseRole(role: string): ParsedCredit {
-	let modifiers: string[] = [];
+	const modifiers: string[] = [];
 	if (role.includes('(voice)')) {
 		modifiers.push('voice');
 	}
