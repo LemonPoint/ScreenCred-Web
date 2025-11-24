@@ -102,7 +102,6 @@
 				updateRecentSearches([completedComparison.first, completedComparison.second]);
 			}
 			const searchId = completedComparison.id!;
-			console.log('searchId', searchId);
 			await Promise.all([
 				fetch(`/search/${completedComparison.id}`, { method: 'POST' }),
 				goto(resolve('/(app)/search/[searchId]', { searchId }), {})

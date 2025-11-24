@@ -2,7 +2,6 @@ import { normalizeSearchId, parseSearchId } from '$lib/utils';
 import sql from '$lib/server/db';
 
 export async function POST({ params }) {
-	console.log('POST /search/[searchId]');
 	const searchId = params.searchId;
 	const comparison = parseSearchId(searchId);
 	if (comparison.first !== null && comparison.second !== null) {
