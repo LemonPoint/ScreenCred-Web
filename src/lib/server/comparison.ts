@@ -84,16 +84,16 @@ async function compareLikeTypes(
 		})
 		// TODO: Make this configurable and stuff
 		.toSorted((a, b) => {
-			const aPopularity = a.popularity ?? 0;
-			const bPopularity = b.popularity ?? 0;
-			if (aPopularity !== bPopularity) {
-				return bPopularity - aPopularity;
-			}
-
 			const aHasImage = !!a.profilePath;
 			const bHasImage = !!b.profilePath;
 			if (aHasImage !== bHasImage) {
 				return aHasImage ? -1 : 1;
+			}
+
+			const aPopularity = a.popularity ?? 0;
+			const bPopularity = b.popularity ?? 0;
+			if (aPopularity !== bPopularity) {
+				return bPopularity - aPopularity;
 			}
 
 			const aCount =
