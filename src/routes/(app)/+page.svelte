@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { type ComparisonState, recentComparisons, resetComparison } from '$lib/store.svelte';
 	import ComparisonCard from '$lib/components/ComparisonCard.svelte';
+	import { page } from '$app/state';
 
 	resetComparison();
 
@@ -135,6 +136,23 @@
 
 <svelte:head>
 	<title>ScreenCred</title>
+	<meta property="og:title" content="ScreenCred" />
+	<meta
+		property="og:description"
+		content="Find the connections between movies, shows, and the people who make them."
+	/>
+	<meta property="og:image" content="/img/screencred_social.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:url" content={page.url.href} />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content="/img/screencred_social.png" />
+	<meta name="twitter:title" content="ScreenCred" />
+	<meta
+		name="twitter:description"
+		content="Find the connections between movies, shows, and the people who make them."
+	/>
 </svelte:head>
 
 {#if recentComparisons.value.length > 0}
