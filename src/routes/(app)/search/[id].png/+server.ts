@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import { Resvg } from '@resvg/resvg-js';
 import { readFile } from 'fs/promises';
 
-export async function GET({ params }) {
+export async function GET({ params, locals }) {
 	const id = params.id;
 	try {
 		const buffer = await makeImage(id);
@@ -15,7 +15,7 @@ export async function GET({ params }) {
 			}
 		});
 	} catch (error) {
-		console.log(error);
+		locals.logger.error({ msg: 'Failed to generate image', error, id, params: params.id.split('__')})
 		return redirect(307, '/img/screencred_social.png');
 	}
 }
