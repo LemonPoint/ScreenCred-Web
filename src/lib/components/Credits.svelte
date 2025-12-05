@@ -5,15 +5,20 @@
 		castRoles: ParsedCredit[];
 		crewRoles: ParsedCredit[];
 		alignment?: 'start' | 'end';
+		title: string;
+		name: string;
 	}
 
-	const { castRoles, crewRoles, alignment }: Props = $props();
+	const { castRoles, crewRoles, alignment, title, name }: Props = $props();
 </script>
 
 <div style:text-align={alignment}>
 	{#if castRoles.length}
-		<h3>Cast</h3>
-		<ul>
+		<h3>
+			<span aria-hidden="true">Cast</span>
+			<span class="visually-hidden">{name} cast roles in {title}</span>
+		</h3>
+		<ul role="list">
 			{#each castRoles as cast, index (index)}
 				<li>
 					{cast.role}
@@ -25,7 +30,10 @@
 		</ul>
 	{/if}
 	{#if crewRoles.length}
-		<h3>Crew</h3>
+		<h3>
+			<span aria-hidden="true">Crew</span>
+			<span class="visually-hidden">{name} crew roles in {title}</span>
+		</h3>
 		<ul>
 			{#each crewRoles as crew, index (index)}
 				<li>
