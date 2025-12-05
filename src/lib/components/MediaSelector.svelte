@@ -17,10 +17,10 @@
 </script>
 
 <div class="media-selector">
-	<button onclick={() => startSearch('first')}>
+	<button onclick={() => startSearch('first')} aria-label="Search for first movie, show, or person">
 		<Poster media={comparison.first} />
 	</button>
-	<button onclick={() => startSearch('second')}>
+	<button onclick={() => startSearch('second')} aria-label="Search for second movie, show, or person">
 		<Poster media={comparison.second} />
 	</button>
 </div>

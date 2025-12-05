@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { MediaDetails } from '$lib/interfaces';
 	import type { ComparisonState } from '$lib/store.svelte';
-	import { mediaImage } from '$lib/utils';
+	import { mediaImage, mediaTitle } from '$lib/utils';
 	import { resolve } from '$app/paths';
 
 	interface Props {
@@ -9,6 +9,15 @@
 	}
 
 	const { comparison }: Props = $props();
+	let ariaLabel = $derived.by(() => {
+		const { first, second } = comparison;
+		if (!first || !second) {
+			return '';
+		}
+		const firstTitle = mediaTitle(first);
+		const secondTitle = mediaTitle(second);
+		return `${firstTitle} & ${secondTitle}`;
+	})
 </script>
 
 {#snippet poster(media: MediaDetails | undefined)}
@@ -20,7 +29,7 @@
 	{/if}
 {/snippet}
 
-<a href={resolve('/(app)/search/[searchId]', { searchId: comparison.id ?? '' })}>
+<a href={resolve('/(app)/search/[searchId]', { searchId: comparison.id ?? '' })} aria-label={ariaLabel}>
 	<div class="z-stack comparison-card">
 		<div class="background">
 			{@render poster(comparison.first)}
