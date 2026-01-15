@@ -1,4 +1,4 @@
-import { TMDB_API_KEY } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import type {
 	Credits,
 	MediaDetails,
@@ -21,7 +21,7 @@ import { SAM } from '$lib/sam';
 async function makeTMDBRequest<T>(url: string) {
 	const response = await fetch(url, {
 		headers: {
-			Authorization: `Bearer ${TMDB_API_KEY}`
+			Authorization: `Bearer ${env.TMDB_API_KEY}`
 		}
 	});
 

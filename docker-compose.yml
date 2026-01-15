@@ -1,0 +1,34 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"  # Local dev only, not used in production
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/screencred
+      - TMDB_API_KEY=${TMDB_API_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=screencred
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
