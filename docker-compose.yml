@@ -1,8 +1,6 @@
 services:
   app:
     build: .
-    ports:
-      - "3000:3000"  # Local dev only, not used in production
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/screencred
       - TMDB_API_KEY=${TMDB_API_KEY}
