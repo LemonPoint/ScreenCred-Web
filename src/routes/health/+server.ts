@@ -1,6 +1,5 @@
-import { error, json } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 
 export function GET() {
-	return error(500);
-	// return json({ status: 'ok' });
+	return json({ status: 'ok' });
 }
