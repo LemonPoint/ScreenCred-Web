@@ -1,16 +1,10 @@
 import { logger } from '$lib/logger';
-import type { Handle } from '@sveltejs/kit';
+import type { Handle, HandleServerError } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const startTime = Date.now();
 
 	event.locals.logger = logger;
-
-	logger.info({
-		method: event.request.method,
-		path: event.url.pathname,
-		msg: 'Incoming request'
-	});
 
 	const response = await resolve(event);
 
@@ -26,3 +20,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return response;
 };
+
+export const handleError: HandleServerError = ({error, event}) => {
+	logger.error({
+		method: event.request.method,
+		path: event.url.pathname,
+		error: error instanceof Error ? error.message : 'Unknown error',
+		stack: error instanceof Error ? error.stack : undefined,
+		msg: 'Unhandled error'
+	});
+
+	return {
+		message: 'Internal error'
+	};
+}

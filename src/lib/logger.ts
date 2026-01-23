@@ -1,16 +1,7 @@
-import pino from 'pino';
 import { dev } from '$app/environment';
+import winston from 'winston';
 
-export const logger = pino({
+export const logger = winston.createLogger({
 	level: dev ? 'debug' : 'info',
-	transport: dev
-		? {
-			target: 'pino-pretty',
-			options: {
-				colorize: true,
-				translateTime: 'HH:MM:ss Z',
-				ignore: 'pid,hostname'
-			}
-		}
-		: undefined,
+	transports: [new winston.transports.Console()]
 });

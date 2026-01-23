@@ -10,6 +10,8 @@ export async function POST({ params }) {
 			`${comparison.second.type}${comparison.second.id}`
 		);
 
+		throw new Error('Not implemented');
+
 		await sql`INSERT INTO search_analytics
 		   (search_id, normalized_search_id)
 		   VALUES (${searchId}, ${normalizedSearchId})`;
