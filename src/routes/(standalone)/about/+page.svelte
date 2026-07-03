@@ -1,6 +1,7 @@
 <script>
 	import sam from '$lib/assets/sam.jpeg';
 	import tmdb from '$lib/assets/tmdb.svg';
+	import builtBy from '$lib/assets/built-by.svg';
 </script>
 
 <svelte:head>
@@ -42,6 +43,12 @@
 		>.
 	</p>
 </section>
+<hr />
+<section>
+	<a href="https://lemonpoint.net" class="lemon-point-link">
+		<img src={builtBy} alt="Built By Lemon Point" width="80" />
+	</a>
+</section>
 
 <style>
 	.sam-profile {
@@ -55,5 +62,9 @@
 		max-width: 300px;
 		margin-inline: auto;
 		margin-bottom: 1em;
+	}
+	.lemon-point-link {
+		display: flex;
+		justify-content: center;
 	}
 </style>
