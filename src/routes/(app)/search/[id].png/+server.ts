@@ -1,6 +1,9 @@
-import { redirect } from '@sveltejs/kit';
+/// <reference types="node" />
+
 import { Resvg } from '@resvg/resvg-js';
+import { redirect } from '@sveltejs/kit';
 import { readFile } from 'fs/promises';
+import ky from 'ky';
 
 export async function GET({ params, locals }) {
 	const id = params.id;
@@ -15,7 +18,12 @@ export async function GET({ params, locals }) {
 			}
 		});
 	} catch (error) {
-		locals.logger.error({ msg: 'Failed to generate image', error, id, params: params.id.split('__')})
+		locals.logger.error({
+			msg: 'Failed to generate image',
+			error,
+			id,
+			params: params.id.split('__')
+		});
 		return redirect(307, '/img/screencred_social.png');
 	}
 }
@@ -77,7 +85,7 @@ async function makeImage(id: string) {
 </svg>`;
 	const resvg = new Resvg(svg, {});
 	const pngData = resvg.render();
-	return pngData.asPng();
+	return new Uint8Array(pngData.asPng());
 }
 
 async function fetchPosterImage(path: string): Promise<string> {
@@ -85,7 +93,7 @@ async function fetchPosterImage(path: string): Promise<string> {
 		const arrayBuffer = await readFile('./static/img/sam.jpg');
 		return bufferToBase64(arrayBuffer, 'image/jpeg');
 	}
-	const res = await fetch(path);
+	const res = await ky.get(path);
 	const contentType = res.headers.get('content-type') || 'image/jpeg';
 	const arrayBuffer = await res.arrayBuffer();
 	const buffer = Buffer.from(arrayBuffer);

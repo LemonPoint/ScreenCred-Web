@@ -8,13 +8,14 @@ import {
 export const BASE_URL = 'https://api.themoviedb.org/3/';
 export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
 
-export function camelize(obj: any): any {
+export function camelize<T>(obj: T): unknown {
 	if (obj === null || typeof obj !== 'object') return obj;
 
 	if (Array.isArray(obj)) {
 		return obj.map(camelize);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const result: any = {};
 	for (const [key, value] of Object.entries(obj)) {
 		const camelKey = key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
@@ -23,11 +24,11 @@ export function camelize(obj: any): any {
 	return result;
 }
 
-export function tmdbImageUrl(path: string | undefined, width = 500) {
+export function tmdbImageUrl(path: string | undefined | null, width = 500) {
 	return path ? `${IMAGE_BASE_URL}w${width}${path}` : undefined;
 }
 
-export function tmdbImageUrlSquare(path: string | undefined) {
+export function tmdbImageUrlSquare(path: string | undefined | null) {
 	return path ? `${IMAGE_BASE_URL}w300_and_h300_bestv2${path}` : undefined;
 }
 

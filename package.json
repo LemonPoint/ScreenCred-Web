@@ -22,6 +22,7 @@
 		"@sveltejs/adapter-node": "^5.4.0",
 		"@sveltejs/kit": "^2.22.0",
 		"@sveltejs/vite-plugin-svelte": "^6.0.0",
+		"@types/node": "^26.1.1",
 		"@vitest/browser": "^3.2.3",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
@@ -41,6 +42,7 @@
 	"dependencies": {
 		"@resvg/resvg-js": "^2.6.2",
 		"@sindresorhus/slugify": "^3.0.0",
+		"ky": "^2.0.2",
 		"postgres": "^3.4.7",
 		"winston": "^3.19.0",
 		"zod": "^4.0.14"

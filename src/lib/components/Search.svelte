@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import type {
-		MediaDetails,
-		MovieDetails,
-		PagedResponse,
-		PersonDetails,
-		TVDetails
+	import {
+		PopularResponseSchema,
+		type MediaDetails,
+		type MovieDetails,
+		type PersonDetails,
+		type TVDetails
 	} from '$lib/interfaces';
 	import { error, isLoading, query, resetSearch, searchResults } from '$lib/search.svelte';
 	import {
@@ -17,6 +17,7 @@
 	} from '$lib/store.svelte';
 	import { mediaSubtitle, mediaTitle } from '$lib/utils';
 	import slugify from '@sindresorhus/slugify';
+	import ky from 'ky';
 	import { onDestroy, onMount } from 'svelte';
 	import Poster from './Poster.svelte';
 	import SearchInput from './SearchInput.svelte';
@@ -38,12 +39,7 @@
 	});
 
 	onMount(async () => {
-		const response = await fetch('/api/popular', {
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-		const data: PagedResponse<MediaDetails>[] = await response.json();
+		const data = await ky.get('/api/popular').json(PopularResponseSchema);
 		const [movies, tvShows, people] = data.map((r) => r.results);
 		popular = {
 			movies: movies as MovieDetails[],
@@ -103,7 +99,7 @@
 			}
 			const searchId = completedComparison.id!;
 			await Promise.all([
-				fetch(`/search/${completedComparison.id}`, { method: 'POST' }),
+				ky.post(`/search/${completedComparison.id}`),
 				goto(resolve('/(app)/search/[searchId]', { searchId }), {})
 			]);
 		}

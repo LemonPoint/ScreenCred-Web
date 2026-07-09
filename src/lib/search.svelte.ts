@@ -1,6 +1,8 @@
-import type { MediaDetails } from '$lib/interfaces';
-import { mediaImage, mediaTitle } from '$lib/utils';
+import { MediaDetailsSchema, type MediaDetails } from '$lib/interfaces';
 import { SAM } from '$lib/sam';
+import { mediaImage, mediaTitle } from '$lib/utils';
+import ky, { SchemaValidationError } from 'ky';
+import z from 'zod';
 
 export const query: { current: string; forWhich: 'first' | 'second' } = $state({
 	current: '',
@@ -10,6 +12,8 @@ let abortController: AbortController | null = null;
 let _searchResults: MediaDetails[] | null = $state(null);
 let _isLoading = $state(false);
 let _error = $state<string | null>(null);
+
+const ResultsSchema = z.object({ results: z.array(MediaDetailsSchema) });
 
 export function searchResults() {
 	return _searchResults;
@@ -54,19 +58,11 @@ async function search(query: string, signal?: AbortSignal) {
 	try {
 		const url = new URL('/api/search', window.location.origin);
 		url.searchParams.set('query', query);
-		const response = await fetch(url, {
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			signal
-		});
-
-		if (!response.ok) {
-			_error = `Search failed: ${response.status}`;
-			return;
-		}
-
-		const data = (await response.json()) as { results: MediaDetails[] };
+		const data = await ky
+			.get(url, {
+				signal
+			})
+			.json(ResultsSchema);
 
 		if (!signal?.aborted) {
 			const lowercasedQuery = query.toLowerCase();
@@ -96,6 +92,9 @@ async function search(query: string, signal?: AbortSignal) {
 			_searchResults = sortedResults;
 		}
 	} catch (err) {
+		if (err instanceof SchemaValidationError) {
+			console.log(err.issues);
+		}
 		if (err instanceof Error && err.name === 'AbortError') {
 			return;
 		}

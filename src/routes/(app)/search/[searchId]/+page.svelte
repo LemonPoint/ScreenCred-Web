@@ -1,10 +1,11 @@
 <script lang="ts">
-	import CombinedResults from './CombinedResults.svelte';
-	import SimpleResults from './SimpleResults.svelte';
+	import { page } from '$app/state';
 	import { updateComparison } from '$lib/store.svelte.js';
 	import { mediaImageId, mediaTitle } from '$lib/utils';
-	import { page } from '$app/state';
+	import ky from 'ky';
 	import { untrack } from 'svelte';
+	import CombinedResults from './CombinedResults.svelte';
+	import SimpleResults from './SimpleResults.svelte';
 
 	let { data } = $props();
 	let first = $derived(data.first);
@@ -32,7 +33,7 @@
 
 	$effect(() => {
 		untrack(() => updateComparison({ first, second }));
-		fetch(ogImageUrl);
+		ky.get(ogImageUrl);
 	});
 </script>
 

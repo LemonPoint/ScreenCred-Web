@@ -1,4 +1,7 @@
 import { env } from '$env/dynamic/private';
+import { SAM } from '$lib/sam';
+import ky from 'ky';
+import z from 'zod';
 import type {
 	Credits,
 	MediaDetails,
@@ -16,22 +19,28 @@ import type {
 	TvShowCrew
 } from '../interfaces';
 import { BASE_URL, camelize } from '../utils';
-import { SAM } from '$lib/sam';
+
+const TMDBResponseSchema = z.looseObject({
+	success: z.boolean().optional(),
+	statusMessage: z.string().optional()
+});
 
 async function makeTMDBRequest<T>(url: string) {
-	const response = await fetch(url, {
-		headers: {
-			Authorization: `Bearer ${env.TMDB_API_KEY}`
-		}
-	});
+	const data = await ky
+		.get(url, {
+			headers: {
+				Authorization: `Bearer ${env.TMDB_API_KEY}`
+			}
+		})
+		.json();
 
-	const data = camelize(await response.json());
-	if (data.success === false) {
-		console.log(data.status_message);
+	const safeData = TMDBResponseSchema.parse(camelize(data));
+	if (safeData.success === false) {
+		console.log(safeData.statusMessage);
 		throw new Error('There was a problem fetching data.');
 	}
 
-	return data as T;
+	return safeData as T;
 }
 
 export async function search(query: string): Promise<SearchResponse> {

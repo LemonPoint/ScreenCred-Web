@@ -1,8 +1,8 @@
 <script lang="ts">
+	import Credits from '$lib/components/Credits.svelte';
+	import type { MediaDetails } from '$lib/interfaces';
 	import type { SimpleComparison } from '$lib/server/comparison';
 	import { mediaTitle, mediaTitleWithYear } from '$lib/utils';
-	import type { MediaDetails } from '$lib/interfaces';
-	import Credits from '$lib/components/Credits.svelte';
 
 	interface Props {
 		first: MediaDetails;
@@ -21,7 +21,12 @@
 		<p>
 			<strong>{mediaTitle(person)}</strong> worked on <strong>{mediaTitleWithYear(media)}</strong>
 		</p>
-		<Credits castRoles={results.castCredits} crewRoles={results.crewCredits}></Credits>
+		<Credits
+			castRoles={results.castCredits}
+			crewRoles={results.crewCredits}
+			title={mediaTitle(media)}
+			name={mediaTitle(person)}
+		></Credits>
 	{:else}
 		<p>
 			<strong>{mediaTitle(person)}</strong> did not work on

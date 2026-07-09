@@ -1,8 +1,14 @@
 <script lang="ts">
-	import type { CombinedCredit, UnionComparison } from '$lib/server/comparison';
-	import { mediaTitle, mediaTitleWithYear, tmdbDetailsUrl, tmdbImageUrl, tmdbImageUrlSquare } from '$lib/utils';
-	import type { MediaDetails } from '$lib/interfaces';
 	import Credits from '$lib/components/Credits.svelte';
+	import type { MediaDetails } from '$lib/interfaces';
+	import type { CombinedCredit, UnionComparison } from '$lib/server/comparison';
+	import {
+		mediaTitle,
+		mediaTitleWithYear,
+		tmdbDetailsUrl,
+		tmdbImageUrl,
+		tmdbImageUrlSquare
+	} from '$lib/utils';
 
 	interface Props {
 		first: MediaDetails;
@@ -47,10 +53,25 @@
 			<li>
 				<header>
 					{@render CreditImage(credit)}
-					<a href={tmdbDetailsUrl(credit.id, credit.type)} aria-label="View details for {credit.name}"><h2>{credit.name}</h2></a>
+					<!-- eslint-disable svelte/no-navigation-without-resolve -->
+					<a
+						href={tmdbDetailsUrl(credit.id, credit.type)}
+						aria-label="View details for {credit.name}"><h2>{credit.name}</h2></a
+					>
+					<!-- eslint-disable svelte/no-navigation-without-resolve -->
 				</header>
-				<Credits castRoles={credit.roles.firstCast} crewRoles={credit.roles.firstCrew} title={mediaTitle(first)} name={credit.name}/>
-				<Credits castRoles={credit.roles.secondCast} crewRoles={credit.roles.secondCrew} title={mediaTitle(second)} name={credit.name}/>
+				<Credits
+					castRoles={credit.roles.firstCast}
+					crewRoles={credit.roles.firstCrew}
+					title={mediaTitle(first)}
+					name={credit.name}
+				/>
+				<Credits
+					castRoles={credit.roles.secondCast}
+					crewRoles={credit.roles.secondCrew}
+					title={mediaTitle(second)}
+					name={credit.name}
+				/>
 			</li>
 		{/each}
 	</ul>

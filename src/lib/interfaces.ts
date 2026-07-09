@@ -12,27 +12,27 @@ export type MediaType = 'movie' | 'tv' | 'person';
 const BaseMediaDetailsSchema = z.object({
 	id: z.number(),
 	mediaType: z.string(),
-	popularity: z.number().optional()
+	popularity: z.number().nullish()
 });
 
 export const MovieDetailsSchema = BaseMediaDetailsSchema.extend({
 	mediaType: z.literal('movie'),
 	title: z.string(),
-	posterPath: z.string(),
+	posterPath: z.string().nullish(),
 	releaseDate: z.string()
 });
 
 export const TVDetailsSchema = BaseMediaDetailsSchema.extend({
 	mediaType: z.literal('tv'),
 	name: z.string(),
-	posterPath: z.string(),
+	posterPath: z.string().nullish(),
 	firstAirDate: z.string()
 });
 
 export const PersonDetailsSchema = BaseMediaDetailsSchema.extend({
 	mediaType: z.literal('person'),
 	name: z.string(),
-	profilePath: z.string(),
+	profilePath: z.string().nullish(),
 	knownFor: z.optional(
 		z.array(z.discriminatedUnion('mediaType', [MovieDetailsSchema, TVDetailsSchema]))
 	)
@@ -139,6 +139,15 @@ export interface PersonCrew {
 	popularity?: number;
 }
 
+export const PagedResponseSchema = <T extends z.ZodType>(item: T) => {
+	return z.object({
+		page: z.number(),
+		results: z.array(item),
+		totalPages: z.number(),
+		totalResults: z.number()
+	});
+};
+
 export interface PagedResponse<T> {
 	page: number;
 	results: T[];
@@ -146,7 +155,10 @@ export interface PagedResponse<T> {
 	total_results: number;
 }
 
-export type SearchResponse = PagedResponse<MediaDetails>;
+export const SearchResponseSchema = PagedResponseSchema(MediaDetailsSchema);
+export const PopularResponseSchema = z.array(PagedResponseSchema(MediaDetailsSchema));
+export type SearchResponse = z.infer<typeof SearchResponseSchema>;
+export type PopularResponse = z.infer<typeof PopularResponseSchema>;
 
 export interface ParsedCredit {
 	role: string;
