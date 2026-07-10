@@ -1,0 +1,26 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "7YJARMBCB3.com.samwarnick.ScreenCred",
+          "7YJARMBCB3.com.samwarnick.ScreenCred.dev",
+          "7YJARMBCB3.com.samwarnick.ScreenCred.Clip",
+          "7YJARMBCB3.com.samwarnick.ScreenCred.dev.Clip"
+        ],
+        "components": [
+          {
+            "/": "/search/?*",
+            "comment": "Matches any URL with a path that starts with /search/someid."
+          }
+        ]
+      }
+    ]
+  },
+  "appclips": {
+    "apps": [
+      "7YJARMBCB3.com.samwarnick.ScreenCred.Clip",
+      "7YJARMBCB3.com.samwarnick.ScreenCred.dev.Clip"
+    ]
+  }
+}
