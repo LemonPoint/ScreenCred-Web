@@ -18,8 +18,7 @@ export async function GET({ params, locals }) {
 			}
 		});
 	} catch (error) {
-		locals.logger.error({
-			msg: 'Failed to generate image',
+		locals.logger.error('Failed to generate image', {
 			error,
 			id,
 			params: params.id.split('__')
