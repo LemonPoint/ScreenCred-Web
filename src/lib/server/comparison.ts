@@ -67,15 +67,18 @@ async function compareLikeTypes(
 		};
 	}
 
-	const { cast: firstCast, crew: firstCrew } = await getCredits(first.mediaType, first.id);
-	const { cast: secondCast, crew: secondCrew } = await getCredits(second.mediaType, second.id);
-	let combinedCredits: CombinedCredit[] = [];
-	addCredits(firstCast, combinedCredits, 'firstCast');
-	addCredits(firstCrew, combinedCredits, 'firstCrew');
-	addCredits(secondCast, combinedCredits, 'secondCast');
-	addCredits(secondCrew, combinedCredits, 'secondCrew');
+	const [{ cast: firstCast, crew: firstCrew }, { cast: secondCast, crew: secondCrew }] =
+		await Promise.all([
+			getCredits(first.mediaType, first.id),
+			getCredits(second.mediaType, second.id)
+		]);
+	const combinedCreditsMap: Map<number, CombinedCredit> = new Map();
+	addCredits(firstCast, combinedCreditsMap, 'firstCast');
+	addCredits(firstCrew, combinedCreditsMap, 'firstCrew');
+	addCredits(secondCast, combinedCreditsMap, 'secondCast');
+	addCredits(secondCrew, combinedCreditsMap, 'secondCrew');
 
-	combinedCredits = combinedCredits
+	const combinedCredits = [...combinedCreditsMap.values()]
 		.filter((c) => {
 			return (
 				c.roles.firstCast.length + c.roles.firstCrew.length > 0 &&
@@ -121,15 +124,15 @@ async function compareLikeTypes(
 
 function addCredits(
 	credits: SimpleCredit[],
-	combinedCredits: CombinedCredit[],
+	combinedCreditsMap: Map<number, CombinedCredit>,
 	key: keyof CombinedCredit['roles']
 ) {
 	credits.forEach((credit) => {
-		const existing = combinedCredits.find((c) => c.id === credit.id);
+		let existing = combinedCreditsMap.get(credit.id);
 		if (existing) {
 			existing.roles[key].push(parseRole(credit.role));
 		} else {
-			const combinedCredit: CombinedCredit = {
+			existing = {
 				id: credit.id,
 				name: credit.name,
 				profilePath: credit.profilePath,
@@ -137,8 +140,7 @@ function addCredits(
 				type: credit.type,
 				popularity: credit.popularity
 			};
-			combinedCredit.roles[key].push(parseRole(credit.role));
-			combinedCredits.push(combinedCredit);
+			combinedCreditsMap.set(credit.id, existing);
 		}
 	});
 }
