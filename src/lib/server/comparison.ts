@@ -128,11 +128,9 @@ function addCredits(
 	key: keyof CombinedCredit['roles']
 ) {
 	credits.forEach((credit) => {
-		let existing = combinedCreditsMap.get(credit.id);
-		if (existing) {
-			existing.roles[key].push(parseRole(credit.role));
-		} else {
-			existing = {
+		let combinedCredits = combinedCreditsMap.get(credit.id);
+		if (!combinedCredits) {
+			combinedCredits = {
 				id: credit.id,
 				name: credit.name,
 				profilePath: credit.profilePath,
@@ -140,8 +138,9 @@ function addCredits(
 				type: credit.type,
 				popularity: credit.popularity
 			};
-			combinedCreditsMap.set(credit.id, existing);
+			combinedCreditsMap.set(credit.id, combinedCredits);
 		}
+		combinedCredits.roles[key].push(parseRole(credit.role));
 	});
 }
 
