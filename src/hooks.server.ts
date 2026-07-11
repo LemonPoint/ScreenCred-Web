@@ -20,15 +20,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 	return response;
 };
 
-export const handleError: HandleServerError = ({ error, event }) => {
-	logger.error('Unhandled error', {
-		method: event.request.method,
-		path: event.url.pathname,
-		error: error instanceof Error ? error.message : 'Unknown error',
-		stack: error instanceof Error ? error.stack : undefined
-	});
+export const handleError: HandleServerError = ({ error, event, status }) => {
+	if (status === 500) {
+		logger.error('Unhandled error', {
+			method: event.request.method,
+			path: event.url.pathname,
+			error: error instanceof Error ? error.message : 'Unknown error',
+			stack: error instanceof Error ? error.stack : undefined
+		});
+	}
 
 	return {
-		message: 'Internal error'
+		message: status === 404 ? 'Not Found' : 'Internal Error'
 	};
 };
