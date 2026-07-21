@@ -173,7 +173,7 @@ async function getCreditsForPerson(id: number): Promise<Credits> {
 }
 
 export async function getPopularMovies() {
-	const url = `${BASE_URL}/movie/popular?language=en-US&page=1`;
+	const url = `${BASE_URL}/discover/movie?language=en-US&page=1&sort_by=popularity.desc&region=US&include_adult=false&vote_count.gte=50&with_origin_country=US`;
 	const data = await makeTMDBRequest<PagedResponse<MovieDetails>>(url);
 	return {
 		...data,
@@ -185,7 +185,7 @@ export async function getPopularMovies() {
 }
 
 export async function getPopularTvShows() {
-	const url = `${BASE_URL}/tv/popular?language=en-US&page=1`;
+	const url = `${BASE_URL}/discover/tv?language=en-US&page=1&sort_by=popularity.desc&region=US&include_adult=false&vote_count.gte=50&with_origin_country=US`;
 	const data = await makeTMDBRequest<PagedResponse<TVDetails>>(url);
 	return {
 		...data,
