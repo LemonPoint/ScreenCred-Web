@@ -1,6 +1,8 @@
-import postgres from 'postgres';
-import { env } from '$env/dynamic/private';
+import 'dotenv/config';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { relations } from './drizzle/relations';
 
-const sql = postgres(env.DATABASE_URL!);
-
-export default sql;
+const db = drizzle(process.env.DATABASE_URL!, {
+	relations
+});
+export default db;
