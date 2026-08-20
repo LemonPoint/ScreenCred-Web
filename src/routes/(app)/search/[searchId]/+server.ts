@@ -1,6 +1,8 @@
 import { normalizeSearchId, parseSearchId } from '$lib/utils';
-import db from '$lib/server/db';
 import { searchAnalytics } from '$lib/server/drizzle/schema.js';
+import getDb from '$lib/server/db';
+
+const db = getDb();
 
 export async function POST({ params }) {
 	const searchId = params.searchId;

@@ -2,7 +2,16 @@ import { env } from '$env/dynamic/private';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { relations } from './drizzle/relations';
 
-const db = drizzle(env.DATABASE_URL!, {
-	relations
-});
-export default db;
+let _db: ReturnType<typeof drizzle> | undefined;
+
+function getDb() {
+	if (!_db) {
+		if (!env.DATABASE_URL) {
+			throw new Error('DATABASE_URL is not set');
+		}
+		_db = drizzle(env.DATABASE_URL, { relations });
+	}
+	return _db;
+}
+
+export default getDb;
