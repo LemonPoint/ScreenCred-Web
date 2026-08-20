@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Credits from '$lib/components/Credits.svelte';
-	import type { MediaDetails } from '$lib/interfaces';
+	import type { MediaDetails, SimpleCredit } from '$lib/interfaces';
 	import type { SimpleComparison } from '$lib/server/comparison';
 	import { mediaTitle, mediaTitleWithYear } from '$lib/utils';
 
@@ -14,12 +14,29 @@
 	const person = first.mediaType === 'person' ? first : second;
 	const media = first.mediaType !== 'person' ? first : second;
 	const didWorkOn = results.crewCredits.length > 0 || results.castCredits.length > 0;
+
+	function appearanceLabel(castCredits: SimpleCredit[], crewCredits: SimpleCredit[]): string {
+		const castCount = castCredits.length;
+		const crewCount = crewCredits.length;
+		let allSelf = castCredits.every((credit) => {
+			return credit.role.toLowerCase() == 'self';
+		});
+		if (crewCount > 0) {
+			return 'worked on';
+		}
+		if (castCount > 0 && allSelf) {
+			return 'appeared on';
+		}
+		return 'was in';
+	}
 </script>
 
 <div class="result">
 	{#if didWorkOn}
 		<p>
-			<strong>{mediaTitle(person)}</strong> worked on <strong>{mediaTitleWithYear(media)}</strong>
+			<strong>{mediaTitle(person)}</strong>
+			{appearanceLabel(results.castCredits, results.crewCredits)}
+			<strong>{mediaTitleWithYear(media)}</strong>
 		</p>
 		<Credits
 			castRoles={results.castCredits}
