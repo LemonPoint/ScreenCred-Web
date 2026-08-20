@@ -50,7 +50,7 @@
 		"@resvg/resvg-js": "^2.6.2",
 		"@sindresorhus/slugify": "^3.0.0",
 		"dotenv": "^17.4.2",
-		"drizzle-kit": "^0.31.10",
+		"drizzle-kit": "^1.0.0-rc.4",
 		"drizzle-orm": "^1.0.0-rc.4",
 		"ky": "^2.0.2",
 		"pg": "^8.23.0",
