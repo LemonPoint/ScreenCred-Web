@@ -1,6 +1,5 @@
-import { db } from '$lib/server/db';
-import { searchAnalytics } from '$lib/server/db/schema';
 import { normalizeSearchId, parseSearchId } from '$lib/utils';
+import sql from '$lib/server/db';
 
 export async function POST({ params }) {
 	const searchId = params.searchId;
@@ -11,10 +10,9 @@ export async function POST({ params }) {
 			`${comparison.second.type}${comparison.second.id}`
 		);
 
-		await db.insert(searchAnalytics).values({
-			searchId,
-			normalizedSearchId
-		});
+		await sql`INSERT INTO search_analytics
+		   (search_id, normalized_search_id)
+		   VALUES (${searchId}, ${normalizedSearchId})`;
 		return new Response(null, { status: 201 });
 	}
 	return new Response(null, { status: 400 });
