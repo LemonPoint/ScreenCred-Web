@@ -1,5 +1,6 @@
 import { logger } from '$lib/logger';
 import type { Handle, HandleServerError } from '@sveltejs/kit';
+import '$lib/server/db';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const startTime = Date.now();
