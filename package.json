@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "vite build && node scripts/build-worker.mjs",
 		"start": "node --enable-source-maps build/index.js",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -24,6 +24,7 @@
 		"@sveltejs/vite-plugin-svelte": "^6.0.0",
 		"@types/node": "^26.1.1",
 		"@vitest/browser": "^3.2.3",
+		"esbuild": "^0.25.12",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-svelte": "^3.0.0",
@@ -44,6 +45,7 @@
 		"@sindresorhus/slugify": "^3.0.0",
 		"ky": "^2.0.2",
 		"postgres": "^3.4.7",
+		"sharp": "^0.35.5",
 		"winston": "^3.19.0",
 		"zod": "^4.0.14"
 	}

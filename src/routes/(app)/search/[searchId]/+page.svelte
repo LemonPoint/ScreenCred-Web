@@ -11,7 +11,8 @@
 	let first = $derived(data.first);
 	let second = $derived(data.second);
 	let results = $derived(data.results);
-	let ogImageUrl = $derived(`/search/${mediaImageId(first)}__${mediaImageId(second)}.png`);
+	let ogImagePath = $derived(`/search/${mediaImageId(first)}__${mediaImageId(second)}.jpg`);
+	let ogImageUrl = $derived(`${page.url.origin}${ogImagePath}`);
 	let title = $derived.by(() => {
 		return `${mediaTitle(first)} & ${mediaTitle(second)}`;
 	});
@@ -33,7 +34,7 @@
 
 	$effect(() => {
 		untrack(() => updateComparison({ first, second }));
-		ky.get(ogImageUrl);
+		ky.get(ogImagePath);
 	});
 </script>
 
@@ -41,6 +42,7 @@
 	<title>ScreenCred | {title}</title>
 	<meta property="og:title" content={title} />
 	<meta property="og:image" content={ogImageUrl} />
+	<meta property="og:image:type" content="image/jpeg" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
 	<meta property="og:url" content={page.url.href} />
