@@ -1,51 +1,26 @@
 /**
- * The pure card renderer.
- *
- * Must stay self-contained: node builtins + npm packages only. No `$lib`,
- * `$app/*` or `$env/*` imports. This file is loaded two ways:
- *
- *  - bundled by Vite when used for inline (main-thread) rendering
- *  - bundled by scripts/build-worker.mjs into build/worker/render.js
- *
- * Do not use parameter properties, enums, namespaces or other non-erasable TS
- * syntax — in dev the worker runs the source directly via type stripping.
+ * Node builtins and npm packages only — no $lib, $app or $env imports. Only the
+ * worker bundle (scripts/build-worker.mjs) loads this, so the SvelteKit server
+ * never pulls in resvg or sharp on the main thread.
  */
-import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
 import sharp from 'sharp';
 
 const POSTER_BASE = 'https://image.tmdb.org/t/p/w500';
 
-/** Universal og:image size; 1.91:1 */
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-/** Poster cards stay 270x405. 570px total, so margins are (1200 - 570) / 2. */
 const CARD_WIDTH = 270;
 const CARD_HEIGHT = 405;
 const CARD_GAP = 30;
-const CARD_LEFT = (WIDTH - (CARD_WIDTH * 2 + CARD_GAP)) / 2; // 315
-const CARD_TOP = (HEIGHT - CARD_HEIGHT) / 2; // 112.5
+const CARD_LEFT = (WIDTH - (CARD_WIDTH * 2 + CARD_GAP)) / 2;
+const CARD_TOP = (HEIGHT - CARD_HEIGHT) / 2;
 
 const JPEG_QUALITY = 85;
 
 const samCache = new Map<string, string>();
-
-export function resolveSamPath(): string {
-	const candidates = [
-		path.join(process.cwd(), 'static/img/sam.jpg'),
-		path.join(process.cwd(), 'build/client/img/sam.jpg')
-	];
-
-	const found = candidates.find((candidate) => existsSync(candidate));
-	if (!found) {
-		throw new Error(`Could not locate sam.jpg. Looked in: ${candidates.join(', ')}`);
-	}
-
-	return found;
-}
 
 async function samUri(samPath: string) {
 	const cached = samCache.get(samPath);
@@ -127,7 +102,10 @@ export async function renderCard(id: string, samPath: string): Promise<Buffer> {
 		throw new Error(`Invalid image id: ${id}`);
 	}
 
-	const [first, second] = await Promise.all([posterUri(firstId, samPath), posterUri(secondId, samPath)]);
+	const [first, second] = await Promise.all([
+		posterUri(firstId, samPath),
+		posterUri(secondId, samPath)
+	]);
 
 	// Resvg only emits PNG; sharp does the JPEG encode.
 	const png = new Resvg(buildSvg(first, second), {}).render().asPng();

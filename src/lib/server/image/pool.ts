@@ -1,24 +1,11 @@
+import { dev } from '$app/environment';
+import { existsSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { Worker } from 'node:worker_threads';
-import { dev } from '$app/environment';
-import { resolveSamPath } from './render';
 
-/**
- * A small worker_threads pool for OG card rendering.
- *
- * Why this exists: resvg's render() is synchronous CPU work (~580ms for this
- * card) and blocks the event loop for its whole duration. Doing it inline makes
- * every other request — including /health — wait. The pool keeps the main thread
- * free and gives us `IMAGE_WORKERS` renders in flight per replica instead of 1.
- *
- * Size defaults to availableParallelism(), capped at 4, so a 1 vCPU replica
- * gets exactly one worker rather than four threads fighting over one core.
- */
-
-const DEFAULT_WORKERS = Math.min(4, os.availableParallelism());
-
-export const poolSize = Math.max(1, Number(process.env.IMAGE_WORKERS) || DEFAULT_WORKERS);
+// One thread per vCPU, capped, so a 1 vCPU replica doesn't spawn four workers.
+const POOL_SIZE = Math.min(4, os.availableParallelism());
 
 type WorkerReply = { ok: true; jpeg: Uint8Array } | { ok: false; error: string };
 
@@ -28,45 +15,41 @@ interface Job {
 	reject: (error: Error) => void;
 }
 
+function resolveSamPath(): string {
+	const candidates = [
+		path.join(process.cwd(), 'static/img/sam.jpg'),
+		path.join(process.cwd(), 'build/client/img/sam.jpg')
+	];
+
+	const found = candidates.find((candidate) => existsSync(candidate));
+	if (!found) {
+		throw new Error(`Could not locate sam.jpg. Looked in: ${candidates.join(', ')}`);
+	}
+
+	return found;
+}
+
 function workerEntry(): string | URL {
 	if (dev) {
-		// In dev Node runs the TypeScript source directly via type stripping.
 		return new URL('./render-worker.ts', import.meta.url);
 	}
 
-	// In production the file is emitted by scripts/build-worker.mjs next to the
-	// adapter-node output. Chunk paths are hashed, so anchor on cwd, which the
-	// Dockerfile sets to /app.
+	// Emitted by scripts/build-worker.mjs. Chunk paths are hashed, so anchor on cwd.
 	return path.join(process.cwd(), 'build/worker/render.js');
 }
 
 class RenderPool {
-	private size: number;
 	private samPath: string | undefined;
 	private workers: Worker[] = [];
 	private idle: Worker[] = [];
 	private jobs = new Map<Worker, Job>();
 	private queue: Job[] = [];
 
-	constructor(size: number) {
-		this.size = size;
-	}
-
 	run(id: string): Promise<Buffer> {
 		return new Promise<Buffer>((resolve, reject) => {
 			this.queue.push({ id, resolve, reject });
 			this.drain();
 		});
-	}
-
-	close(): void {
-		for (const worker of this.workers) {
-			void worker.terminate();
-		}
-		this.workers = [];
-		this.idle = [];
-		this.jobs.clear();
-		this.queue = [];
 	}
 
 	private spawn(): Worker {
@@ -122,7 +105,7 @@ class RenderPool {
 			let worker = this.idle.pop();
 
 			if (!worker) {
-				if (this.workers.length >= this.size) return;
+				if (this.workers.length >= POOL_SIZE) return;
 				worker = this.spawn();
 				this.workers.push(worker);
 			}
@@ -134,9 +117,9 @@ class RenderPool {
 	}
 }
 
-const pool = new RenderPool(poolSize);
+const pool = new RenderPool();
 
-/** In-flight renders keyed by id, so a cold burst renders each card once. */
+// Collapse a cold burst into one render per id.
 const inFlight = new Map<string, Promise<Buffer>>();
 
 export function renderComparison(id: string): Promise<Buffer> {
@@ -146,8 +129,4 @@ export function renderComparison(id: string): Promise<Buffer> {
 	const promise = pool.run(id).finally(() => inFlight.delete(id));
 	inFlight.set(id, promise);
 	return promise;
-}
-
-export function shutdownPool(): void {
-	pool.close();
 }
