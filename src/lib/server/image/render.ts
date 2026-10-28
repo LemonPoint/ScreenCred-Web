@@ -107,7 +107,10 @@ export async function renderCard(id: string, samPath: string): Promise<Buffer> {
 		posterUri(secondId, samPath)
 	]);
 
-	// Resvg only emits PNG; sharp does the JPEG encode.
-	const png = new Resvg(buildSvg(first, second), {}).render().asPng();
-	return await sharp(png).jpeg({ quality: JPEG_QUALITY, mozjpeg: true }).toBuffer();
+	const image = new Resvg(buildSvg(first, second), {}).render();
+	return await sharp(image.pixels, {
+		raw: { width: image.width, height: image.height, channels: 4 }
+	})
+		.jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
+		.toBuffer();
 }
