@@ -145,6 +145,21 @@ class RenderPool {
 		job.reject(error);
 	}
 
+	async shutdown() {
+		for (const queued of this.queue.splice(0)) {
+			queued.reject(new Error('Render pool is shutting down'));
+		}
+
+		const workers = this.workers;
+		this.workers = [];
+		this.idle = [];
+
+		for (const timer of this.idleTimers.values()) clearTimeout(timer);
+		this.idleTimers.clear();
+
+		await Promise.allSettled(workers.map((worker) => worker.terminate()));
+	}
+
 	private drain() {
 		while (this.queue.length > 0) {
 			let worker = this.takeIdle();
@@ -190,4 +205,8 @@ export function renderComparison(id: string): Promise<Buffer> {
 	const promise = pool.run(id).finally(() => inFlight.delete(id));
 	inFlight.set(id, promise);
 	return promise;
+}
+
+export function shutdownRenderPool(): Promise<void> {
+	return pool.shutdown();
 }

@@ -4,13 +4,20 @@ A fairly standard SvelteKit project. It requires an API key from [The Movie DB](
 
 ## Developing
 
-Install dependencies with `npm install`, start a development server:
+Install dependencies with `bun install`, start a development server:
 
 ```sh
-npm run dev
+bun run dev
 
 # or start the server and open the app in a new browser tab
-npm run dev -- --open
+bun run dev -- --open
+```
+
+Build and run the production server with Bun:
+
+```sh
+bun run build
+bun ./build
 ```
 
 ## Deploying

@@ -1,14 +1,14 @@
-FROM node:24-alpine AS builder
+FROM oven/bun:1.4.4-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 COPY . .
-RUN npm run build
+RUN bun run build
 
-FROM node:24-alpine
+FROM oven/bun:1.4.4-alpine
 WORKDIR /app
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/package*.json ./
-RUN npm ci --omit=dev
+COPY --from=builder /app/package.json /app/bun.lock ./
+RUN bun install --production --frozen-lockfile
 EXPOSE 3000
-CMD ["node", "--enable-source-maps", "build/index.js"]
+CMD ["bun", "./build"]
