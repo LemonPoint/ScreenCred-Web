@@ -1,5 +1,5 @@
 /**
- * Node builtins and npm packages only — no $lib, $app or $env imports. Only the
+ * Node builtins and npm packages only — no #lib, $app or $app/env imports. Only the
  * worker bundle (scripts/build-worker.mjs) loads this, so the SvelteKit server
  * never pulls in resvg or sharp on the main thread.
  */

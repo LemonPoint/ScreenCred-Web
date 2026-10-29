@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Credits from '$lib/components/Credits.svelte';
-	import type { MediaDetails, SimpleCredit } from '$lib/interfaces';
-	import type { SimpleComparison } from '$lib/server/comparison';
-	import { mediaTitle, mediaTitleWithYear } from '$lib/utils';
+	import Credits from '#lib/components/Credits.svelte';
+	import type { MediaDetails, SimpleCredit } from '#lib/interfaces.js';
+	import type { SimpleComparison } from '#lib/server/comparison.js';
+	import { mediaTitle, mediaTitleWithYear } from '#lib/utils.js';
 
 	interface Props {
 		first: MediaDetails;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { updateComparison } from '$lib/store.svelte.js';
-	import { mediaImageId, mediaTitle } from '$lib/utils';
+	import { updateComparison } from '#lib/store.svelte.js';
+	import { mediaImageId, mediaTitle } from '#lib/utils.js';
 	import ky from 'ky';
 	import { untrack } from 'svelte';
 	import CombinedResults from './CombinedResults.svelte';

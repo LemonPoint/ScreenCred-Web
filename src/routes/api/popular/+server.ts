@@ -1,5 +1,4 @@
-import { getPopularMovies, getPopularPeople, getPopularTvShows } from '$lib/server/tmdb';
-import { json } from '@sveltejs/kit';
+import { getPopularMovies, getPopularPeople, getPopularTvShows } from '#lib/server/tmdb.js';
 
 const CACHE_TTL = 5 * 60 * 1000;
 
@@ -38,5 +37,5 @@ export const GET = async ({ setHeaders }) => {
 	setHeaders({
 		'cache-control': 'public, max-age=300, s-maxage=3600'
 	});
-	return json(data);
+	return Response.json(data);
 };

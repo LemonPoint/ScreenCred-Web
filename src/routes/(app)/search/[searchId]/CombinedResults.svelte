@@ -1,14 +1,14 @@
 <script lang="ts">
-	import Credits from '$lib/components/Credits.svelte';
-	import type { MediaDetails } from '$lib/interfaces';
-	import type { CombinedCredit, UnionComparison } from '$lib/server/comparison';
+	import Credits from '#lib/components/Credits.svelte';
+	import type { MediaDetails } from '#lib/interfaces.js';
+	import type { CombinedCredit, UnionComparison } from '#lib/server/comparison.js';
 	import {
 		mediaTitle,
 		mediaTitleWithYear,
 		tmdbDetailsUrl,
 		tmdbImageUrl,
 		tmdbImageUrlSquare
-	} from '$lib/utils';
+	} from '#lib/utils.js';
 
 	interface Props {
 		first: MediaDetails;

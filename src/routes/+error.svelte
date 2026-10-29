@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import Header from '$lib/components/Header.svelte';
+	import Header from '#lib/components/Header.svelte';
 	import { resolve } from '$app/paths';
 </script>
 
@@ -8,7 +8,7 @@
 	<Header />
 	<div class="content">
 		<h2>{page?.error?.message}</h2>
-		<a href={resolve('/')}>Home</a>
+		<a href={resolve('/(app)')}>Home</a>
 	</div>
 </div>
 

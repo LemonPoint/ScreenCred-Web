@@ -1,5 +1,5 @@
-import { normalizeSearchId, parseSearchId } from '$lib/utils';
-import sql from '$lib/server/db';
+import { normalizeSearchId, parseSearchId } from '#lib/utils.js';
+import sql from '#lib/server/db.js';
 
 export async function POST({ params }) {
 	const searchId = params.searchId;

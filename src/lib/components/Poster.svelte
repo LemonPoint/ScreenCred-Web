@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import type { MediaDetails } from '$lib/interfaces';
-	import { mediaImage, mediaTitle } from '$lib/utils';
+	import type { MediaDetails } from '#lib/interfaces.js';
+	import { mediaImage, mediaTitle } from '#lib/utils.js';
 
 	interface Props {
 		media?: MediaDetails;

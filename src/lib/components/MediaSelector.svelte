@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Poster from '$lib/components/Poster.svelte';
-	import { query } from '$lib/search.svelte';
-	import { comparison } from '$lib/store.svelte';
+	import Poster from '#lib/components/Poster.svelte';
+	import { query } from '#lib/search.svelte.js';
+	import { comparison } from '#lib/store.svelte.js';
 	import Search from './Search.svelte';
 
 	interface Props {
@@ -20,7 +20,10 @@
 	<button onclick={() => startSearch('first')} aria-label="Search for first movie, show, or person">
 		<Poster media={comparison.first} />
 	</button>
-	<button onclick={() => startSearch('second')} aria-label="Search for second movie, show, or person">
+	<button
+		onclick={() => startSearch('second')}
+		aria-label="Search for second movie, show, or person"
+	>
 		<Poster media={comparison.second} />
 	</button>
 </div>

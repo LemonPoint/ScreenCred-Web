@@ -1,5 +1,5 @@
-import { env } from '$env/dynamic/private';
-import { SAM } from '$lib/sam';
+import { TMDB_API_KEY } from '$app/env/private';
+import { SAM } from '#lib/sam.js';
 import ky from 'ky';
 import z from 'zod';
 import type {
@@ -26,14 +26,7 @@ const TMDBResponseSchema = z.looseObject({
 });
 
 async function makeTMDBRequest<T>(url: string) {
-	const data = await ky
-		.get(url, {
-			headers: {
-				Authorization: `Bearer ${env.TMDB_API_KEY}`
-			}
-		})
-		.json();
-
+	const data = await ky.get(url, { headers: { Authorization: `Bearer ${TMDB_API_KEY}` } }).json();
 	const safeData = TMDBResponseSchema.parse(camelize(data));
 	if (safeData.success === false) {
 		console.log(safeData.statusMessage);
