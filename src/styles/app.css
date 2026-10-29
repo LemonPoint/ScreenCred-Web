@@ -18,43 +18,43 @@ body {
 }
 
 article.standalone {
-    h2 {
-        margin-top: 1em;
-        margin-bottom: 0.5em;
-    }
+	h2 {
+		margin-top: 1em;
+		margin-bottom: 0.5em;
+	}
 
-    p {
-        margin-bottom: 1em;
-    }
+	p {
+		margin-bottom: 1em;
+	}
 
-    a {
-        color: white;
-        /*text-decoration-thickness: 2px;*/
-        /*text-decoration-color: var(--uchu-blue-1);*/
-        /*text-underline-offset: 3px;*/
-    }
+	a {
+		color: white;
+		/*text-decoration-thickness: 2px;*/
+		/*text-decoration-color: var(--uchu-blue-1);*/
+		/*text-underline-offset: 3px;*/
+	}
 }
 
 hr {
-    height: 1px;
-    background-color: var(--uchu-gray-8);
-    border: none;
-    margin-inline: var(--body-padding-inline);
-    margin-block: 2em;
+	height: 1px;
+	background-color: var(--uchu-gray-8);
+	border: none;
+	margin-inline: var(--body-padding-inline);
+	margin-block: 2em;
 }
 
 button {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
 }
