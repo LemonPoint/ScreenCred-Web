@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { MediaDetails } from '#lib/interfaces.js';
-	import type { ComparisonState } from '#lib/store.svelte.js';
-	import { mediaImage, mediaTitle } from '#lib/utils.js';
+	import type { MediaDetails } from '#lib/interfaces.ts';
+	import type { ComparisonState } from '#lib/store.svelte.ts';
+	import { mediaImage, mediaTitle } from '#lib/utils.ts';
 	import { resolve } from '$app/paths';
 
 	interface Props {

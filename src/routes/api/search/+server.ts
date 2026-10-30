@@ -1,4 +1,4 @@
-import { search } from '#lib/server/tmdb.js';
+import { search } from '#lib/server/tmdb.ts';
 
 export const GET = async ({ url }) => {
 	const query = url.searchParams.get('query');

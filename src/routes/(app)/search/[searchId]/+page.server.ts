@@ -1,8 +1,8 @@
-import { MEDIA_TYPE_KEY } from '#lib/interfaces.js';
-import { getDetails } from '#lib/server/tmdb.js';
-import { compare } from '#lib/server/comparison.js';
+import { MEDIA_TYPE_KEY } from '#lib/interfaces.ts';
+import { getDetails } from '#lib/server/tmdb.ts';
+import { compare } from '#lib/server/comparison.ts';
 import { redirect } from '@sveltejs/kit';
-import { parseSearchId } from '#lib/utils.js';
+import { parseSearchId } from '#lib/utils.ts';
 
 export const load = async ({ params }) => {
 	const comparison = parseSearchId(params.searchId);

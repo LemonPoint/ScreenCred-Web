@@ -1,4 +1,4 @@
-import { getPopularMovies, getPopularPeople, getPopularTvShows } from '#lib/server/tmdb.js';
+import { getPopularMovies, getPopularPeople, getPopularTvShows } from '#lib/server/tmdb.ts';
 
 const CACHE_TTL = 5 * 60 * 1000;
 

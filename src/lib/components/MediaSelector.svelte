@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Poster from '#lib/components/Poster.svelte';
-	import { query } from '#lib/search.svelte.js';
-	import { comparison } from '#lib/store.svelte.js';
+	import { query } from '#lib/search.svelte.ts';
+	import { comparison } from '#lib/store.svelte.ts';
 	import Search from './Search.svelte';
 
 	interface Props {

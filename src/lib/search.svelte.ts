@@ -1,6 +1,6 @@
-import { MediaDetailsSchema, type MediaDetails } from '#lib/interfaces.js';
-import { SAM } from '#lib/sam.js';
-import { mediaImage, mediaTitle } from '#lib/utils.js';
+import { MediaDetailsSchema, type MediaDetails } from '#lib/interfaces.ts';
+import { SAM } from '#lib/sam.ts';
+import { mediaImage, mediaTitle } from '#lib/utils.ts';
 import ky, { SchemaValidationError } from 'ky';
 import z from 'zod';
 

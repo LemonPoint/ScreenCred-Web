@@ -1,5 +1,5 @@
 import { TMDB_API_KEY } from '$app/env/private';
-import { SAM } from '#lib/sam.js';
+import { SAM } from '#lib/sam.ts';
 import ky from 'ky';
 import z from 'zod';
 import type {

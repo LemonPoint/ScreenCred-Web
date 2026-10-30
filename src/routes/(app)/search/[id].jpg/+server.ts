@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
-import { renderComparison } from '#lib/server/image/pool.js';
+import { renderComparison } from '#lib/server/image/pool.ts';
 
 const CACHE_CONTROL = 'public, max-age=2592000, stale-while-revalidate=604800';
 

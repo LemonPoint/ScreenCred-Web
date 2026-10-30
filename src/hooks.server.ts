@@ -1,5 +1,5 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit/hooks';
-import { logger } from '#lib/logger.js';
+import { logger } from '#lib/logger.ts';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const startTime = Date.now();
