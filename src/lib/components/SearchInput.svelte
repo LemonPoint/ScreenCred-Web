@@ -1,6 +1,6 @@
 <script lang="ts">
-	import DebounceInput from '$lib/components/DebounceInput.svelte';
-	import { handleSearch, query, resetSearch } from '$lib/search.svelte';
+	import DebounceInput from '#lib/components/DebounceInput.svelte';
+	import { handleSearch, query, resetSearch } from '#lib/search.svelte.ts';
 </script>
 
 <div class="search-wrapper">

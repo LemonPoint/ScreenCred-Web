@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import logo from '$lib/assets/screencred.svg';
+	import logo from '#lib/assets/screencred.svg';
 </script>
 
 <header>
-	<a href={resolve('/')}>
+	<a href={resolve('/(app)')}>
 		<h1><img alt="ScreenCred TV logo" src={logo} />ScreenCred</h1>
 	</a>
 </header>

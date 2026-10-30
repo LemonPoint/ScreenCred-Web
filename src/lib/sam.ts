@@ -1,4 +1,4 @@
-import type { PersonDetails } from '$lib/interfaces';
+import type { PersonDetails } from '#lib/interfaces.ts';
 
 export const SAM: PersonDetails = {
 	id: -1,

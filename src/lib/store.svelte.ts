@@ -1,6 +1,6 @@
-import type { MediaDetails } from '$lib/interfaces';
-import { localStore } from '$lib/storage.svelte';
-import { normalizeMediaDetails, normalizeSearchId } from '$lib/utils';
+import type { MediaDetails } from '#lib/interfaces.ts';
+import { localStore } from '#lib/storage.svelte.ts';
+import { normalizeMediaDetails, normalizeSearchId } from '#lib/utils.ts';
 
 export interface ComparisonState {
 	id?: string;

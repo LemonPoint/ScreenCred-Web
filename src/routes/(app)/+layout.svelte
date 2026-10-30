@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Header from '$lib/components/Header.svelte';
-	import MediaSelector from '$lib/components/MediaSelector.svelte';
-	import Search from '$lib/components/Search.svelte';
+	import Header from '#lib/components/Header.svelte';
+	import MediaSelector from '#lib/components/MediaSelector.svelte';
+	import Search from '#lib/components/Search.svelte';
 
 	let { children } = $props();
 

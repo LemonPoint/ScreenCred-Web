@@ -1,7 +1,7 @@
 <script>
-	import sam from '$lib/assets/sam.jpeg';
-	import tmdb from '$lib/assets/tmdb.svg';
-	import builtBy from '$lib/assets/built-by.svg';
+	import sam from '#lib/assets/sam.jpeg';
+	import tmdb from '#lib/assets/tmdb.svg';
+	import builtBy from '#lib/assets/built-by.svg';
 </script>
 
 <svelte:head>

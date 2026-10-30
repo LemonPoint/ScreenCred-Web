@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ParsedCredit } from '$lib/interfaces';
+	import type { ParsedCredit } from '#lib/interfaces.ts';
 
 	interface Props {
 		castRoles: ParsedCredit[];

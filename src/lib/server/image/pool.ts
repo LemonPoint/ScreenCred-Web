@@ -1,4 +1,4 @@
-import { dev } from '$app/environment';
+import { dev } from '$app/env';
 import { existsSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';

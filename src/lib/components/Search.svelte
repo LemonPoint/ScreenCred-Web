@@ -7,15 +7,15 @@
 		type MovieDetails,
 		type PersonDetails,
 		type TVDetails
-	} from '$lib/interfaces';
-	import { error, isLoading, query, resetSearch, searchResults } from '$lib/search.svelte';
+	} from '#lib/interfaces.ts';
+	import { error, isLoading, query, resetSearch, searchResults } from '#lib/search.svelte.ts';
 	import {
 		comparison,
 		recentSearches,
 		updateComparison,
 		updateRecentSearches
-	} from '$lib/store.svelte';
-	import { mediaSubtitle, mediaTitle } from '$lib/utils';
+	} from '#lib/store.svelte.ts';
+	import { mediaSubtitle, mediaTitle } from '#lib/utils.ts';
 	import slugify from '@sindresorhus/slugify';
 	import ky from 'ky';
 	import { onDestroy, onMount } from 'svelte';

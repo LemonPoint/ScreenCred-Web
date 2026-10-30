@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { type ComparisonState, recentComparisons, resetComparison } from '$lib/store.svelte';
-	import ComparisonCard from '$lib/components/ComparisonCard.svelte';
+	import { type ComparisonState, recentComparisons, resetComparison } from '#lib/store.svelte.ts';
+	import ComparisonCard from '#lib/components/ComparisonCard.svelte';
 	import { page } from '$app/state';
 
 	resetComparison();
