@@ -1,5 +1,13 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit/hooks';
 import { logger } from '#lib/logger.ts';
+import sql from '#lib/server/db.ts';
+import { shutdownRenderPool } from '#lib/server/image/pool.ts';
+
+// adapter-bun waits for in-flight requests before emitting this. Node's adapter
+// never emits it, so the listener is inert in dev and on non-Bun runtimes.
+process.on('sveltekit:shutdown', async () => {
+	await Promise.allSettled([sql.end({ timeout: 5 }), shutdownRenderPool()]);
+});
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const startTime = Date.now();

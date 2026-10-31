@@ -1,4 +1,4 @@
-// adapter-node's Vite build leaves `new Worker(new URL(...))` untouched and emits
+// The Vite build leaves `new Worker(new URL(...))` untouched and emits
 // nothing for it, so the worker needs its own build step written into build/.
 import { build } from 'esbuild';
 

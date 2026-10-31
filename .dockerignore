@@ -1,4 +1,8 @@
 node_modules
 .svelte-kit
+build
+load-test
+.git
+.idea
 .env
 *.log
